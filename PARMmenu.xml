@@ -48,7 +48,7 @@ for parm in parms:
         if text is None:
             continue
 
-        save_snippet.saveVEXToDisk(text, code, comment)
+        save_snippet.savePythonToDisk(text, code, comment)
 
                     ]]>
                     </scriptCode>
