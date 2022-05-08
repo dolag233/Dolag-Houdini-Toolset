@@ -1,0 +1,11 @@
+# ignore pycharm cache
+scripts/__pycache__
+.idea
+scripts/.idea
+
+# ignore pyc
+*.pyc
+
+#ignore custom file
+vex/custom/*
+python/custom/*
