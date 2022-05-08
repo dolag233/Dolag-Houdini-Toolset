@@ -67,11 +67,11 @@ def saveVEXToDisk(vfl_name, code, comment, vex_type=VexType.vfl):
 
     dolag_home = env["DOLAG_HOUDINI_PATH"]
     suffix = 'vfl' if vex_type == VexType.vfl else 'h'
-    file_path = dolag_home + "\\vex\\include\\" + vfl_name + '.' + suffix
+    file_path = dolag_home + "\\vex\\custom\\" + vfl_name + '.' + suffix
     comment = __getVexCommentStr(comment)
 
     # if file already exists, then just append
-    if os.path.exists(file_path):
+    if os.path.isfile(file_path):
         content = ""
         with open(file_path, "r+") as f:
             f.seek(0, 0)
@@ -122,11 +122,11 @@ def savePythonToDisk(py_name, code, comment):
         return
 
     dolag_home = env["DOLAG_HOUDINI_PATH"]
-    file_path = dolag_home + "\\python\\include\\" + py_name + ".py"
+    file_path = dolag_home + "\\python\\custom\\" + py_name + ".py"
     comment = __getPythonCommentStr(comment)
 
     # if file already exists, then just append
-    if os.path.exists(file_path):
+    if os.path.isfile(file_path):
         content = ""
         with open(file_path, "r+") as f:
             f.seek(0, 0)
