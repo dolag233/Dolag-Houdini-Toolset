@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    right-click menu of Dolag tools
+-->
+<menuDocument>
+    <!-- menuDocument can only contain 1 menu element, whose id is 
+         implicitly "root_menu"
+      -->
+    <menu>
+        <subMenu id = "dolag.parm.menu">
+            <label>Dolag</label>
+            <scriptItem id = "dolag.parm.menu.save_snippet">
+                <label>Save Snippet</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from parm_menu import save_snippet, save_window
+from utils import show_UI
+from utils.code_type import SnippetType, VexType
+from error.error_report import displayError
+
+parms = kwargs['parms']
+
+for parm in parms:
+    # just save snnipet
+    if parm.name() == 'snippet':
+        code = parm.unexpandedString()
+        if len(code) == 0:
+            continue
+        
+        save_wind = show_UI.showUI(save_window.SaveWindow, SnippetType.vex)
+        text = save_wind.getText()
+        comment = save_wind.getComment()
+        vex_type = save_wind.getVexType()
+        if text is None:
+            continue
+
+        save_snippet.saveVEXToDisk(text, code, comment, vex_type)
+
+    elif parm.name() == 'python':
+        code = parm.unexpandedString()
+        if len(code) == 0:
+            continue
+        
+        save_wind = show_UI.showUI(save_window.SaveWindow, SnippetType.python)
+        text = save_wind.getText()
+        comment = save_wind.getComment()
+        if text is None:
+            continue
+
+        save_snippet.saveVEXToDisk(text, code, comment)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+        </subMenu>
+    </menu>
+
+</menuDocument>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Please see menu.xsd for the menu validation schema. -->
+
+<mainMenu>
+  <menuBar>
+    <subMenu>
+      <label>Dolag</label>
+        <scriptItem id="h.first_item">
+          <label>/remake</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH\scripts\main_menu\menu_event.py</scriptPath>
+        </scriptItem>
+    </subMenu>
+  </menuBar>
+</mainMenu>
