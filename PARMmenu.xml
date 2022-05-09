@@ -53,6 +53,27 @@ for parm in parms:
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <scriptItem id = "dolag.parm.menu.import_snippet">
+                <label>Import Snippet</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from parm_menu import import_snippet
+
+parms = kwargs['parms']
+
+for parm in parms:
+    # just save snnipet
+    if parm.name() == 'snippet':
+        import_snippet.searchVexList()
+
+    elif parm.name() == 'python':
+        import_snippet.searchVexList()
+
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
         </subMenu>
     </menu>
 
