@@ -58,14 +58,17 @@ for parm in parms:
                     <scriptCode><![CDATA[
 import hou
 import sys
-from parm_menu import import_snippet
+from parm_menu import import_snippet, import_snippet_UI
+from utils import show_UI
+from utils.code_type import SnippetType, VexType
 
 parms = kwargs['parms']
 
 for parm in parms:
     # just save snnipet
     if parm.name() == 'snippet':
-        import_snippet.searchVexList()
+        func_dict = import_snippet.searchVexList()
+        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict)
 
     elif parm.name() == 'python':
         import_snippet.searchVexList()

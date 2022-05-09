@@ -70,7 +70,7 @@ def __getVexFunc(vex_path):
             # append func name
             func_names.append(tokens[-1])
 
-    return func_names, vex_path.split('\\')[-1]
+    return func_names, vex_path
 
 
 def searchVexList():
@@ -87,8 +87,11 @@ def searchVexList():
         vex_files += __getVexFilenames(vfl_path_custom)
 
         for vex_file in vex_files:
-            func_names, file_name = __getVexFunc(vex_file)
-            if file_name is not None and len(func_names) != 0:
-                vex_funcs[file_name] = func_names
+            func_names, file_path = __getVexFunc(vex_file)
+            func_names = list(set(func_names))
+            if file_path is not None and len(func_names) != 0:
+                vex_funcs[file_path] = func_names
 
     print(vex_funcs)
+
+    return vex_funcs
