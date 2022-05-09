@@ -41,7 +41,7 @@ def __getPythonFilenames(path):
 
 
 def __getVexFunc(vex_path):
-    suffix = ("vfl", "h", "vex")
+    suffix = ("vfl", "h")
     if not isinstance(vex_path, str) or vex_path.split('.')[-1] not in suffix:
         return [], None
 
@@ -60,11 +60,21 @@ def __getVexFunc(vex_path):
         # discard string
         pattern_string = re.compile(r"'.'|\".+\"")
         content = pattern_string.sub('', content)
-        # match function signature
-        pattern_func = re.compile(r"{0}void{1}|{0}int{1}|{0}vector[24]?{1}|{0}float{1}|{0}string{1}|{0}int\[\]{1}|{0}matrix[23]?{1}".format(r"function[\s\n]+", r"[\s\n]+\w+[\s\n]*"), re.M)
-        func_sigs = pattern_func.findall(content)
-        # match token
-        pattern_token = re.compile(r"\w+")
+        func_sigs = ()
+        if vex_path.split('.')[-1] == 'vfl':
+            # match function signature
+            pattern_func = re.compile(r"{0}void{1}|{0}int{1}|{0}vector[24]?{1}|{0}float{1}|{0}string{1}|{0}int{1}|{0}int\[\]{1}|{0}matrix[23]?{1}".format(r"function[\s\n]+", r"[\s\n]+\w+[\s\n]*"), re.M)
+            func_sigs = pattern_func.findall(content)
+            # match token
+            pattern_token = re.compile(r"\w+")
+
+        elif vex_path.split('.')[-1] == 'h':
+            # match function signature
+            pattern_func = re.compile(r"void{0}|int{0}|vector[24]?{0}|float{0}|string{0}|int{0}|int\[\]{0}|matrix[23]?{0}".format(r"[\s\n]+\w+[\s\n]*\(.*\)[\s\n]*\{"), re.M)
+            func_sigs = pattern_func.findall(content)
+            # match token
+            pattern_token = re.compile(r"\w+")
+
         for func_sig in func_sigs:
             tokens = pattern_token.findall(func_sig)
             # append func name
@@ -76,22 +86,22 @@ def __getVexFunc(vex_path):
 def searchVexList():
     vex_funcs = {}
     houdini_paths = env["HOUDINI_PATH"].split(';')
+    dolag_path = env["DOLAG_HOUDINI_PATH"]
+    vex_files = list()
+    vex_files += __getVexFilenames(dolag_path + "\\vex\\custom")
     for houdini_path in houdini_paths:
         vfl_path_root = houdini_path + "\\vex"
         vfl_path_include = houdini_path + "\\vex\\include"
-        vfl_path_custom = houdini_path + "\\vex\\custom"
-        vex_files = list()
 
         vex_files += __getVexFilenames(vfl_path_root)
         vex_files += __getVexFilenames(vfl_path_include)
-        vex_files += __getVexFilenames(vfl_path_custom)
 
-        for vex_file in vex_files:
-            func_names, file_path = __getVexFunc(vex_file)
-            func_names = list(set(func_names))
-            if file_path is not None and len(func_names) != 0:
-                vex_funcs[file_path] = func_names
-
-    print(vex_funcs)
+    # remove duplication
+    # vex_files = list(set(vex_files))
+    for vex_file in vex_files:
+        func_names, file_path = __getVexFunc(vex_file)
+        func_names = list(set(func_names))
+        if file_path is not None and len(func_names) != 0:
+            vex_funcs[file_path] = func_names
 
     return vex_funcs
