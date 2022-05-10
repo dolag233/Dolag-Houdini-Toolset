@@ -6,6 +6,10 @@ scripts/.idea
 # ignore pyc
 *.pyc
 
-#ignore custom file
+# ignore custom file
 vex/custom/*
 python/custom/*
+
+# ignore test and backup
+*.back
+*.test
