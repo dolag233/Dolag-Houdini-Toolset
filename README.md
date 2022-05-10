@@ -5,13 +5,10 @@ Dolag的Houdini工具集
 
 在使用前需要进行安装配置：
 
-1. 将此文件夹。即“Dolag-Houdini-Toolset”文件夹放置于用户文档目录下，例如如果当前用户名叫“Dolag”则放置此文件夹到“C:\Users\Dolag\Documents”下。可以将此文件夹重命名为“DolagHoudiniToolset”。
+1. DolagPlugin.json文件放置到文档目录下对应版本的houdini文件夹下的packages文件夹中。
 
-2. 将文档目录下的houdiniX.Y(X和Y为houdini版本号)目录中的houdini.env文件的HOUDINI_PATH行末尾添加文件夹路径(例如“C:\Users\Dolag\Documents\DolagHoudiniToolSet”)，并用分号“;”与前面的路径分开。
+   例如，如果用户名为Dolag，且houdini版本好号18.5，则将此文件放置到C:\Users\Dolag\Documents\houdini18.5\packages中。
 
-   例如，一个合适的HOUDINI_PATH行为“HOUDINI_PATH = C:\Users\Dolag\Documents\GameDevelopmentToolset;C:\Users\Dolag\Documents\DolagHoudiniToolset;&;”。
+2. 在文档下的对应版本houdini文件夹下新建DolagPlugin文件夹，并将剩余文件放置到此文件夹中。
 
-3. vex自定义文件夹的路径为此工具集文件夹下的vex/custom，例如“C:\Users\Dolag\Documents\DolagHoudiniToolset\vex\custom”。
-   然后在2中的houdini.env中以相同的方式添加自定义vex文件夹路径到HOUDINI_VEX_PATH。
-
-   若不存在HOUDINI_VEX_PATH则新建HOUDINI_VEX_PATH行，并在其后输入“ = ”和vex文件夹路径。例如“HOUDINI_VEX_PATH = C:\Users\Dolag\Documents\DolagHoudiniToolSet\vex\custom;&;”。
+   例如，如果用户名为Dolag，且houdini版本号为18.5，则将剩余文件放置到C:\Users\Dolag\Documents\houdini18.5\DolagPlugin中。
