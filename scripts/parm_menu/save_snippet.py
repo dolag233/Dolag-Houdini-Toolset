@@ -1,4 +1,5 @@
 import hou
+import sys
 import os
 from os import environ as env
 from error.error_report import displayError
@@ -67,7 +68,17 @@ def saveVEXToDisk(vfl_name, code, comment, vex_type=VexType.vfl):
 
     dolag_home = env["DOLAG_HOUDINI_PATH"]
     suffix = 'vfl' if vex_type == VexType.vfl else 'h'
-    file_path = dolag_home + "\\vex\\custom\\" + vfl_name + '.' + suffix
+    custom_path = dolag_home + "\\vex\\custom"
+    # deal with custom folder
+    if not os.path.exists(custom_path) and not os.path.isdir(custom_path):
+        # make dir with chmod 664
+        if sys.version_info.major == 2:
+            os.mkdir(custom_path, 436)
+
+        elif sys.version_info.major == 3:
+            os.mkdir(custom_path, 436)
+
+    file_path = custom_path + "\\" + vfl_name + '.' + suffix
     comment = __getVexCommentStr(comment)
 
     # if file already exists, then just append
@@ -122,7 +133,17 @@ def savePythonToDisk(py_name, code, comment):
         return
 
     dolag_home = env["DOLAG_HOUDINI_PATH"]
-    file_path = dolag_home + "\\python\\custom\\" + py_name + ".py"
+    custom_path = dolag_home + "\\python\\custom"
+    # deal with custom folder
+    if not os.path.exists(custom_path) and not os.path.isdir(custom_path):
+        # make dir with chmod 664
+        if sys.version_info.major == 2:
+            os.mkdir(custom_path, 436)
+
+        elif sys.version_info.major == 3:
+            os.mkdir(custom_path, 436)
+
+    file_path = custom_path + "\\" + py_name + ".py"
     comment = __getPythonCommentStr(comment)
 
     # if file already exists, then just append
