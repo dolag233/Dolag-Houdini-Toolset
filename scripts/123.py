@@ -18,6 +18,10 @@ if __name__ == "__main__":
         # custom python snippet path
         sys.path.append(dolag_path + "\\python\\include")
         sys.path.append(dolag_path + "\\python\\custom")
+        # env DOLAG_PYTHON_LIB path
+        for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
+            if pylib_path not in sys.path:
+                sys.path.append(pylib_path)
 
     else:
         # cannot use hou.ui because of partial initialization
