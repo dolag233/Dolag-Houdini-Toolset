@@ -13,3 +13,4 @@ python/custom/*
 # ignore test and backup
 *.back
 *.test
+test
