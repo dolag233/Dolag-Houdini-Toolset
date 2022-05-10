@@ -1,9 +1,8 @@
 """
     config some items for DolagPlugin
-    @NOTE: This file maybe loaded in shell mode
-    os.getcwd() will return %HOME%
-    __file__ is not defined and cannot do any relative path operation
-    so config the PATH in houdini.env
+    @NOTE: This file is run in top-level
+    so cannot do any relative path operation
+    solving by configuring the sys.path
 """
 if __name__ == "__main__":
     import os
@@ -16,7 +15,7 @@ if __name__ == "__main__":
         # python script path
         sys.path.append(dolag_path + "\\scripts")
         # custom python snippet path
-        sys.path.append(dolag_path + "\\python\\include")
+        sys.path.append(dolag_path + "\\python\\python2.7libs")
         sys.path.append(dolag_path + "\\python\\custom")
         # env DOLAG_PYTHON_LIB path
         for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
