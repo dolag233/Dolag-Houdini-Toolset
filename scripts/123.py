@@ -8,8 +8,8 @@ if __name__ == "__main__":
     import os
     import sys
 
-    # set DOLAG_HOUDINI_PATH by the first HOUDINI_PATH containing "DolagHoudiniToolSet"
-    # and append DOLAG_HOUDINI_PATH\scripts into the sys.path
+    # DOLAG_HOUDINI_PATH will be create by DolagPlugin.json
+    # and append some our python load dir into the sys.path
     if "DOLAG_HOUDINI_PATH" in os.environ.keys():
         dolag_path = os.environ["DOLAG_HOUDINI_PATH"]
         # python script path
