@@ -1,0 +1,18 @@
+{
+	"enable" : true,
+	"load_package_once" : true,
+	"env" :
+	[
+		{
+			"HOUDINI_VEX_PATH" :
+			{
+				"value" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/vex/custom",
+				"method" : "prepend"
+			}
+		},
+		{
+			"DOLAG_HOUDINI_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin"
+		}
+	],
+	"path" : "$DOLAG_HOUDINI_PATH"
+}
