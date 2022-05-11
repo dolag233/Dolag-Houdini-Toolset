@@ -20,9 +20,10 @@ if __name__ == "__main__":
         sys.path.append(dolag_path + "\\python")
         sys.path.append(dolag_path)
         # env DOLAG_PYTHON_LIB path
-        for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
-            if pylib_path not in sys.path:
-                sys.path.append(pylib_path)
+        if "DOLAG_PYTHON_LIB" in os.environ.keys():
+            for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
+                if pylib_path not in sys.path:
+                    sys.path.append(pylib_path)
 
     else:
         # cannot use hou.ui because of partial initialization
