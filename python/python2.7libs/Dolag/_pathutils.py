@@ -7,6 +7,10 @@ def getRelativePath(src, dest):
         consider src = /obj/geo/subnet1/button1 and dest = /obj/geo/subnet2/file/reload
         and the result should be ../../subnet2/file/reload
     """
+    
+    # if equal
+    if src == dest:
+        return '.'
     src_path_list = src.split('/')
     dest_path_list = dest.split('/')
     res_str = ''
