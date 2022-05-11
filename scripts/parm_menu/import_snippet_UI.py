@@ -26,6 +26,7 @@ class ImportWindow(QtGui.QDialog):
             self.snippet_type = snippet_type
 
         self.comment = None
+        self.snippet = None
         self.vex_type = VexType.h
         self.func_dict = {}
         self.func_list = []
@@ -37,10 +38,15 @@ class ImportWindow(QtGui.QDialog):
                     func_str = key.split('\\')[-1] + " -> " + func_name
                     self.func_list.append(func_str)
 
+            self.func_list = list(set(self.func_list))
+            self.func_list.sort()
+
+        self.slmFunc = QtCore.QStringListModel()
+        self.slmFunc.setStringList(self.func_list)
         self._initUI()
 
-    def getText(self):
-        return self.text
+    def getSnippet(self):
+        return self.snippet
 
     def getComment(self):
         return self.comment
@@ -48,24 +54,29 @@ class ImportWindow(QtGui.QDialog):
     def getVexType(self):
         return int(self.vex_type)
 
-    def __onPressSave(self):
-        # check snippet type
-        if self.snippet_type == SnippetType.vex:
-            # vex header type
-            if self.rbVfl.isChecked():
-                self.vex_type = VexType.vfl
-            elif self.rbHeader.isChecked():
-                self.vex_type = VexType.h
-            else:
-                return
+    def __onPressImport(self):
+        index = self.lvFunc.currentIndex().row()
+        file_name = self.func_list[index].split(' -> ')[0]
+        file_path = None
+        for key in self.func_dict.keys():
+            if file_name in key:
+                file_path = key
 
-        # if file name is not legal
-        if not checkInvalidFileName(self.leFile.text()):
-            displayError("filename")
+        if file_path is None:
+            displayError("Error: Wrong file name")
             return
 
-        self.text = self.leFile.text()
-        self.comment = self.leComment.text()
+        if self.snippet_type == SnippetType.vex:
+            self.snippet = "#include <{0}>\n".format(file_name)
+
+        elif self.snippet_type == SnippetType.python:
+            # strip ".py"
+            self.snippet = "import {0}\n".format(file_name[:-3])
+
+        else:
+            displayError("Error: Wrong snippet type")
+            return
+
         self.close()
 
     def __onPressCancel(self):
@@ -73,75 +84,42 @@ class ImportWindow(QtGui.QDialog):
         self.close()
 
     def _initUI(self):
+        blvMain = QtGui.QVBoxLayout()
+        blvMain.setObjectName(u"blvMain")
+        blvMain.setContentsMargins(0, 0, 0, 0)
+
+        # set list view model
+        self.lvFunc = QtGui.QListView()
+        self.lvFunc.setViewMode(QtGui.QListView.ListMode)
+        self.lvFunc.setObjectName(u"lvFunc")
+        # bind model
+        self.lvFunc.setModel(self.slmFunc)
+        self.lvFunc.setProperty("isWrapping", False)
+        self.lvFunc.setUniformItemSizes(False)
+        self.lvFunc.setSelectionRectVisible(False)
+
+        blvMain.addWidget(self.lvFunc)
+        self.blhButtons = QtGui.QHBoxLayout()
+        self.blhButtons.setObjectName(u"blhButtons")
+        self.pbImport = QtGui.QPushButton("Import")
+        self.pbImport.clicked.connect(self.__onPressImport)
+        self.pbCancel = QtGui.QPushButton("Cancel")
+        self.pbCancel.clicked.connect(self.__onPressCancel)
+
+        self.blhButtons.addWidget(self.pbImport)
+        self.blhButtons.addWidget(self.pbCancel)
+
+        blvMain.addLayout(self.blhButtons)
+
+        # window setting
         if self.snippet_type == SnippetType.python:
-            blvMain = QtGui.QVBoxLayout()
-            blhButtons = QtGui.QHBoxLayout()
-            blhComment = QtGui.QHBoxLayout()
-            blhMain = QtGui.QHBoxLayout()
-            self.leFile = QtGui.QLineEdit(self)
-            self.lbFile = QtGui.QLabel("File Name")
-            self.lbComment = QtGui.QLabel("Comment")
-            self.leComment = QtGui.QLineEdit(self)
-            self.pbSave = QtGui.QPushButton("Save")
-            self.pbSave.setFixedWidth(100)
-            self.pbSave.clicked.connect(self.__onPressSave)
-            self.pbCancel = QtGui.QPushButton("Cancel")
-            self.pbCancel.setFixedWidth(100)
-            self.pbCancel.clicked.connect(self.__onPressCancel)
-
-            blhMain.addWidget(self.lbFile)
-            blhMain.addWidget(self.leFile)
-            blhButtons.addWidget(self.pbSave, 0, QtCore.Qt.AlignRight)
-            blhButtons.addWidget(self.pbCancel, 0, QtCore.Qt.AlignRight)
-            blhComment.addWidget(self.lbComment)
-            blhComment.addWidget(self.leComment)
-            blhMain.layoutSpacing = 2
-            blvMain.addLayout(blhMain)
-            blvMain.addLayout(blhComment)
-            blvMain.addLayout(blhButtons)
-            blhMain.layoutSpacing = 5
-
-            self.setLayout(blvMain)
-            self.resize(QtCore.QSize(400, 150))
-            self.setWindowTitle("Save Vex/Python Snippet")
-            self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+            self.setWindowTitle("Import Python Snippet")
 
         elif self.snippet_type == SnippetType.vex:
-            blvMain = QtGui.QVBoxLayout()
-            blvMain.setObjectName(u"blvMain")
-            blvMain.setContentsMargins(0, 0, 0, 0)
-            # set list view model
-            slmFunc = QtCore.QStringListModel()
-            slmFunc.setStringList(self.func_list)
-
-            self.lvFunc = QtGui.QListView()
-            self.lvFunc.setViewMode(QtGui.QListView.ListMode)
-            self.lvFunc.setObjectName(u"lvFunc")
-            self.lvFunc.setModel(slmFunc)
-            self.lvFunc.setProperty("isWrapping", False)
-            self.lvFunc.setUniformItemSizes(False)
-            self.lvFunc.setSelectionRectVisible(False)
-
-            blvMain.addWidget(self.lvFunc)
-
-            self.blhButtons = QtGui.QHBoxLayout()
-            self.blhButtons.setObjectName(u"blhButtons")
-            self.pbImport = QtGui.QPushButton("Import")
-
-            self.blhButtons.addWidget(self.pbImport)
-
-            self.pbCancel = QtGui.QPushButton("Cancel")
-
-            self.blhButtons.addWidget(self.pbCancel)
-
-            blvMain.addLayout(self.blhButtons)
-
-        else:
-            return
+            self.setWindowTitle("Import Vex Snippet")
 
         self.setLayout(blvMain)
-        self.resize(QtCore.QSize(400, 150))
-        self.setWindowTitle("Import Vex/Python Snippet")
+        self.resize(QtCore.QSize(350, 450))
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def closeEvent(self, event):

@@ -70,7 +70,7 @@ for parm in parms:
     if parm.name() == 'snippet':
         code = parm.unexpandedString()
         func_dict = import_snippet.searchVexList()
-        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict)
+        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict, SnippetType.vex)
         import_snippet = import_wind.getSnippet()
         if import_snippet:
             code = import_snippet + code
@@ -80,7 +80,7 @@ for parm in parms:
     elif parm.name() == 'python':
         code = parm.unexpandedString()
         func_dict = import_snippet.searchPythonList()
-        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict)
+        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict, SnippetType.python)
         import_snippet = import_wind.getSnippet()
         if import_snippet:
             code = import_snippet + code
