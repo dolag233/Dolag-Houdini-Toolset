@@ -5,6 +5,8 @@ _error_msg =\
         "config": "Error: Failed to config Dolag Tools",
         "filename": "Error: Illegal file name",
         "code": "Error: Wrong code type",
+        "env_json": "Error: Cannot find environment json file",
+        "doc": "Error: Cannot find doc file"
     }
 
 def displayError(error_key):
