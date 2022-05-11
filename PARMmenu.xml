@@ -92,7 +92,6 @@ import hou
 from parm_menu import copy_button
 
 parms = kwargs['parms']
-print(kwargs)
 for parm in parms:
     if isinstance(parm.parmTemplate(), hou.ButtonParmTemplate):
         copy_button.copyButtonToClipboard(parm)
