@@ -78,8 +78,14 @@ for parm in parms:
         parm.set(code)
 
     elif parm.name() == 'python':
-        import_snippet.searchVexList()
+        code = parm.unexpandedString()
+        func_dict = import_snippet.searchPythonList()
+        import_wind = show_UI.showUI(import_snippet_UI.ImportWindow, func_dict)
+        import_snippet = import_wind.getSnippet()
+        if import_snippet:
+            code = import_snippet + code
 
+        parm.set(code)
 
                     ]]>
                     </scriptCode>

@@ -1,4 +1,5 @@
 import hou
+import sys
 import os
 from os import environ as env
 import re
@@ -7,7 +8,7 @@ from error.error_report import displayError
 
 def __getVexFilenames(path):
     if not os.path.isdir(path):
-        return [], []
+        return []
 
     lists = os.listdir(path)
     filenames = []
@@ -30,6 +31,7 @@ def __getPythonFilenames(path):
     lists = os.listdir(path)
     filenames = []
     for i in lists:
+        i = path + '\\' + i
         if not os.path.isfile(i):
             continue
 
@@ -83,6 +85,35 @@ def __getVexFunc(vex_path):
     return func_names, vex_path
 
 
+def __getPythonFunc(py_path):
+    suffix = ("py", )
+    if not isinstance(py_path, str) or py_path.split('.')[-1] not in suffix:
+        return [], None
+
+    if not os.path.isfile(py_path):
+        return [], None
+
+    func_names = []
+    with open(py_path, 'r') as f:
+        f.seek(0, 0)
+        content = f.read()
+        # @TODO parser
+
+        # discard comment
+        pattern_comment = re.compile(r"'''.*'''|\"\"\".*\"\"\"|#[^\n]*", re.M | re.S)
+        content = pattern_comment.sub('', content)
+        # discard string
+        pattern_string = re.compile(r"'.*'|\".*\"")
+        content = pattern_string.sub('', content)
+        if py_path.split('.')[-1] == 'py':
+            # def func(dolag)
+            # match function signature
+            pattern_func = re.compile(r"{0}{1}".format(r"def\s+", r"((?!_)\w\w*)\s*\(.*\)\s*:"), re.M)
+            func_names = pattern_func.findall(content)
+
+    return func_names, py_path
+
+
 def searchVexList():
     vex_funcs = {}
     houdini_paths = env["HOUDINI_PATH"].split(';')
@@ -105,3 +136,27 @@ def searchVexList():
             vex_funcs[file_path] = func_names
 
     return vex_funcs
+
+
+def searchPythonList():
+    # just load py file in DolagPlugin/Python
+    py_funcs = {}
+    dolag_path = env["DOLAG_HOUDINI_PATH"]
+    py_files = list()
+    py_files += __getPythonFilenames(dolag_path + "\\python")
+    py_files += __getPythonFilenames(dolag_path + "\\python\\custom")
+    # search "DOLAG_PYTHON_SNIPPET_PATH" in DolagPlugin.json
+    if "DOLAG_PYTHON_SNIPPET_PATH" in env.keys():
+        dolag_snippet_path = env["DOLAG_PYTHON_SNIPPET_PATH"]
+        for snippet_path in dolag_snippet_path.split(';'):
+            py_files += __getPythonFilenames(snippet_path)
+
+    # remove duplication
+    # vex_files = list(set(vex_files))
+    for py_file in py_files:
+        func_names, file_path = __getPythonFunc(py_file)
+        func_names = list(set(func_names))
+        if file_path is not None and len(func_names) != 0:
+            py_funcs[file_path] = func_names
+
+    return py_funcs
