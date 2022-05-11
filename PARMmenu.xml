@@ -22,7 +22,7 @@ from error.error_report import displayError
 parms = kwargs['parms']
 
 for parm in parms:
-    # just save snnipet
+    # just save snippet
     if parm.name() == 'snippet':
         code = parm.unexpandedString()
         if len(code) == 0:
@@ -53,6 +53,7 @@ for parm in parms:
                     ]]>
                     </scriptCode>
             </scriptItem>
+
             <scriptItem id = "dolag.parm.menu.import_snippet">
                 <label>Import Snippet</label>
                     <scriptCode><![CDATA[
@@ -65,7 +66,7 @@ from utils.code_type import SnippetType, VexType
 parms = kwargs['parms']
 
 for parm in parms:
-    # just save snnipet
+    # just save snippet
     if parm.name() == 'snippet':
         code = parm.unexpandedString()
         func_dict = import_snippet.searchVexList()
@@ -80,6 +81,37 @@ for parm in parms:
         import_snippet.searchVexList()
 
 
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "dolag.parm.menu.copy_button">
+                <label>Copy Button</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import copy_button
+
+parms = kwargs['parms']
+print(kwargs)
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.ButtonParmTemplate):
+        copy_button.copyButtonToClipboard(parm)
+        break
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "dolag.parm.menu.paste_button">
+                <label>Paste Button</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import copy_button
+
+parms = kwargs['parms']
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.ButtonParmTemplate):
+        copy_button.pasteButtonFromClipboard(parm)
+        break
                     ]]>
                     </scriptCode>
             </scriptItem>
