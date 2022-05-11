@@ -17,6 +17,8 @@ if __name__ == "__main__":
         # custom python snippet path
         sys.path.append(dolag_path + "\\python\\python2.7libs")
         sys.path.append(dolag_path + "\\python\\custom")
+        sys.path.append(dolag_path + "\\python")
+        sys.path.append(dolag_path)
         # env DOLAG_PYTHON_LIB path
         for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
             if pylib_path not in sys.path:
