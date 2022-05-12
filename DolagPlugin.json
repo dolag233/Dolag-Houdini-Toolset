@@ -14,10 +14,16 @@
 			"DOLAG_HOUDINI_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin"
 		},
 		{
+			"DOLAG_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin"
+		},
+		{
 			"DOLAG_PYTHON_LIB" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/python/python2.7libs"
 		},
 		{
 			"DOLAG_PYTHON_SNIPPET_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/python/python2.7libs/Dolag"
+		},
+		{
+			"HOUDINI_OTLSCAN_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/otls"
 		}
 	],
 	"path" : "$DOLAG_HOUDINI_PATH"
