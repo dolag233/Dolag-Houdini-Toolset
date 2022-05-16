@@ -12,3 +12,7 @@ Dolag的Houdini工具集
 2. 在文档下的对应版本houdini文件夹下新建DolagPlugin文件夹，并将剩余文件放置到此文件夹中。
 
    例如，如果用户名为Dolag，且houdini版本号为18.5，则将剩余文件放置到C:\Users\Dolag\Documents\houdini18.5\DolagPlugin中。
+
+---
+
+注：此为otls分支，专门用于开发otl工具。当提交达到一定规模后可以合并到dev分支。
