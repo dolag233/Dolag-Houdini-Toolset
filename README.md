@@ -1,6 +1,5 @@
 # Doalg-Houdini-Toolset
 Dolag的Houdini工具集
-dev分支为正在开发中的分支，目前还未merge到主分支
 
 ---
 
@@ -16,3 +15,7 @@ dev分支为正在开发中的分支，目前还未merge到主分支
    然后在2中的houdini.env中以相同的方式添加自定义vex文件夹路径到HOUDINI_VEX_PATH。
 
    若不存在HOUDINI_VEX_PATH则新建HOUDINI_VEX_PATH行，并在其后输入“ = ”和vex文件夹路径。例如“HOUDINI_VEX_PATH = C:\Users\Dolag\Documents\DolagHoudiniToolSet\vex\custom;&;”。
+   
+---
+
+注意：当前分支为主分支，而开发分支dev及其子分支为进行开发的分支。目前dev分支尚未合并到主分支，因此新功能目前都集中在dev分支和其子分支下。
