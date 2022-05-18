@@ -22,8 +22,13 @@
         </scriptItem>
 
         <scriptItem id="h.menu_bar.open_doc">
-          <label>Open Documentation</label>
+          <label>Open Doc</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/open_doc.py</scriptPath>
+        </scriptItem>
+
+        <scriptItem id="h.menu_bar.open_doc_online">
+          <label>Open Online Doc</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/open_doc_online.py</scriptPath>
         </scriptItem>
     </subMenu>
   </menuBar>
