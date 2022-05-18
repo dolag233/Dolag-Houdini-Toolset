@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Operator menu of Dolag tools
+-->
+<menuDocument>
+    <!-- menuDocument can only contain 1 menu element, whose id is
+         implicitly "root_menu"
+      -->
+    <menu>
+        <subMenu id = "dolag.parm.OPmenu">
+            <label>Dolag</label>
+            <scriptItem id = "dolag.parm.OPmenu.dup_node_ref">
+                <label>Duplicate Node As Reference</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from op_menu import node_ref
+
+nodes = kwargs['items']
+
+node_ref.dupNodeRef(nodes)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "dolag.parm.OPmenu.copy_node_ref">
+                <label>Copy Node Reference</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from op_menu import node_ref
+
+node = kwargs['node']
+
+node_ref.copyNodeRef(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "dolag.parm.OPmenu.paste_node_ref">
+                <label>Paste Node Reference</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from op_menu import node_ref
+
+print(kwargs)
+node = kwargs['node']
+
+node_ref.pasteNodeRef(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+        </subMenu>
+    </menu>
+
+</menuDocument>
