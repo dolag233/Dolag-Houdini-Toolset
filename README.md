@@ -1,5 +1,5 @@
 # Doalg-Houdini-Toolset
-Dolag的Houdini工具集
+Dolag的Houdini工具集。使用python2版本的Houdini18.5.351进行开发。
 
 ---
 
@@ -15,6 +15,4 @@ Dolag的Houdini工具集
 
 ---
 
-注：此为dev分支，所有最新的功能会被提交到此处，当新功能添加到一定规模后合并到主分支。
-
-从此dev分支fork出的各种分支，例如otls分支用于开发一系列特定种类的工具，待新工具添加到一定规模后合并到dev分支。
+注：main分支为主分支，而dev分支以及dev分支下的分支(如otls分支)中进行新功能的开发，在新功能规模达到一定程度并验证后会进行合并，因此如要获取beta功能请关注dev分支以及dev分支下的分支。
