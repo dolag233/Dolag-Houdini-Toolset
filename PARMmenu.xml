@@ -127,12 +127,12 @@ for parm in parms:
                     <label>CatmullRom</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.CatmullRom
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -141,12 +141,12 @@ for parm in parms:
                     <label>BSpline</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.BSpline
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -155,12 +155,12 @@ for parm in parms:
                     <label>Bezier</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.Bezier
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -169,12 +169,12 @@ for parm in parms:
                     <label>Constant</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.Constant
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -183,12 +183,12 @@ for parm in parms:
                     <label>Hermite</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.Hermite
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -197,12 +197,12 @@ for parm in parms:
                     <label>Linear</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.Linear
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
@@ -211,12 +211,12 @@ for parm in parms:
                     <label>MonotoneCubic</label>
                     <scriptCode><![CDATA[
 import hou
-from parm_menu import ramp_interpolation
+from parm_menu import ramp
 
 parms = kwargs['parms']
 for parm in parms:
     base = hou.rampBasis.MonotoneCubic
-    ramp_interpolation.setRampInterpolation(parm, base)
+    ramp.setRampInterpolation(parm, base)
                     ]]>
                     </scriptCode>
                 </scriptItem>
