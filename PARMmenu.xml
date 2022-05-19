@@ -221,6 +221,35 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
             </subMenu>
+
+            <subMenu id = "dolag.parm.menu.mirror_ramp">
+                <label>Mirror Ramp</label>
+                <scriptItem id = "dolag.parm.menu.mirror_ramp.left_to_right">
+                    <label>Left To Right</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.mirrorRamp(parm, 1)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.mirror_ramp.right_to_left">
+                    <label>Right To Left</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.mirrorRamp(parm, 0)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+            </subMenu>
         </subMenu>
     </menu>
 
