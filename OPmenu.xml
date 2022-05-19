@@ -46,7 +46,6 @@ import hou
 import sys
 from op_menu import node_ref
 
-print(kwargs)
 node = kwargs['node']
 
 node_ref.pasteNodeRef(node)
