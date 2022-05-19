@@ -120,6 +120,107 @@ for parm in parms:
                     ]]>
                     </scriptCode>
             </scriptItem>
+
+            <subMenu id = "dolag.parm.menu.ramp_interpolation">
+                <label>Set Ramp Interpolation</label>
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.CatmullRom">
+                    <label>CatmullRom</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.CatmullRom
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.BSpline">
+                    <label>BSpline</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.BSpline
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Bezier">
+                    <label>Bezier</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.Bezier
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Constant">
+                    <label>Constant</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.Constant
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Hermite">
+                    <label>Hermite</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.Hermite
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Linear">
+                    <label>Linear</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.Linear
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "dolag.parm.menu.ramp_interpolation.MonotoneCubic">
+                    <label>MonotoneCubic</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp_interpolation
+
+parms = kwargs['parms']
+for parm in parms:
+    base = hou.rampBasis.MonotoneCubic
+    ramp_interpolation.setRampInterpolation(parm, base)
+                    ]]>
+                    </scriptCode>
+                </scriptItem>
+            </subMenu>
         </subMenu>
     </menu>
 
