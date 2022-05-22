@@ -4,6 +4,27 @@
 
 <mainMenu>
   <menuBar>
+    <!-- Item inserted into File menu -->
+    <subMenu id="file_menu">
+      <label>File</label>
+      <scriptItem id="h.save_incrementally">
+          <label>Save Incrementally</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/save_incrementally.py</scriptPath>
+          <insertBefore>h.save_as</insertBefore>
+      </scriptItem>
+
+      <scriptItem id="h.save_backup">
+          <label>Save Backup</label>
+          <scriptCode><![CDATA[
+import hou
+
+hou.hipFile.saveAsBackup()
+                    ]]>
+          </scriptCode>
+          <insertBefore>h.save_as</insertBefore>
+      </scriptItem>
+    </subMenu>
+
     <subMenu>
       <label>Dolag</label>
         <scriptItem id="h.menu_bar.visit_github">
