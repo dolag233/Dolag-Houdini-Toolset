@@ -1,3 +1,6 @@
+import hou
+
+
 # get the dest path related to src
 def getRelativePath(src, dest):
     """
@@ -60,3 +63,32 @@ def getRelativePath(src, dest):
         res_str = "../" * len(src_path_list) + dest_parm_name
 
     return res_str
+
+
+# get hda library path
+# return None if no otl file
+def getHdaLibraryPath(hda_name):
+    import os
+
+    otl_scan_paths = hou.getenv("HOUDINI_OTLSCAN_PATH").split(';')
+    otl_scan_paths += list(map(lambda x: x + "/otls", hou.getenv("HOUDINI_PATH").split(';')))
+    # remove duplication
+    otl_scan_paths = list(set(otl_scan_paths))
+    hda_path = None
+    # find matched hda path
+    for path in otl_scan_paths:
+        if not os.path.isdir(path):
+            continue
+        else:
+            for f in os.listdir(path):
+                file_path = "{0}/{1}".format(path, f)
+                if os.path.isfile(file_path):
+                    try:
+                        if f[:-4] == hda_name:
+                            hda_path = file_path
+                            break
+                    except:
+                        continue
+
+    return hda_path
+
