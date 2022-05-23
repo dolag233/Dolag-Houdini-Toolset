@@ -7,9 +7,11 @@
          implicitly "root_menu"
       -->
     <menu>
-        <subMenu id = "dolag.parm.menu">
+        <subMenu id = "h.pane.parms.dolag">
             <label>Dolag</label>
-            <scriptItem id = "dolag.parm.menu.save_snippet">
+            <insertBefore>revert_to_prev_val</insertBefore>
+            <scriptItem id = "h.pane.parms.dolag.menu.save_snippet">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
                 <label>Save Snippet</label>
                     <scriptCode><![CDATA[
 import hou
@@ -54,8 +56,9 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "dolag.parm.menu.import_snippet">
+            <scriptItem id = "h.pane.parms.dolag.import_snippet">
                 <label>Import Snippet</label>
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
                     <scriptCode><![CDATA[
 import hou
 import sys
@@ -91,8 +94,11 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "dolag.parm.menu.copy_button">
+            <separatorItem id="h.pane.parms.dolag.sep_0"/>
+
+            <scriptItem id = "h.pane.parms.dolag.copy_button">
                 <label>Copy Button</label>
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.ButtonParmTemplate)</expression>
                     <scriptCode><![CDATA[
 import hou
 from parm_menu import copy_button
@@ -106,7 +112,8 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "dolag.parm.menu.paste_button">
+            <scriptItem id = "h.pane.parms.dolag.paste_button">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.ButtonParmTemplate)</expression>
                 <label>Paste Button</label>
                     <scriptCode><![CDATA[
 import hou
@@ -121,9 +128,12 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
-            <subMenu id = "dolag.parm.menu.ramp_interpolation">
+            <separatorItem id="h.pane.parms.dolag.sep_1"/>
+
+            <subMenu id = "h.pane.parms.dolag.ramp_interpolation">
                 <label>Set Ramp Interpolation</label>
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.CatmullRom">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.CatmullRom">
                     <label>CatmullRom</label>
                     <scriptCode><![CDATA[
 import hou
@@ -137,7 +147,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.BSpline">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.BSpline">
                     <label>BSpline</label>
                     <scriptCode><![CDATA[
 import hou
@@ -151,7 +161,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Bezier">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.Bezier">
                     <label>Bezier</label>
                     <scriptCode><![CDATA[
 import hou
@@ -165,7 +175,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Constant">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.Constant">
                     <label>Constant</label>
                     <scriptCode><![CDATA[
 import hou
@@ -179,7 +189,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Hermite">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.Hermite">
                     <label>Hermite</label>
                     <scriptCode><![CDATA[
 import hou
@@ -193,7 +203,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.Linear">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.Linear">
                     <label>Linear</label>
                     <scriptCode><![CDATA[
 import hou
@@ -207,7 +217,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.ramp_interpolation.MonotoneCubic">
+                <scriptItem id = "h.pane.parms.dolag.ramp_interpolation.MonotoneCubic">
                     <label>MonotoneCubic</label>
                     <scriptCode><![CDATA[
 import hou
@@ -222,9 +232,10 @@ for parm in parms:
                 </scriptItem>
             </subMenu>
 
-            <subMenu id = "dolag.parm.menu.mirror_ramp">
+            <subMenu id = "h.pane.parms.dolag.mirror_ramp">
                 <label>Mirror Ramp</label>
-                <scriptItem id = "dolag.parm.menu.mirror_ramp.left_to_right">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+                <scriptItem id = "h.pane.parms.dolag.mirror_ramp.left_to_right">
                     <label>Left To Right</label>
                     <scriptCode><![CDATA[
 import hou
@@ -237,7 +248,7 @@ for parm in parms:
                     </scriptCode>
                 </scriptItem>
 
-                <scriptItem id = "dolag.parm.menu.mirror_ramp.right_to_left">
+                <scriptItem id = "h.pane.parms.dolag.mirror_ramp.right_to_left">
                     <label>Right To Left</label>
                     <scriptCode><![CDATA[
 import hou
