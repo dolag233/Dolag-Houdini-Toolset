@@ -128,6 +128,7 @@ def getHdaLibraryPath(hda_name):
 
     otl_scan_paths = hou.getenv("HOUDINI_OTLSCAN_PATH").split(';')
     otl_scan_paths += list(map(lambda x: x + "/otls", hou.getenv("HOUDINI_PATH").split(';')))
+    otl_scan_paths += [hou.getenv("HFS") + "/houdini/otls"]
     # remove duplication
     otl_scan_paths = list(set(otl_scan_paths))
     hda_path = None
