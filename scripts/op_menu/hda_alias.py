@@ -17,6 +17,10 @@ def setHdaAlias(node, new_hda_menu_name):
         return
 
     hda_def = hou.hdaDefinition(hou.sopNodeTypeCategory(), hda_name, hda_path)
+    # if can't find hda definition
+    if hda_def is None:
+        hou.ui.setStatusMessage("Error: Cannot find hda definition")
+
     suffix = hda_path[-4:]
     hda_folder = '/'.join(hda_path.split('/')[:-1])
     new_hda_file_name = hda_name + "_alias"
