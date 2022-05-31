@@ -7,9 +7,10 @@
          implicitly "root_menu"
       -->
     <menu>
-        <subMenu id = "dolag.parm.OPmenu">
+        <subMenu id = "opmenu.dolag">
             <label>Dolag</label>
-            <scriptItem id = "dolag.parm.OPmenu.dup_node_ref">
+            <insertBefore>opmenu.flags_menu</insertBefore>
+            <scriptItem id = "opmenu.dolag.dup_node_ref">
                 <label>Duplicate Node As Reference</label>
                     <scriptCode><![CDATA[
 import hou
@@ -24,8 +25,8 @@ node_ref.dupNodeRef(nodes)
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "dolag.parm.OPmenu.copy_node_ref">
-                <label>Copy Node Reference</label>
+            <scriptItem id = "opmenu.dolag.copy_node_ref">
+                <label>Copy Node Parms Reference</label>
                     <scriptCode><![CDATA[
 import hou
 import sys
@@ -39,8 +40,29 @@ node_ref.copyNodeRef(node)
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "dolag.parm.OPmenu.paste_node_ref">
-                <label>Paste Node Reference</label>
+            <scriptItem id = "opmenu.dolag.paste_node_ref">
+                <label>Paste Node Parms Reference</label>
+                <expression>
+import hou
+
+tar = hou.ui.getTextFromClipboard()
+tar = tar.split('\n')
+if len(tar) == 0:
+    return False
+
+src_node = hou.node(tar[0])
+if src_node is None:
+    return False
+
+# discard tar[0]
+tar = tar[1:]
+# if node types are not the same
+if src_node.type() == kwargs["node"].type():
+    return True
+else:
+    return False
+
+                </expression>
                     <scriptCode><![CDATA[
 import hou
 import sys
@@ -49,6 +71,22 @@ from op_menu import node_ref
 node = kwargs['node']
 
 node_ref.pasteNodeRef(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.set_hda_alias">
+                <label>Set Otl Alias</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu import hda_alias, hda_alias_UI
+from utils import show_UI
+
+alias_wind = show_UI.showUI(hda_alias_UI.AliasWindow)
+alias = alias_wind.getAlias()
+node = kwargs['node']
+hda_alias.setHdaAlias(node, alias)
 
                     ]]>
                     </scriptCode>

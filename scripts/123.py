@@ -13,17 +13,17 @@ if __name__ == "__main__":
     if "DOLAG_HOUDINI_PATH" in os.environ.keys():
         dolag_path = os.environ["DOLAG_HOUDINI_PATH"]
         # python script path
-        sys.path.append(dolag_path + "\\scripts")
+        sys.path.insert(0, dolag_path + "\\scripts")
         # custom python snippet path
-        sys.path.append(dolag_path + "\\python\\python2.7libs")
-        sys.path.append(dolag_path + "\\python\\custom")
-        sys.path.append(dolag_path + "\\python")
-        sys.path.append(dolag_path)
+        sys.path.insert(0, dolag_path + "\\python\\python2.7libs")
+        sys.path.insert(0, dolag_path + "\\python\\custom")
+        sys.path.insert(0, dolag_path + "\\python")
+        sys.path.insert(0, dolag_path)
         # env DOLAG_PYTHON_LIB path
         if "DOLAG_PYTHON_LIB" in os.environ.keys():
             for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:
                 if pylib_path not in sys.path:
-                    sys.path.append(pylib_path)
+                    sys.path.insert(0, pylib_path)
 
     else:
         # cannot use hou.ui because of partial initialization
