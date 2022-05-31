@@ -1,7 +1,9 @@
 """
     visit doc online
 """
+import hou
 import webbrowser
 
-DOLAG_GITHUB_LINK = "http://www.vis.dolag.work/houdini-toolset/"
-webbrowser.open_new(DOLAG_GITHUB_LINK)
+desk = hou.ui.curDesktop()
+browser = desk.createFloatingPane(hou.paneTabType.HelpBrowser)
+browser.setUrl("http://www.vis.dolag.work/houdini-toolset/")
