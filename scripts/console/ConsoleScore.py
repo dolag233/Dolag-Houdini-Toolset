@@ -31,6 +31,9 @@ class MatchScoreBase(EvalBase):
 
 # longest common substring
 def lcString(s1, s2):
+    if len(s1) == 0 or len(s2) == 0:
+        return '', -1
+
     m = [[0 for i in range(len(s2) + 1)] for j in range(len(s1) + 1)]
     mmax = 0
     p = -1
@@ -108,6 +111,9 @@ class SubStringMatchScore(MatchScoreBase):
 
 
 def lcSequence(s1, s2):
+    if len(s1) == 0 or len(s2) == 0:
+        return ''
+
     matrix = [["" for x in range(len(s2))] for x in range(len(s1))]
     for i in range(len(s1)):
         for j in range(len(s2)):
