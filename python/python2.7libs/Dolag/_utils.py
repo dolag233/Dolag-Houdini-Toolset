@@ -46,3 +46,16 @@ def lcSequence(s1, s2):
     cs = matrix[-1][-1]
 
     return cs
+
+
+def writeClipBoard(text):
+    import PySide2
+    clipboard = PySide2.QtWidgets.QApplication.clipboard()
+    clipboard.clear()
+    clipboard.setText(text)
+
+
+def readClipBoard():
+    import PySide2
+    clipboard = PySide2.QtWidgets.QApplication.clipboard()
+    return clipboard.text()
