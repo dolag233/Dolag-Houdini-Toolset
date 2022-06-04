@@ -19,7 +19,7 @@
   },
   {
     "item_name": "Subdivide",
-    "alias": "hf",
+    "alias": "sd",
     "important": true,
     "node_name": "subdivide"
   }
