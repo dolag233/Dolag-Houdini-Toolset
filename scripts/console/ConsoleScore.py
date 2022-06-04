@@ -1,4 +1,6 @@
-from abc import abstractmethod, ABCMeta
+from abc import abstractmethod, ABCMeta, abstractproperty
+from functools import wraps
+from Dolag import utils as du
 
 
 class EvalBase(object):
@@ -9,7 +11,7 @@ class EvalBase(object):
         pass
 
 
-class MatchScoreBase(EvalBase):
+class MatchScoreMethodBase(EvalBase):
     __metaclass__ = ABCMeta
 
     def __init__(self, search_str, match_str, score_bias, score_grain=0.00001):
@@ -17,6 +19,7 @@ class MatchScoreBase(EvalBase):
         self.match_str = match_str
         self.score_bias = score_bias
         self.score_grain = score_grain
+        self.__priority = self.initPriority()
 
     @abstractmethod
     # eval the match score of two str
@@ -27,6 +30,16 @@ class MatchScoreBase(EvalBase):
     # each score method should strip the match string for the next score method
     def getRestStr(self):
         pass
+
+    def getPriority(self):
+        return self.__priority
+
+    def setMatchString(self, string):
+        self.match_str = string
+
+    @abstractmethod
+    def initPriority(self):
+        return -1
 
 
 # longest common substring
@@ -49,12 +62,14 @@ def lcString(s1, s2):
     return s1[p - mmax:p], first_match
 
 
-class PrefixMatchScore(MatchScoreBase):
+class PrefixMatchScore(MatchScoreMethodBase):
     def __init__(self, search_str, match_str):
         super(PrefixMatchScore, self).__init__(search_str, match_str, 3)
-        self.lcs, self.first_match = lcString(search_str, match_str)
+        self.lcs = 0
+        self.first_match = -1
 
     def eval(self, ignore_cap=True):
+        self.lcs, self.first_match = lcString(self.search_str, self.match_str)
         search_str = self.search_str
         match_str = self.match_str
         score_bias = self.score_bias
@@ -70,6 +85,7 @@ class PrefixMatchScore(MatchScoreBase):
 
         score += score_bias
         score += score_grain * len(lcs)
+        score -= first_match * score_grain
         return score
 
     def getRestStr(self):
@@ -78,13 +94,18 @@ class PrefixMatchScore(MatchScoreBase):
 
         return self.match_str[:len(self.lcs)]
 
+    def initPriority(self):
+        return 3
 
-class SubStringMatchScore(MatchScoreBase):
+
+class SubStringMatchScore(MatchScoreMethodBase):
     def __init__(self, search_str, match_str):
         super(SubStringMatchScore, self).__init__(search_str, match_str, 2)
-        self.lcs, self.first_match = lcString(search_str, match_str)
+        self.lcs = ''
+        self.first_match = -1
 
     def eval(self, ignore_cap=True):
+        self.lcs, self.first_match = lcString(self.search_str, self.match_str)
         search_str = self.search_str
         match_str = self.match_str
         score_bias = self.score_bias
@@ -101,6 +122,7 @@ class SubStringMatchScore(MatchScoreBase):
 
         score += score_bias
         score += score_grain * len(lcs)
+        score -= first_match * score_grain
         return score
 
     def getRestStr(self):
@@ -108,6 +130,9 @@ class SubStringMatchScore(MatchScoreBase):
             return self.match_str
 
         return self.match_str[self.first_match:self.first_match + len(self.lcs)]
+
+    def initPriority(self):
+        return 2
 
 
 def lcSequence(s1, s2):
@@ -130,15 +155,17 @@ def lcSequence(s1, s2):
     return cs
 
 
-class SubSequenceMatchScore(MatchScoreBase):
+class SubSequenceMatchScore(MatchScoreMethodBase):
     def __init__(self, search_str, match_str):
         super(SubSequenceMatchScore, self).__init__(search_str, match_str, 1)
-        self.lcs = lcSequence(search_str, match_str)
+        self.lcs = ''
         self.first_match = -1
-        if len(self.lcs) != 0:
-            self.first_match = match_str.find(self.lcs[0])
 
     def eval(self, ignore_cap=True):
+        self.lcs = lcSequence(self.search_str, self.match_str)
+        if len(self.lcs) != 0:
+            self.first_match = self.match_str.find(self.lcs[0])
+
         search_str = self.search_str
         match_str = self.match_str
         score_bias = self.score_bias
@@ -149,85 +176,110 @@ class SubSequenceMatchScore(MatchScoreBase):
             match_str.upper()
 
         lcs, first_match = self.lcs, self.first_match
-        # if just match 1 char, degenerate to lcSequence
+        # match failed
         if len(lcs) == 0 or first_match == -1:
             return score
 
         score += score_bias
-        score += score_grain * (len(lcs) + self.first_match)
+        score += score_grain * (len(lcs) - self.first_match)
         return score
 
     def getRestStr(self):
         return self.match_str
 
+    def initPriority(self):
+        return 1
 
-class MatchStringBase(object):
+
+class MatchScoreStringBase(du.Subject):
     __metaclass__ = ABCMeta
 
-    def __init__(self, string):
-        self.string = string
+    def __init__(self, search_str, match_str):
+        super(MatchScoreStringBase, self).__init__()
+        self.match_str = match_str
+        self.search_str = search_str
         self.rank_score = 0
 
     def getRankScore(self):
         return self.rank_score
 
     def getString(self):
-        return self.string
+        return self.match_str
+
+    def eval(self):
+        max_score = -1
+        search_str = self.search_str
+        match_str = self.match_str
+        parm = (search_str, match_str)
+        score_methods = []
+        for score_method in self.getObs():
+            score_method = score_method(*parm)
+            score_methods.append((score_method.getPriority(), score_method))
+
+        # sort it
+        score_methods.sort()
+        score_methods.reverse()
+        score_methods = [pair[-1] for pair in score_methods]
+
+        for score_method in score_methods:
+            score_method.setMatchString(match_str)
+            score = score_method.eval()
+            match_str = score_method.getRestStr()
+
+            max_score = max(max_score, score)
+
+        return max_score, self.getRankScore()
 
 
-class AliasMatchString(MatchStringBase):
-    def __init__(self, string):
-        super(AliasMatchString, self).__init__(string=string)
+class AliasMatchString(MatchScoreStringBase):
+    def __init__(self, search_str, match_str, score_method_tuple=()):
+        MatchScoreStringBase.__init__(self, search_str=search_str, match_str=match_str)
+        for obs in score_method_tuple:
+            # if is a class
+            if isinstance(obs, type):
+                self.addObs(obs)
+
         self.rank_score = 0.3
 
 
-class ItemNameMatchString(MatchStringBase):
-    def __init__(self, string):
-        super(ItemNameMatchString, self).__init__(string=string)
+class ItemNameMatchString(MatchScoreStringBase):
+    def __init__(self, search_str, match_str, score_method_tuple=()):
+        MatchScoreStringBase.__init__(self, search_str=search_str, match_str=match_str)
+        for obs in score_method_tuple:
+            # if is a class
+            if isinstance(obs, type):
+                self.addObs(obs)
+
         self.rank_score = 0.2
 
 
-class CaptainMatchString(MatchStringBase):
-    def __init__(self, string):
-        super(CaptainMatchString, self).__init__(string=string)
+class CaptainMatchString(MatchScoreStringBase):
+    def __init__(self, search_str, match_str, score_method_tuple=()):
+        MatchScoreStringBase.__init__(self, search_str=search_str, match_str=match_str)
+        for obs in score_method_tuple:
+            # if is a class
+            if isinstance(obs, type):
+                self.addObs(obs)
+
         self.rank_score = 0.1
 
 
-# @TODO divide this workflow
-def evalScore(search_str, match_str):
-    score = 0
-    cur_match_str = match_str.getString()
-
-    # eval with the order of prefix->substring->subsequence
-    pms = PrefixMatchScore(search_str, cur_match_str)
-    score += pms.eval()
-    cur_match_str = pms.getRestStr()
-
-    sstrs = SubStringMatchScore(search_str, cur_match_str)
-    score += sstrs.eval()
-    cur_match_str = sstrs.getRestStr()
-
-    sseqs = SubSequenceMatchScore(search_str, cur_match_str)
-    score += sseqs.eval()
-
-    rank_score = match_str.getRankScore()
-    return score, rank_score
-
-
 # the final eval class
-class EvalScore(EvalBase):
-    def __init__(self, search_str, match_string_tuple):
-        self.search_str = search_str
+# observer mode
+class EvalSearchStringScore(EvalBase, du.Subject):
+    def __init__(self, mstring_tuple=()):
+        EvalBase.__init__(self)
+        du.Subject.__init__(self)
         self.match_strings = []
-        for match_string in match_string_tuple:
-            if isinstance(match_string, MatchStringBase):
-                self.match_strings.append(match_string)
+        for match_string in mstring_tuple:
+            if isinstance(match_string, MatchScoreStringBase):
+                self.addObs(match_string)
 
     def eval(self):
-        max_score = [-1, -1]
-        for match_string in self.match_strings:
-            score, rank_score = evalScore(self.search_str, match_string)
-            if score > max_score[0] or (score == max_score[0] and rank_score > max_score[1]):
-                max_score = [score, rank_score]
+        max_score = (-1, -1)
+        for match_string in self.getObs():
+            score, rank_score = match_string.eval()
+            if score > max_score[0]:
+                max_score = (score, rank_score)
 
-        return tuple(max_score)
+        return max_score
