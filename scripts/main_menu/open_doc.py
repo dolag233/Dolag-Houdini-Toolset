@@ -1,19 +1,10 @@
-#coding=utf-8
+# coding=utf-8
 """
-    open documentation file
+    visit doc in inhouse browser
 """
-import os
-from error.error_report import displayError
+import hou
+import webbrowser
 
-DOC_NAME = "文档模板"
-if "DOLAG_HOUDINI_PATH" in os.environ.keys():
-    dolag_path = os.environ["DOLAG_HOUDINI_PATH"]
-    doc_path = dolag_path + '/doc/{0}.html'.format(DOC_NAME)
-    if os.path.isfile(doc_path):
-        os.startfile(doc_path)
-
-    else:
-        displayError("doc")
-
-else:
-    displayError("doc")
+desk = hou.ui.curDesktop()
+browser = desk.createFloatingPane(hou.paneTabType.HelpBrowser)
+browser.setUrl("http://www.vis.dolag.work/houdini-toolset/")

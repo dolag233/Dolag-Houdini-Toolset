@@ -92,11 +92,17 @@ class ConsoleWindow(QtWidgets.QDialog):
             else:
                 alias = alias.upper()
             search_str = search_str.upper()
-            alias_match_str = ConsoleScore.AliasMatchString(alias)
-            name_match_str = ConsoleScore.ItemNameMatchString(item_name)
+            alias_match_str = ConsoleScore.AliasMatchString(search_str, alias,
+                                                            (ConsoleScore.SubStringMatchScore,
+                                                             ConsoleScore.SubSequenceMatchScore))
+            name_match_str = ConsoleScore.ItemNameMatchString(search_str, item_name,
+                                                              (ConsoleScore.SubStringMatchScore,
+                                                               ConsoleScore.SubSequenceMatchScore))
             captain = ''.join([word[0] for word in item_name.split(' ')])
-            captain_match_str = ConsoleScore.CaptainMatchString(captain)
-            eval_score = ConsoleScore.EvalScore(search_str, (alias_match_str, name_match_str, captain_match_str))
+            captain_match_str = ConsoleScore.CaptainMatchString(search_str, captain,
+                                                                (ConsoleScore.SubStringMatchScore,
+                                                                 ConsoleScore.SubSequenceMatchScore))
+            eval_score = ConsoleScore.EvalSearchStringScore((alias_match_str, name_match_str, captain_match_str))
             score, rank_score = eval_score.eval()
             # the tuple order means the sort order
             # score > rank_score(alias > name > captain) > name length
@@ -224,8 +230,8 @@ class ConsoleWindow(QtWidgets.QDialog):
         self._updateCursorPos()
         self.move(self.pos)
         self.setLayout(self.blvMain)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint |
-                            QtCore.Qt.WindowStaysOnTopHint)
+        # self.setWindowFlags(self.windowFlags()^self.windowFlags())
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint, False)
         self.setWindowFlag(QtCore.Qt.WindowMinimizeButtonHint, False)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)

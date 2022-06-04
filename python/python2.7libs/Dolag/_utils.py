@@ -1,6 +1,7 @@
 """
     misc utils
 """
+from abc import ABCMeta, abstractmethod
 
 
 # use as meta class
@@ -11,6 +12,36 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+# subject class of observers
+class Subject(object):
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        self.__obsList = []
+        self.__is_changed = False
+
+    # add observer instance
+    def addObs(self, obs):
+        self.__obsList.append(obs)
+
+    def removeObs(self, obs):
+        if obs in self.__obsList:
+            self.__obsList.remove(obs)
+
+    def sortObs(self):
+        pass
+
+    def getObs(self):
+        return self.__obsList
+
+    def setChangedFlag(self, val):
+        if isinstance(val, bool):
+            self.__is_changed = val
+
+    def notifyObs(self):
+        pass
 
 
 # longest common substring
@@ -46,3 +77,16 @@ def lcSequence(s1, s2):
     cs = matrix[-1][-1]
 
     return cs
+
+
+def writeClipBoard(text):
+    import PySide2
+    clipboard = PySide2.QtWidgets.QApplication.clipboard()
+    clipboard.clear()
+    clipboard.setText(text)
+
+
+def readClipBoard():
+    import PySide2
+    clipboard = PySide2.QtWidgets.QApplication.clipboard()
+    return clipboard.text()
