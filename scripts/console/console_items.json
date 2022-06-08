@@ -1,0 +1,26 @@
+[
+  {
+    "item_name": "Heightfield",
+    "alias": "hf",
+    "important": true,
+    "node_name": "heightfield"
+  },
+  {
+    "item_name": "Heightfield Copy Layer",
+    "alias": "hfco",
+    "important": true,
+    "node_name": "heightfield_copylayer"
+  },
+  {
+    "item_name": "Copy To Points",
+    "alias": "cp",
+    "important": false,
+    "node_name": "copytopoints"
+  },
+  {
+    "item_name": "Subdivide",
+    "alias": "sd",
+    "important": true,
+    "node_name": "subdivide"
+  }
+]
