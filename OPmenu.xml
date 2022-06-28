@@ -76,6 +76,21 @@ node_ref.pasteNodeRef(node)
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "opmenu.dolag.del_all_keyframes">
+                <label>Delete Expression And Keys</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from op_menu import del_keyframes
+
+node = kwargs['node']
+
+del_keyframes.delKeyframes(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <separatorItem id="opmenu.dolag.dolag.sep_0"/>
 
             <scriptItem id = "opmenu.dolag.copy_node_shape">
