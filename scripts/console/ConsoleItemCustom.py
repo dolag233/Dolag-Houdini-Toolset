@@ -2,7 +2,13 @@
     User custom console items
 """
 import hou
-from ConsoleItem import ConsoleItem
+import platform
+if platform.python_version_tuple()[0] == '2':
+    from ConsoleItem import ConsoleItem
+
+elif platform.python_version_tuple()[0] == '3':
+    from .ConsoleItem import ConsoleItem
+
 from Dolag import utils as du
 
 # CUSTOM_ITEMS contains all user customized console item here

@@ -1,4 +1,10 @@
-from ConsoleContext import ConsoleContext
+import platform
+if platform.python_version_tuple()[0] == '2':
+    from ConsoleContext import ConsoleContext
+
+elif platform.python_version_tuple()[0] == '3':
+    from .ConsoleContext import ConsoleContext
+
 import hou
 from abc import ABCMeta, abstractmethod
 
