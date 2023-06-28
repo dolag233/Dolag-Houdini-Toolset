@@ -48,3 +48,4 @@ class ConsoleItem(ConsoleItemBase):
             self.callback(context)
         except Exception:
             pass
+

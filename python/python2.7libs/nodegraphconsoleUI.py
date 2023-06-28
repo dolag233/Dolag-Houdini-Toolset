@@ -109,7 +109,16 @@ class ConsoleWindow(QtWidgets.QDialog):
             score_item_list.append((score, rank_score, -len(item_name), item))
 
         # sort decreasingly
-        score_item_list.sort()
+        # for python2, it sorts default by index
+        import sys
+        if sys.version_info.major == 2:
+            score_item_list.sort()
+
+        # for python3, we have to use itemgetter
+        elif sys.version_info.major == 3:
+            from operator import itemgetter
+            score_item_list.sort(key=itemgetter(0, 1, 2))
+
         score_item_list.reverse()
         # extract name as a new list
         new_item_list = [item[-1].item_name for item in score_item_list]
