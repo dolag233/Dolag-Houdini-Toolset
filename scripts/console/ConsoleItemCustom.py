@@ -112,7 +112,7 @@ create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref"
 CUSTOM_ITEMS.append(create_python_shell)
 
 
-# create node(s) reference(s)
+# display points
 def display_point_cb(context):
     import hou
     # Get a reference to the geometry viewer
@@ -129,4 +129,50 @@ def display_point_cb(context):
 
 
 create_python_shell = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# display point normals
+def display_point_normal_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point normals
+    display_mode.showPointNormals(not display_mode.isShowingPointNormals())
+
+    # display point markers
+    if display_mode.isShowingPointNormals():
+        display_mode.showPointMarkers(True)
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Normals", alias="dpn", callback=display_point_normal_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# display point numbers
+def display_point_number_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point numbers
+    display_mode.showPointNumbers(not display_mode.isShowingPointNumbers())
+
+    # display point markers
+    if display_mode.isShowingPointNumbers():
+        display_mode.showPointMarkers(True)
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Numbers", alias="dpn", callback=display_point_number_cb)
 CUSTOM_ITEMS.append(create_python_shell)
