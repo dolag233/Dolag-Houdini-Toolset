@@ -97,3 +97,16 @@ def copy_node_path_cb(context):
 
 create_python_shell = ConsoleItem(item_name="Copy Node Path", alias="np", callback=copy_node_path_cb)
 CUSTOM_ITEMS.append(create_python_shell)
+
+# create node(s) reference(s)
+def copy_node_path_cb(context):
+    from scripts.op_menu.node_ref import dupNodeRef
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            dupNodeRef(node)
+
+
+create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=copy_node_path_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
