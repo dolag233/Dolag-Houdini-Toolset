@@ -98,8 +98,9 @@ def copy_node_path_cb(context):
 create_python_shell = ConsoleItem(item_name="Copy Node Path", alias="np", callback=copy_node_path_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
+
 # create node(s) reference(s)
-def copy_node_path_cb(context):
+def create_node_ref_cb(context):
     from scripts.op_menu.node_ref import dupNodeRef
     nodes = context["selected_nodes"]
     if nodes:
@@ -107,6 +108,25 @@ def copy_node_path_cb(context):
             dupNodeRef(node)
 
 
-create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=copy_node_path_cb)
+create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=create_node_ref_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
+
+# create node(s) reference(s)
+def display_point_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point marker
+    display_mode.showPointMarkers(not display_mode.isShowingPointMarkers())
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
+CUSTOM_ITEMS.append(create_python_shell)
