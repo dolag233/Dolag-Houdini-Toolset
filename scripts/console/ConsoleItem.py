@@ -1,4 +1,6 @@
 import platform
+import time
+
 if platform.python_version_tuple()[0] == '2':
     from ConsoleContext import ConsoleContext
 
@@ -37,6 +39,11 @@ class ConsoleItem(ConsoleItemBase):
     def __init__(self, item_name, callback, alias=tuple(), important=False):
         super(ConsoleItem, self).__init__(item_name=item_name, callback=callback, \
                                           alias=alias, important=important)
+        # last used time
+        self.LUT = 0
+
+    def updateLastUsedTime(self):
+        self.LUT = time.time()
 
     def run(self, context):
         if not isinstance(context, ConsoleContext):
