@@ -176,3 +176,42 @@ def display_point_number_cb(context):
 
 create_python_shell = ConsoleItem(item_name="Display Point Numbers", alias="dpn", callback=display_point_number_cb)
 CUSTOM_ITEMS.append(create_python_shell)
+
+
+# display prim normals
+def display_prim_normal_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch prim normals
+    display_mode.showPrimNormals(not display_mode.isShowingPrimNormals())
+
+
+create_python_shell = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# display rim numbers
+def display_point_number_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch prim numbers
+    display_mode.showPrimNumbers(not display_mode.isShowingPrimNumbers())
+
+
+create_python_shell = ConsoleItem(item_name="Display Prim Numbers", alias="dpn", callback=display_point_number_cb)
+CUSTOM_ITEMS.append(create_python_shell)
