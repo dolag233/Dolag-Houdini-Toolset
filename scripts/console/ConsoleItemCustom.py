@@ -197,21 +197,31 @@ def display_prim_normal_cb(context):
 create_python_shell = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
-# display rim numbers
-def display_point_number_cb(context):
-    import hou
-    # Get a reference to the geometry viewer
-    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+# edit wrangle with vsc
+def vex_with_vsc_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            if isinstance(node, hou.SopNode):
+                parms = node.parms()
+                vex = [v for v in parms if v.name() == "snippet"]
+                if len(vex) > 0:
+                    for v in vex:
+                        # escape quotes
+                        vex_str = v.eval()
+                        vex_str = vex_str.replace("\"", "`")
+                        # print(vex_str)
+                        # to avoid blocking houdini, we have to use threading
+                        def __tmp_vex_vsc_func():
+                            import subprocess
+                            # @TODO support Linux and OSX?
+                            subprocess.call(["powershell", "-WindowStyle", "hidden", "-Command", r'''"{0}" | code -
+                                                    exit'''.format(vex_str)], shell=False)
 
-    # Get the display settings
-    settings = pane.curViewport().settings()
-
-    # Get display mode
-    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
-
-    # switch prim numbers
-    display_mode.showPrimNumbers(not display_mode.isShowingPrimNumbers())
+                        import threading
+                        t = threading.Thread(target=__tmp_vex_vsc_func)
+                        t.start()
 
 
-create_python_shell = ConsoleItem(item_name="Display Prim Numbers", alias="dpn", callback=display_point_number_cb)
+create_python_shell = ConsoleItem(item_name="Edit Vex in VSC", alias="vex", callback=vex_with_vsc_cb)
 CUSTOM_ITEMS.append(create_python_shell)
