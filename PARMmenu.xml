@@ -10,6 +10,29 @@
         <subMenu id = "h.pane.parms.dolag">
             <label>Dolag</label>
             <insertBefore>revert_to_prev_val</insertBefore>
+
+            <scriptItem id = "h.pane.parms.dolag.menu.open_in_vsc">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
+                <label>Edit in VSCode</label>
+                    <scriptCode><![CDATA[
+import hou
+from utils.open_vex_in_vsc import openVexInVSC
+
+parms = kwargs['parms']
+
+for parm in parms:
+    # just save snippet
+    if parm.name() == 'snippet' or parm.name() == 'python':
+        code = parm.unexpandedString()
+        if len(code) == 0:
+            continue
+
+        openVexInVSC(code)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <scriptItem id = "h.pane.parms.dolag.menu.save_snippet">
                 <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
                 <label>Save Snippet</label>

@@ -3,6 +3,9 @@
 """
 import hou
 import platform
+from utils.open_vex_in_vsc import openVexInVSC
+
+
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem
 
@@ -197,31 +200,18 @@ def display_prim_normal_cb(context):
 create_python_shell = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
-# edit wrangle with vsc
-def vex_with_vsc_cb(context):
+# edit wrangle or python with vsc
+def code_with_vsc_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
         for node in nodes:
             if isinstance(node, hou.SopNode):
                 parms = node.parms()
-                vex = [v for v in parms if v.name() == "snippet"]
-                if len(vex) > 0:
-                    for v in vex:
-                        # escape quotes
-                        vex_str = v.eval()
-                        vex_str = vex_str.replace("\"", "`")
-                        # print(vex_str)
-                        # to avoid blocking houdini, we have to use threading
-                        def __tmp_vex_vsc_func():
-                            import subprocess
-                            # @TODO support Linux and OSX?
-                            subprocess.call(["powershell", "-WindowStyle", "hidden", "-Command", r'''"{0}" | code -
-                                                    exit'''.format(vex_str)], shell=False)
-
-                        import threading
-                        t = threading.Thread(target=__tmp_vex_vsc_func)
-                        t.start()
+                code = [v for v in parms if v.name() == "snippet" or v.name == "python"]
+                if len(code) > 0:
+                    for v in code:
+                        openVexInVSC(v.unexpandedString())
 
 
-create_python_shell = ConsoleItem(item_name="Edit Vex in VSC", alias="vex", callback=vex_with_vsc_cb)
+create_python_shell = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
 CUSTOM_ITEMS.append(create_python_shell)
