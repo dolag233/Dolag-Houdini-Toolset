@@ -24,6 +24,13 @@
 		},
 		{
 			"HOUDINI_OTLSCAN_PATH" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/otls"
+		},
+		{
+			"STICKER_PATH" :
+			{
+				"value" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/stickers/",
+				"method" : "prepend"
+			}
 		}
 	],
 	"path" : "$DOLAG_HOUDINI_PATH"
