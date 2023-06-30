@@ -90,6 +90,14 @@ def create_python_shell_cb(context):
 create_python_shell = ConsoleItem(item_name="Open Python Shell", alias="ps", callback=create_python_shell_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
+# open shell
+def create_python_shell_cb(context):
+    desktop = hou.ui.curDesktop()
+    desktop.createFloatingPane(hou.paneTabType.Shell)
+
+
+create_python_shell = ConsoleItem(item_name="Open Python Shell", alias="ps", callback=create_python_shell_cb)
+CUSTOM_ITEMS.append(create_python_shell)
 
 # copy node path
 def copy_node_path_cb(context):
