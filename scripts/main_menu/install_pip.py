@@ -1,5 +1,5 @@
 import hou
-import os
+import sys
 import threading
 import subprocess
 from pathlib import Path
@@ -10,11 +10,11 @@ shell_path = hou_path + "/bin/hcmd.exe"
 tmp_path = str(Path(hou.getenv("HOUDINI_TEMP_DIR")).resolve()) + "/get-pip.py"
 
 print("download pip installation script...")
-subprocess.call((shell_path, '/c', r"curl https://bootstrap.pypa.io/get-pip.py -o {}".format(tmp_path)))
+subprocess.call((shell_path, '/c', r"curl https://bootstrap.pypa.io/get-pip.py -o {}".format(tmp_path)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 print("finish downloading!")
 
 print("install pip...")
-subprocess.call((shell_path, '/c', r"hython {}".format(tmp_path)))
+subprocess.call((shell_path, '/c', r"hython {}".format(tmp_path)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 print("finish installing pip!")
 
 

@@ -1,3 +1,6 @@
+import sys
+
+
 def pipInstall(module_name: str, version: str = ""):
     import hou
     import os
@@ -18,10 +21,10 @@ def pipInstall(module_name: str, version: str = ""):
 
     if version == "" or version is None:
         print("start install {}".format(module_name))
-        subprocess.call((python_path, '-m', r"pip install {}".format(module_name)))
+        subprocess.call((python_path, '-m', 'pip', 'install', r"{}".format(module_name)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
     else:
         print("start install {}=={}".format(module_name, version))
-        subprocess.call((python_path, '-m', r"pip install {}=={}".format(module_name, version)))
+        subprocess.call((python_path, '-m', 'pip', 'install', r"{}=={}".format(module_name, version)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 
     print("finish downloading!")
 
@@ -44,7 +47,7 @@ def pipUninstall(module_name: str):
         print("cannot find python!")
 
     print("start install {}}".format(module_name))
-    subprocess.call((python_path, '-m', r"pip uninstall {}".format(module_name)))
+    subprocess.call((python_path, '-m', 'pip', 'uninstall', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
     print("finish downloading!")
 
 
