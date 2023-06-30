@@ -64,6 +64,8 @@ from main_menu import pip_install_UI
 from utils import show_UI
 
 show_UI.showUI(pip_install_UI.PipWindow)
+
+
             ]]>
             </scriptCode>
         </scriptItem>
