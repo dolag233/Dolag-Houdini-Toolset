@@ -11,7 +11,12 @@ if sys.version_info.major == 3:
 shell_path = hou_path + "/bin/hcmd.exe"
 
 print("download pip installation script...")
-subprocess.call((shell_path, '/c', r"curl https://bootstrap.pypa.io/get-pip.py -o {}".format(tmp_path)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
+
+if sys.version_info.major == 3:
+    subprocess.call((shell_path, '/c', r"curl https://bootstrap.pypa.io/get-pip.py -o {}".format(tmp_path)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
+elif sys.version_info.major == 2:
+    subprocess.call((shell_path, '/c', r"curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o {}".format(tmp_path)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
+
 print("finish downloading!")
 
 print("install pip...")

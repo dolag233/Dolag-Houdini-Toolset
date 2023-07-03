@@ -15,7 +15,10 @@ def pipInstall(module_name, version = ""):
     python_path = hou_path + "/python37/python.exe"
 
     if not os.path.exists(python_path):
+        python_path = hou_path + "/python27/python.exe"
+    if not os.path.exists(python_path):
         print("cannot find python!")
+        return
 
     if version == "" or version is None:
         print("start install {}".format(module_name))
@@ -40,7 +43,10 @@ def pipUninstall(module_name):
     python_path = hou_path + "/python37/python.exe"
 
     if not os.path.exists(python_path):
+        python_path = hou_path + "/python27/python.exe"
+    if not os.path.exists(python_path):
         print("cannot find python!")
+        return
 
     print("start install {}}".format(module_name))
     subprocess.call((python_path, '-m', 'pip', 'uninstall', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
