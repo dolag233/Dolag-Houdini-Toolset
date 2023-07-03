@@ -74,6 +74,11 @@ show_UI.showUI(pip_install_UI.PipWindow)
             ]]>
             </scriptCode>
         </scriptItem>
+
+        <scriptItem id="h.menu_bar.clear_cache">
+          <label>Clear Python Cache</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/clear_pyc.py</scriptPath>
+        </scriptItem>
     </subMenu>
   </menuBar>
 </mainMenu>
