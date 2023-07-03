@@ -52,6 +52,8 @@ hou.hipFile.saveAsBackup()
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/open_doc_online.py</scriptPath>
         </scriptItem>
 
+        <separatorItem id="h.menu_bar.sep_1"/>
+
         <scriptItem id="h.menu_bar.install_pip">
           <label>Install Pip</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/install_pip.py</scriptPath>
@@ -74,6 +76,8 @@ show_UI.showUI(pip_install_UI.PipWindow)
             ]]>
             </scriptCode>
         </scriptItem>
+
+        <separatorItem id="h.menu_bar.sep_2"/>
 
         <scriptItem id="h.menu_bar.clear_cache">
           <label>Clear Python Cache</label>
