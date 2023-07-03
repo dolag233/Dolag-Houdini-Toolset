@@ -75,50 +75,59 @@ def increaseFileName(file_name, has_suffix=True):
         file_name = '.'.join(file_name.split('.')[:-1])
 
     # get version number
-    file_name_rev = file_name[::-1]
-    version = []
     version_start = 0
-    for c in file_name_rev:
-        if '9' >= c >= '0':
-            version.append(int(c))
-            version_start += 1
-        else:
-            break
+    version = getVersionNum(file_name)
+    if version is None or len(version) == 0:
+        return file_name + '_0' + suffix
 
+    # get reversed version
+    version_rev = version[::-1]
     # for "abc123", the version_start is 3
-    version_start = len(file_name) - version_start
+    version_start = len(file_name) - len(version)
+    carry = 0
+    for i in range(len(version_rev)):
+        dig = version_rev[i]
+        dig += carry
+        if i == 0:
+            dig += 1
 
-    if len(version) > 0:
-        # get reversed version
-        version = version[::-1]
-        carry = [0 for i in range(len(version) + 1)]
-        for i in range(len(version)):
-            dig = version[i]
-            dig += 1 if i == 0 else 0
-            # if carry
-            dig_sum = dig + carry[i]
-            if dig_sum >= 10:
-                version[i] = dig_sum % 10
-                carry[i + 1] = 1
-            # else not carry
-            else:
-                version[i] = dig_sum
+        if dig >= 10:
+            carry = 1
+            dig -= 10
 
-        # if version == something like 999999
-        if carry[-1] == 1:
-            version.append(1)
-        version.reverse()
+        else:
+            carry = 0
 
-    else:
-        pass
+        version_rev[i] = dig
 
+        if i == len(version_rev) - 1 and carry:
+            version_rev.append(1)
+
+    version = version_rev[::-1]
     # convert to digital version
     version = ''.join(list(map(str, version)))
-    if len(version) == 0:
-        version = '_0'
-
     file_name = file_name[:version_start] + version + suffix
     return file_name
+
+
+def getVersionNum(filename):
+    if not isinstance(filename, str):
+        return None
+
+    number = []
+    for i in range(len(filename)):
+        char = filename[-i - 1]
+        if char.isdigit():
+            number.append(int(char))
+
+        else:
+            if i == 0:
+                return None
+
+            break
+
+    number.reverse()
+    return number
 
 
 # get hda library path

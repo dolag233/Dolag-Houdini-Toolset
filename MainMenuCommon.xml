@@ -51,6 +51,24 @@ hou.hipFile.saveAsBackup()
           <label>Open Online Doc</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/open_doc_online.py</scriptPath>
         </scriptItem>
+
+        <scriptItem id="h.menu_bar.install_pip">
+          <label>Install Pip</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/install_pip.py</scriptPath>
+        </scriptItem>
+
+        <scriptItem id="h.menu_bar.pip_install">
+          <label>Pip Install</label>
+            <scriptCode><![CDATA[
+from main_menu import pip_install_UI
+from utils import show_UI
+
+show_UI.showUI(pip_install_UI.PipWindow)
+
+
+            ]]>
+            </scriptCode>
+        </scriptItem>
     </subMenu>
   </menuBar>
 </mainMenu>

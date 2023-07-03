@@ -283,3 +283,4 @@ class EvalSearchStringScore(EvalBase, du.Subject):
                 max_score = (score, rank_score)
 
         return max_score
+

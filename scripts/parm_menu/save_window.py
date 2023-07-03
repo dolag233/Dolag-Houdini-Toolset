@@ -34,6 +34,9 @@ class SaveWindow(QtGui.QDialog):
         return self.comment
 
     def getVexType(self):
+        if hasattr(self.vex_type, "value"):
+            return self.vex_type.value
+
         return int(self.vex_type)
 
     def __onPressSave(self):

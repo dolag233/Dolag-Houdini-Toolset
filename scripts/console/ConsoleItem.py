@@ -1,4 +1,12 @@
-from ConsoleContext import ConsoleContext
+import platform
+import time
+
+if platform.python_version_tuple()[0] == '2':
+    from ConsoleContext import ConsoleContext
+
+elif platform.python_version_tuple()[0] == '3':
+    from .ConsoleContext import ConsoleContext
+
 import hou
 from abc import ABCMeta, abstractmethod
 
@@ -31,6 +39,11 @@ class ConsoleItem(ConsoleItemBase):
     def __init__(self, item_name, callback, alias=tuple(), important=False):
         super(ConsoleItem, self).__init__(item_name=item_name, callback=callback, \
                                           alias=alias, important=important)
+        # last used time
+        self.LUT = 0
+
+    def updateLastUsedTime(self):
+        self.LUT = time.time()
 
     def run(self, context):
         if not isinstance(context, ConsoleContext):
@@ -42,3 +55,4 @@ class ConsoleItem(ConsoleItemBase):
             self.callback(context)
         except Exception:
             pass
+

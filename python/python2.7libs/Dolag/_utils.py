@@ -90,3 +90,15 @@ def readClipBoard():
     import PySide2
     clipboard = PySide2.QtWidgets.QApplication.clipboard()
     return clipboard.text()
+
+
+# convert unicode in parsed json to str
+def convertJsonUnicodeToStr(i):
+    if isinstance(i, dict):
+        return {convertJsonUnicodeToStr(key): convertJsonUnicodeToStr(value) for key, value in i.iteritems()}
+    elif isinstance(i, list):
+        return [convertJsonUnicodeToStr(element) for element in i]
+    elif isinstance(i, unicode):
+        return i.encode('utf-8')
+    else:
+        return i

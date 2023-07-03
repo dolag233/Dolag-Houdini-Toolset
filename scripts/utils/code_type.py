@@ -26,8 +26,57 @@ elif sys.version_info.major == 3:
         python = auto()
         end = auto()
 
+        def __le__(self, b):
+            if isinstance(b, int):
+                return self.value <= b
+
+            return self.value <= b.value
+
+        def __lt__(self, b):
+            if isinstance(b, int):
+                return self.value < b
+
+            return self.value < b.value
+
+        def __ge__(self, b):
+            if isinstance(b, int):
+                return self.value >= b
+
+            return self.value >= b.value
+
+        def __gt__(self, b):
+            if isinstance(b, int):
+                return self.value > b
+
+            return self.value > b.value
+
     # type of vex
     class VexType(Enum):
         h = 0
         vfl = auto()
         end = auto()
+
+        def __le__(self, b):
+            if isinstance(b, int):
+                return self.value <= b
+
+            return self.value <= b.value
+
+        def __lt__(self, b):
+            if isinstance(b, int):
+                return self.value < b
+
+            return self.value < b.value
+
+        def __ge__(self, b):
+            if isinstance(b, int):
+                return self.value >= b
+
+            return self.value >= b.value
+
+        def __gt__(self, b):
+            if isinstance(b, int):
+                return self.value > b
+
+            return self.value > b.value
+

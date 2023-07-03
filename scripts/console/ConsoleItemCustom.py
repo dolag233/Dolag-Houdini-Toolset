@@ -2,7 +2,16 @@
     User custom console items
 """
 import hou
-from ConsoleItem import ConsoleItem
+import platform
+from utils.open_vex_in_vsc import openVexInVSC
+
+
+if platform.python_version_tuple()[0] == '2':
+    from ConsoleItem import ConsoleItem
+
+elif platform.python_version_tuple()[0] == '3':
+    from .ConsoleItem import ConsoleItem
+
 from Dolag import utils as du
 
 # CUSTOM_ITEMS contains all user customized console item here
@@ -90,4 +99,119 @@ def copy_node_path_cb(context):
 
 
 create_python_shell = ConsoleItem(item_name="Copy Node Path", alias="np", callback=copy_node_path_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+
+# create node(s) reference(s)
+def create_node_ref_cb(context):
+    from scripts.op_menu.node_ref import dupNodeRef
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            dupNodeRef(node)
+
+
+create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=create_node_ref_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+
+# display points
+def display_point_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point marker
+    display_mode.showPointMarkers(not display_mode.isShowingPointMarkers())
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# display point normals
+def display_point_normal_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point normals
+    display_mode.showPointNormals(not display_mode.isShowingPointNormals())
+
+    # display point markers
+    if display_mode.isShowingPointNormals():
+        display_mode.showPointMarkers(True)
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Normals", alias="dpn", callback=display_point_normal_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# display point numbers
+def display_point_number_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch point numbers
+    display_mode.showPointNumbers(not display_mode.isShowingPointNumbers())
+
+    # display point markers
+    if display_mode.isShowingPointNumbers():
+        display_mode.showPointMarkers(True)
+
+
+create_python_shell = ConsoleItem(item_name="Display Point Numbers", alias="dpn", callback=display_point_number_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+
+# display prim normals
+def display_prim_normal_cb(context):
+    import hou
+    # Get a reference to the geometry viewer
+    pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
+
+    # Get the display settings
+    settings = pane.curViewport().settings()
+
+    # Get display mode
+    display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
+
+    # switch prim normals
+    display_mode.showPrimNormals(not display_mode.isShowingPrimNormals())
+
+
+create_python_shell = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# edit wrangle or python with vsc
+def code_with_vsc_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            if isinstance(node, hou.SopNode):
+                parms = node.parms()
+                code = [v for v in parms if v.name() == "snippet" or v.name == "python"]
+                if len(code) > 0:
+                    for v in code:
+                        openVexInVSC(v.unexpandedString())
+
+
+create_python_shell = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
 CUSTOM_ITEMS.append(create_python_shell)

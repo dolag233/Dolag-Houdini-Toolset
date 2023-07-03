@@ -1,6 +1,14 @@
-from ConsoleItem import ConsoleItem
-from ConsoleContext import ConsoleContext
-from ConsoleItemCustom import CUSTOM_ITEMS
+import platform
+if platform.python_version_tuple()[0] == '2':
+    from ConsoleItem import ConsoleItem
+    from ConsoleContext import ConsoleContext
+    from ConsoleItemCustom import CUSTOM_ITEMS
+
+elif platform.python_version_tuple()[0] == '3':
+    from .ConsoleItem import ConsoleItem
+    from .ConsoleContext import ConsoleContext
+    from .ConsoleItemCustom import CUSTOM_ITEMS
+
 import hou
 import json
 import os

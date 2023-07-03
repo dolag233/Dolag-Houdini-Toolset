@@ -105,11 +105,20 @@ class ConsoleWindow(QtWidgets.QDialog):
             eval_score = ConsoleScore.EvalSearchStringScore((alias_match_str, name_match_str, captain_match_str))
             score, rank_score = eval_score.eval()
             # the tuple order means the sort order
-            # score > rank_score(alias > name > captain) > name length
-            score_item_list.append((score, rank_score, -len(item_name), item))
+            # score > rank_score(alias > name > captain) > last used time > name length
+            score_item_list.append((score, rank_score, item.LUT, -len(item_name), item))
 
         # sort decreasingly
-        score_item_list.sort()
+        # for python2, it sorts default by index
+        import sys
+        if sys.version_info.major == 2:
+            score_item_list.sort()
+
+        # for python3, we have to use itemgetter
+        elif sys.version_info.major == 3:
+            from operator import itemgetter
+            score_item_list.sort(key=itemgetter(0, 1, 2, 3))
+
         score_item_list.reverse()
         # extract name as a new list
         new_item_list = [item[-1].item_name for item in score_item_list]
@@ -133,7 +142,9 @@ class ConsoleWindow(QtWidgets.QDialog):
             # update context
             self.updateContext(event)
             item_name = self.item_list[index.row()]
-            self.console_items[item_name].run(self.context)
+            item = self.console_items[item_name]
+            item.run(self.context)
+            item.updateLastUsedTime()
             # will be close in this uievent session of houdini
             self.close_flag = True
             self.close()
@@ -155,6 +166,31 @@ class ConsoleWindow(QtWidgets.QDialog):
             self._updateCursorPos()
             self.move(self.pos)
 
+    def sortItemsByLastUsedTime(self):
+        score_item_list = []
+        for key in self.console_items.keys():
+            item = self.console_items[key]
+            score_item_list.append((item.LUT, item))
+
+        # sort by LUT
+        # for python2, it sorts default by index
+        import sys
+        if sys.version_info.major == 2:
+            score_item_list.sort()
+
+        # for python3, we have to use itemgetter
+        elif sys.version_info.major == 3:
+            from operator import itemgetter
+            score_item_list.sort(key=itemgetter(0))
+
+        score_item_list.reverse()
+        # extract name as a new list
+        new_item_list = [item[-1].item_name for item in score_item_list]
+        self.item_list = new_item_list
+        self.slmRes.setStringList(self.item_list)
+        new_index = self.slmRes.index(0, 0)
+        self.smRes.setCurrentIndex(new_index, QtCore.QItemSelectionModel.SelectCurrent)
+
     def dragEnterEvent(self, event):
         event.accept()
 
@@ -167,10 +203,11 @@ class ConsoleWindow(QtWidgets.QDialog):
 
     def _changeText(self):
         text = self.leSearch.text()
-        if text is None or text == '':
-            return
-
-        self.searchItem(text)
+        # if input text is white string, sort by last used time
+        if text is None or text.strip() == "":
+            self.sortItemsByLastUsedTime()
+        else:
+            self.searchItem(text)
 
     def _initUI(self):
         fRes = QFont()
@@ -203,7 +240,6 @@ class ConsoleWindow(QtWidgets.QDialog):
         # list model of list view
         self.slmRes = QtCore.QStringListModel()
         # select first one
-        self.slmRes.setStringList(self.item_list)
         self.lvRes.setModel(self.slmRes)
         idx = self.slmRes.index(0, 0)
         # selection model of list view
@@ -212,6 +248,9 @@ class ConsoleWindow(QtWidgets.QDialog):
         # initial select
         new_index = self.slmRes.index(0, 0)
         self.smRes.setCurrentIndex(new_index, QtCore.QItemSelectionModel.SelectCurrent)
+        # sort items by last used time by default
+        self.sortItemsByLastUsedTime()
+        self.slmRes.setStringList(self.item_list)
 
         # line editor
         self.leSearch = QtWidgets.QLineEdit(self)
@@ -239,5 +278,5 @@ class ConsoleWindow(QtWidgets.QDialog):
 
     def closeEvent(self, event):
         # detach
-        # self.setParent(None)
-        self.done(0)
+        self.setParent(None)
+        # self.done(0)
