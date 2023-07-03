@@ -57,6 +57,11 @@ hou.hipFile.saveAsBackup()
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/install_pip.py</scriptPath>
         </scriptItem>
 
+        <scriptItem id="h.menu_bar.tuna_mirror">
+          <label>Add Tuna Mirror</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/pip_mirror.py</scriptPath>
+        </scriptItem>
+
         <scriptItem id="h.menu_bar.pip_install">
           <label>Pip Install</label>
             <scriptCode><![CDATA[
