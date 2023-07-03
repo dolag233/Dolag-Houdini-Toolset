@@ -170,7 +170,7 @@ import hou
 
 color = hou.ui.getTextFromClipboard()
 try:
-    color = map(float, color.split(';'))
+    color = list(map(float, color.split(';')))
     if len(color) == 3:
         return True
 except:
@@ -200,7 +200,7 @@ import hou
 style = hou.ui.getTextFromClipboard()
 try:
     shape, color = style.split('-')
-    color = map(float, color.split(';'))
+    color = list(map(float, color.split(';')))
     if len(color) == 3:
         return True
 except:
