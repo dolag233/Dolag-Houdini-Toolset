@@ -120,3 +120,43 @@ def randomizeRamp(parm):
     new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
     parm.set(new_ramp)
 
+
+def subdivideRamp(parm):
+    import random
+    parm = dp.getParm(parm)
+    if parm is None:
+        return
+
+    if not isinstance(parm.parmTemplate(), hou.RampParmTemplate):
+        return
+
+    ramp = parm.evalAsRamp()
+    values = ramp.values()
+    keys = ramp.keys()
+    basis = ramp.basis()
+
+    len_keys = len(keys)
+    if len_keys <= 1:
+        return
+
+    len_new = 2 * len_keys - 1
+    new_values = [0 for i in range(len_new)]
+    new_keys = [0 for i in range(len_new)]
+    new_basis = [0 for i in range(len_new)]
+
+    # add a little salts
+    for i in range(len_keys):
+        idx = i
+        new_idx = idx * 2
+        if idx != (len_keys - 1):
+            new_values[new_idx + 1] = values[idx] * 0.5 + values[idx + 1] * 0.5
+            new_keys[new_idx + 1] = keys[idx] * 0.5 + keys[idx + 1] * 0.5
+            new_basis[new_idx + 1] = basis[idx + 1]
+
+        new_values[new_idx] = values[idx]
+        new_keys[new_idx] = keys[idx]
+        new_basis[new_idx] = basis[idx]
+
+    new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
+    parm.set(new_ramp)
+

@@ -301,6 +301,21 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "h.pane.parms.dolag.subdivide_ramp">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+                <label>Subdivide Ramp</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.subdivideRamp(parm)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
         </subMenu>
     </menu>
 
