@@ -92,7 +92,7 @@ def mirrorRamp(parm, LtoR):
         parm.set(new_ramp)
 
 
-def randomizeRamp(parm):
+def randomizeRamp(parm, amp=0.2):
     import random
     parm = dp.getParm(parm)
     if parm is None:
@@ -115,13 +115,13 @@ def randomizeRamp(parm):
     # add a little salts
     for i in range(len_keys):
         idx = i
-        new_values[idx] = values[idx] + ((random.random() - 0.5) * 2) * 0.2
+        new_values[idx] = values[idx] + ((random.random() - 0.5) * 2) * amp
 
     new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
     parm.set(new_ramp)
 
 
-def subdivideRamp(parm):
+def subdivideRamp(parm, level=1):
     import random
     parm = dp.getParm(parm)
     if parm is None:
@@ -139,7 +139,9 @@ def subdivideRamp(parm):
     if len_keys <= 1:
         return
 
-    len_new = 2 * len_keys - 1
+    subdivision = level + 1
+    unit = 1 / subdivision
+    len_new = subdivision * (len_keys - 1) + 1
     new_values = [0 for i in range(len_new)]
     new_keys = [0 for i in range(len_new)]
     new_basis = [0 for i in range(len_new)]
@@ -147,11 +149,16 @@ def subdivideRamp(parm):
     # add a little salts
     for i in range(len_keys):
         idx = i
-        new_idx = idx * 2
+        new_idx = idx * subdivision
         if idx != (len_keys - 1):
-            new_values[new_idx + 1] = values[idx] * 0.5 + values[idx + 1] * 0.5
-            new_keys[new_idx + 1] = keys[idx] * 0.5 + keys[idx + 1] * 0.5
-            new_basis[new_idx + 1] = basis[idx + 1]
+            for j in range(subdivision):
+                ji = j + 1
+                new_values[new_idx + j + 1] = values[idx] * (1 - ji * unit) + values[idx + 1] * ji * unit
+                new_keys[new_idx + j + 1] = keys[idx] * (1 - ji * unit) + keys[idx + 1] * ji * unit
+                if (j - 1) > (subdivision + 2) / 2:
+                    new_basis[new_idx + j + 1] = basis[idx + 1]
+                else:
+                    new_basis[new_idx + j + 1] = basis[idx]
 
         new_values[new_idx] = values[idx]
         new_keys[new_idx] = keys[idx]
@@ -161,7 +168,7 @@ def subdivideRamp(parm):
     parm.set(new_ramp)
 
 
-def smoothRamp(parm):
+def smoothRamp(parm, iter=1):
     import random
     parm = dp.getParm(parm)
     if parm is None:
@@ -195,12 +202,15 @@ def smoothRamp(parm):
         else:
             return values[idx]
 
-    # add a little salts
-    for i in range(len_keys):
-        idx = i
-        for j in range(len_weight):
-            sample_idx = idx + (j - (half_len_weight - 1))
-            new_values[idx] += getValue(sample_idx) * weight[j]
+    for j in range(iter):
+        # add a little salts
+        for i in range(len_keys):
+            idx = i
+            for j in range(len_weight):
+                sample_idx = idx + (j - (half_len_weight - 1))
+                new_values[idx] += getValue(sample_idx) * weight[j]
+
+        values = new_values
 
     new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
     parm.set(new_ramp)

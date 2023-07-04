@@ -286,10 +286,12 @@ for parm in parms:
                 </scriptItem>
             </subMenu>
 
-            <scriptItem id = "h.pane.parms.dolag.randomize_ramp">
+            <subMenu id = "h.pane.parms.dolag.process_ramp">
+                <label>Process Ramp</label>
                 <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
-                <label>Randomize Ramp</label>
-                    <scriptCode><![CDATA[
+                    <scriptItem id = "h.pane.parms.dolag.randomize_ramp">
+                        <label>Randomize Ramp</label>
+                            <scriptCode><![CDATA[
 import hou
 from parm_menu import ramp
 
@@ -297,14 +299,27 @@ parms = kwargs['parms']
 for parm in parms:
     ramp.randomizeRamp(parm)
 
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
 
-            <scriptItem id = "h.pane.parms.dolag.subdivide_ramp">
-                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
-                <label>Subdivide Ramp</label>
-                    <scriptCode><![CDATA[
+                    <scriptItem id = "h.pane.parms.dolag.randomize_ramp2">
+                        <label>Randomize Ramp * 2</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeRamp(parm, 0.4)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.subdivide_ramp">
+                        <label>Subdivide Ramp</label>
+                            <scriptCode><![CDATA[
 import hou
 from parm_menu import ramp
 
@@ -312,14 +327,41 @@ parms = kwargs['parms']
 for parm in parms:
     ramp.subdivideRamp(parm)
 
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
 
-            <scriptItem id = "h.pane.parms.dolag.smooth_ramp">
-                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
-                <label>Smooth Ramp</label>
-                    <scriptCode><![CDATA[
+                    <scriptItem id = "h.pane.parms.dolag.subdivide_ramp2">
+                        <label>Subdivide Ramp * 2</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.subdivideRamp(parm, 2)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.subdivide_ramp4">
+                        <label>Subdivide Ramp * 4</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.subdivideRamp(parm, 4)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.smooth_ramp">
+                        <label>Smooth Ramp</label>
+                            <scriptCode><![CDATA[
 import hou
 from parm_menu import ramp
 
@@ -327,12 +369,39 @@ parms = kwargs['parms']
 for parm in parms:
     ramp.smoothRamp(parm)
 
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
 
+                    <scriptItem id = "h.pane.parms.dolag.smooth_ramp2">
+                        <label>Smooth Ramp * 2</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
 
+parms = kwargs['parms']
+for parm in parms:
+    ramp.smoothRamp(parm, 2)
 
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.smooth_ramp4">
+                        <label>Smooth Ramp * 4</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.smoothRamp(parm, 4)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+            </subMenu>
         </subMenu>
     </menu>
 
