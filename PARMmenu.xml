@@ -316,6 +316,21 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "h.pane.parms.dolag.smooth_ramp">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+                <label>Smooth Ramp</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.smoothRamp(parm)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
 
 
         </subMenu>

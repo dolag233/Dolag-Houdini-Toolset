@@ -160,3 +160,48 @@ def subdivideRamp(parm):
     new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
     parm.set(new_ramp)
 
+
+def smoothRamp(parm):
+    import random
+    parm = dp.getParm(parm)
+    if parm is None:
+        return
+
+    if not isinstance(parm.parmTemplate(), hou.RampParmTemplate):
+        return
+
+    ramp = parm.evalAsRamp()
+    values = ramp.values()
+    keys = ramp.keys()
+    basis = ramp.basis()
+
+    len_keys = len(keys)
+
+    new_values = [0 for i in range(len_keys)]
+    new_keys = keys
+    new_basis = basis
+
+    weight = [0.041666667, 0.0833333333, 0.16666667, 0.41666666667, 0.16666667, 0.0833333333, 0.041666667]
+    len_weight = len(weight)
+    half_len_weight = (len_weight + 1) / 2
+    def getValue(idx):
+        idx = int(idx)
+        if idx < 0:
+            return values[0]
+
+        elif idx > (len_keys - 1):
+            return values[-1]
+
+        else:
+            return values[idx]
+
+    # add a little salts
+    for i in range(len_keys):
+        idx = i
+        for j in range(len_weight):
+            sample_idx = idx + (j - (half_len_weight - 1))
+            new_values[idx] += getValue(sample_idx) * weight[j]
+
+    new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
+    parm.set(new_ramp)
+
