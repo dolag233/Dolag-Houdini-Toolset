@@ -90,3 +90,33 @@ def mirrorRamp(parm, LtoR):
 
         new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
         parm.set(new_ramp)
+
+
+def randomizeRamp(parm):
+    import random
+    parm = dp.getParm(parm)
+    if parm is None:
+        return
+
+    if not isinstance(parm.parmTemplate(), hou.RampParmTemplate):
+        return
+
+    ramp = parm.evalAsRamp()
+    values = ramp.values()
+    keys = ramp.keys()
+    basis = ramp.basis()
+
+    len_keys = len(keys)
+
+    new_values = [0 for i in range(len_keys)]
+    new_keys = keys
+    new_basis = basis
+
+    # add a little salts
+    for i in range(len_keys):
+        idx = i
+        new_values[idx] = values[idx] * (1 + ((random.random() - 0.5) * 2) * 0.2)
+
+    new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
+    parm.set(new_ramp)
+

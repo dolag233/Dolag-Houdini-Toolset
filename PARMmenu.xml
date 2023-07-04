@@ -280,10 +280,27 @@ from parm_menu import ramp
 parms = kwargs['parms']
 for parm in parms:
     ramp.mirrorRamp(parm, 0)
+
                     ]]>
                     </scriptCode>
                 </scriptItem>
             </subMenu>
+
+            <scriptItem id = "h.pane.parms.dolag.randomize_ramp">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+                <label>Randomize Ramp</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeRamp(parm)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
         </subMenu>
     </menu>
 
