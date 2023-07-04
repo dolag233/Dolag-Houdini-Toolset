@@ -32,6 +32,11 @@ hou.hipFile.saveAsBackup()
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/visit_github.py</scriptPath>
         </scriptItem>
 
+        <scriptItem id="h.menu_bar.pull_plugin">
+          <label>Pull Plugin With Git</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/pull_plugin.py</scriptPath>
+        </scriptItem>
+
         <scriptItem id="h.menu_bar.edit_env_json">
           <label>Edit Configure Json</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/edit_env.py</scriptPath>
