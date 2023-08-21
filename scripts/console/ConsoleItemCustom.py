@@ -261,3 +261,14 @@ def set_preset_node_style_heavy_cb(context):
 
 create_python_shell = ConsoleItem(item_name="Set Heavy Node Style", alias="heavy", callback=set_preset_node_style_heavy_cb)
 CUSTOM_ITEMS.append(create_python_shell)
+
+# preset important node style
+def set_preset_node_style_important_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "important")
+
+
+create_python_shell = ConsoleItem(item_name="Set Important Node Style", alias="important", callback=set_preset_node_style_important_cb)
+CUSTOM_ITEMS.append(create_python_shell)

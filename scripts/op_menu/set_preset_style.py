@@ -6,8 +6,9 @@ import hou
 from Dolag import node as dn
 from Dolag import utils as du
 
-preset_style_dict = {"input" : ((0.95, 0.8, 0.35), "diamond"), "output" : ((0.35, 0.8, 0.95), "diamond"),
-                    "global control" : ((0.32, 0.258, 0.578), "cloud"), "heavy" :  (0.85, 0.075, 0.075, "")}
+preset_style_dict = {"input" : ((0.95, 0.8, 0.35), "diamond"), "output" : ((0.95, 0.8, 0.235), "diamond"),
+                    "global control" : ((0.32, 0.258, 0.578), "cloud"), "heavy" :  ((0.85, 0.075, 0.075), ""),
+                     "important" : ((0.99, 0.95, 0), "burst")}
 
 def setNodeColor(node, color):
     if node is None or len(color) != 3:

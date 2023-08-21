@@ -275,6 +275,19 @@ set_preset_style.setNodePresetStyle(node, "heavy")
                         ]]>
                         </scriptCode>
                 </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_important">
+                    <label>Important Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "important")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
             </subMenu>
 
             <separatorItem id="opmenu.dolag.dolag.sep_1"/>
