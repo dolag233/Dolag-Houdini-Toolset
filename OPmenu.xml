@@ -222,6 +222,35 @@ for node in hou.selectedNodes():
                     </scriptCode>
             </scriptItem>
 
+            <subMenu id = "opmenu.dolag.set_node_preset_style_menu">
+                <label>Preset Style</label>
+                <scriptItem id = "opmenu.set_node_preset_style_input">
+                    <label>Input Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "input")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_output">
+                    <label>Output Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "output")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+            </subMenu>
+
             <separatorItem id="opmenu.dolag.dolag.sep_1"/>
 
             <scriptItem id = "opmenu.dolag.set_hda_alias">
