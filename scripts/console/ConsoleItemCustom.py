@@ -274,7 +274,7 @@ create_python_shell = ConsoleItem(item_name="Set Important Node Style", alias="i
 CUSTOM_ITEMS.append(create_python_shell)
 
 # preset milestone node style
-def set_preset_node_style_important_cb(context):
+def set_preset_node_style_milestone_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
         for node in nodes:
