@@ -151,6 +151,38 @@ for parm in parms:
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "h.pane.parms.dolag.copy_global_seed">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.IntParmTemplate) or isinstance(kwargs['parms'][0].parmTemplate(), hou.FloatParmTemplate)</expression>
+                <label>Copy Global Seed</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import global_seed
+
+parms = kwargs['parms']
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.IntParmTemplate) or isinstance(parm.parmTemplate(), hou.FloatParmTemplate):
+        global_seed.copyGlobalParamToClipboard(parm)
+        break
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "h.pane.parms.dolag.paste_global_seed">
+                <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.IntParmTemplate) or isinstance(kwargs['parms'][0].parmTemplate(), hou.FloatParmTemplate)</expression>
+                <label>Paste Global Seed</label>
+                    <scriptCode><![CDATA[
+import hou
+from parm_menu import global_seed
+
+parms = kwargs['parms']
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.IntParmTemplate) or isinstance(parm.parmTemplate(), hou.FloatParmTemplate):
+        global_seed.pasteGlobalParamFromClipboard(parm)
+        break
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <separatorItem id="h.pane.parms.dolag.sep_1"/>
 
             <subMenu id = "h.pane.parms.dolag.ramp_interpolation">
