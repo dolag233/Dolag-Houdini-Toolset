@@ -40,8 +40,7 @@ def pasteGlobalParamFromClipboard(parm):
         expression = parm.expression()
     except:
         # if do not has expression, set expression direclty
-        parm.setExpression("({0}.eval() * {1} - {2})".format(r_path, random.random() * 1145, random.random() * 1419),
-                           hou.exprLanguage.Python)
+        parm.setExpression(('(hou.parm("{0}").eval() * {1} - {2})').format(r_path, random.random() * 1145, random.random() * 1419), hou.exprLanguage.Python)
         return
 
     if parm.expressionLanguage() == hou.exprLanguage.Python:
