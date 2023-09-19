@@ -94,7 +94,11 @@ show_UI.showUI(pip_install_UI.PipWindow)
             <scriptCode><![CDATA[
 from op_menu.node_layout import verticalSpacingAllNodes
 
-verticalSpacingAllNodes()
+if len(hou.selectedNodes()) == 0:
+  verticalSpacingAllNodes()
+
+else:
+  verticalSpacing(hou.selectedNodes())
             ]]>
             </scriptCode>
         </scriptItem>
@@ -104,7 +108,11 @@ verticalSpacingAllNodes()
             <scriptCode><![CDATA[
 from op_menu.node_layout import verticalSpacingAllNodes
 
-verticalSpacingAllNodes(True)
+if len(hou.selectedNodes()) == 0:
+  verticalSpacingAllNodes(True)
+
+else:
+  verticalSpacing(hou.selectedNodes(), True)
             ]]>
             </scriptCode>
         </scriptItem>
