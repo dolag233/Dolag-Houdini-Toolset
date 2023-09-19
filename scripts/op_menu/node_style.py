@@ -71,7 +71,7 @@ def pasteNodeColor(node):
 
     color = hou.ui.getTextFromClipboard()
     try:
-        color = map(float, color.split(';'))
+        color = list(map(float, color.split(';')))
         node.setColor(hou.Color(*color))
     except:
         return
@@ -96,7 +96,7 @@ def pasteNodeStyle(node):
             return
 
         node.setUserData("nodeshape", shape)
-        color = map(float, color.split(';'))
+        color = list(map(float, color.split(';')))
         node.setColor(hou.Color(*color))
 
     except:

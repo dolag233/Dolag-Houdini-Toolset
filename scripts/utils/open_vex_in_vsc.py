@@ -3,7 +3,7 @@ def openVexInVSC(vex_str):
         return
 
     # escape quotes
-    vex_str = vex_str.replace("\"", "`")
+    vex_str = vex_str.replace("\"", "`\"")
     # print(vex_str)
 
     # to avoid blocking houdini, we have to use threading
@@ -18,3 +18,4 @@ def openVexInVSC(vex_str):
     t = threading.Thread(target=__tmp_vex_vsc_func)
     t.start()
 
+ 

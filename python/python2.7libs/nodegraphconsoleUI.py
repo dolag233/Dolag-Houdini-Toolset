@@ -74,6 +74,7 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.context["editor"] = self.hou_event.editor
         self.context["network_node"] = self.hou_event.editor.pwd()
         self.context["selected_nodes"] = hou.selectedNodes()
+        self.context["selected_items"] = hou.selectedItems()
         self.context["editor_pos"] = self.hou_event.editor.posFromScreen(self.hou_event.mousepos)
         self.context["hit_item"] = self.hou_event.editor.networkItemsInBox(self.hou_event.mousepos, \
                                                                            self.hou_event.mousepos, for_select=False)
@@ -143,6 +144,7 @@ class ConsoleWindow(QtWidgets.QDialog):
             self.updateContext(event)
             item_name = self.item_list[index.row()]
             item = self.console_items[item_name]
+            # @TODO this can be designed as a coroutine
             item.run(self.context)
             item.updateLastUsedTime()
             # will be close in this uievent session of houdini

@@ -32,6 +32,11 @@ hou.hipFile.saveAsBackup()
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/visit_github.py</scriptPath>
         </scriptItem>
 
+        <scriptItem id="h.menu_bar.pull_plugin">
+          <label>Pull Plugin With Git</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/pull_plugin.py</scriptPath>
+        </scriptItem>
+
         <scriptItem id="h.menu_bar.edit_env_json">
           <label>Edit Configure Json</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/edit_env.py</scriptPath>
@@ -52,9 +57,16 @@ hou.hipFile.saveAsBackup()
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/open_doc_online.py</scriptPath>
         </scriptItem>
 
+        <separatorItem id="h.menu_bar.sep_1"/>
+
         <scriptItem id="h.menu_bar.install_pip">
           <label>Install Pip</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/install_pip.py</scriptPath>
+        </scriptItem>
+
+        <scriptItem id="h.menu_bar.tuna_mirror">
+          <label>Add Tuna Mirror</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/pip_mirror.py</scriptPath>
         </scriptItem>
 
         <scriptItem id="h.menu_bar.pip_install">
@@ -66,6 +78,33 @@ from utils import show_UI
 show_UI.showUI(pip_install_UI.PipWindow)
 
 
+            ]]>
+            </scriptCode>
+        </scriptItem>
+
+        <separatorItem id="h.menu_bar.sep_2"/>
+
+        <scriptItem id="h.menu_bar.clear_cache">
+          <label>Clear Python Cache</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/clear_pyc.py</scriptPath>
+        </scriptItem>
+
+        <scriptItem id="h.menu_bar.vertical_spacing">
+          <label>Vertical Space Nodes</label>
+            <scriptCode><![CDATA[
+from op_menu.node_layout import verticalSpacingAllNodes
+
+verticalSpacingAllNodes()
+            ]]>
+            </scriptCode>
+        </scriptItem>
+
+          <scriptItem id="h.menu_bar.vertical_spacing_upward">
+          <label>Vertical Space Nodes Upward</label>
+            <scriptCode><![CDATA[
+from op_menu.node_layout import verticalSpacingAllNodes
+
+verticalSpacingAllNodes(True)
             ]]>
             </scriptCode>
         </scriptItem>

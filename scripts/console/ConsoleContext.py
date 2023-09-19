@@ -1,6 +1,7 @@
 class ConsoleContext(object):
     def __init__(self):
         self.__data = {"selected_nodes": (),
+                       "selected_items" : (),
                        "hit_item": None,  # item under your mouse in this network
                        "screen_pos": (0, 0),  # mouse pos in your screen(not the screen pos of network editor)
                        "editor_pos": (0, 0),  # mouse pos in network editor space

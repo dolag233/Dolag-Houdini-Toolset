@@ -5,7 +5,6 @@ import hou
 import platform
 from utils.open_vex_in_vsc import openVexInVSC
 
-
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem
 
@@ -214,4 +213,103 @@ def code_with_vsc_cb(context):
 
 
 create_python_shell = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+from op_menu import set_preset_style
+
+# preset input node style
+def set_preset_node_style_input_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "input")
+
+
+create_python_shell = ConsoleItem(item_name="Set Input Node Style", alias="input", callback=set_preset_node_style_input_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# preset output node style
+def set_preset_node_style_output_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "output")
+
+
+create_python_shell = ConsoleItem(item_name="Set Output Node Style", alias="output", callback=set_preset_node_style_output_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# preset global control node style
+def set_preset_node_style_global_control_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "global control")
+
+
+create_python_shell = ConsoleItem(item_name="Set Global Control Node Style", alias="global control", callback=set_preset_node_style_global_control_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# preset output node style
+def set_preset_node_style_heavy_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "heavy")
+
+
+create_python_shell = ConsoleItem(item_name="Set Heavy Node Style", alias="heavy", callback=set_preset_node_style_heavy_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# preset important node style
+def set_preset_node_style_important_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "important")
+
+
+create_python_shell = ConsoleItem(item_name="Set Important Node Style", alias="important", callback=set_preset_node_style_important_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# preset milestone node style
+def set_preset_node_style_milestone_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        for node in nodes:
+            set_preset_style.setNodePresetStyle(node, "milestone")
+
+
+create_python_shell = ConsoleItem(item_name="Set Milestone Node Style", alias="milestone", callback=set_preset_node_style_milestone_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
+# vertical spacing all nodes
+def vertical_spacing_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalSpacingAllNodes()
+
+    else:
+        verticalSpacing(items)
+
+    return
+
+
+create_python_shell = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# vertical spacing all nodes upward
+def vertical_spacing_upward_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalSpacingAllNodes(True)
+
+    else:
+        verticalSpacing(items, True)
+
+    return
+
+
+create_python_shell = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
 CUSTOM_ITEMS.append(create_python_shell)

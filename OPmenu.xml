@@ -170,7 +170,7 @@ import hou
 
 color = hou.ui.getTextFromClipboard()
 try:
-    color = map(float, color.split(';'))
+    color = list(map(float, color.split(';')))
     if len(color) == 3:
         return True
 except:
@@ -200,7 +200,7 @@ import hou
 style = hou.ui.getTextFromClipboard()
 try:
     shape, color = style.split('-')
-    color = map(float, color.split(';'))
+    color = list(map(float, color.split(';')))
     if len(color) == 3:
         return True
 except:
@@ -221,6 +221,87 @@ for node in hou.selectedNodes():
                     ]]>
                     </scriptCode>
             </scriptItem>
+
+            <subMenu id = "opmenu.dolag.set_node_preset_style_menu">
+                <label>Preset Style</label>
+                <scriptItem id = "opmenu.set_node_preset_style_input">
+                    <label>Input Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "input")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_output">
+                    <label>Output Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "output")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_global">
+                    <label>Global Control Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "global control")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_heavy">
+                    <label>Heavy Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "heavy")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_important">
+                    <label>Important Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "important")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+
+                <scriptItem id = "opmenu.set_node_preset_style_milestone">
+                    <label>Milestone Node</label>
+                        <scriptCode><![CDATA[
+import hou
+from op_menu import set_preset_style
+
+node = kwargs['node']
+set_preset_style.setNodePresetStyle(node, "milestone")
+
+                        ]]>
+                        </scriptCode>
+                </scriptItem>
+            </subMenu>
 
             <separatorItem id="opmenu.dolag.dolag.sep_1"/>
 
