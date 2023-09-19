@@ -320,6 +320,33 @@ hda_alias.setHdaAlias(node, alias)
                     ]]>
                     </scriptCode>
             </scriptItem>
+
+            <separatorItem id="opmenu.dolag.dolag.sep_2"/>
+
+            <scriptItem id = "opmenu.dolag.vertical_spacing">
+                <label>Vertical Space Nodes</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu.node_layout import verticalSpacing
+
+verticalSpacing(hou.selectedNodes())
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.vertical_spacing_upward">
+                <label>Vertical Space Nodes Upward</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu.node_layout import verticalSpacing
+
+verticalSpacing(hou.selectedNodes(), True)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
         </subMenu>
     </menu>
 

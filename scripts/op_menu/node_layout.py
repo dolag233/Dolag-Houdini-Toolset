@@ -1,6 +1,7 @@
 import hou
 from collections.abc import Iterable
 SPACE_DISTANCE = 1.5
+MIN_VERTICAL_SPACE = 1.25
 
 def verticalSpacingAllNodes(upward = False):
     editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
@@ -93,8 +94,9 @@ def verticalSpacing(nodes, upward = False):
                 # if can calculate position at this moment, set, mark and pop
                 if can_calc:
                     # print("calc : " + n.name())
-                    if nodes[n]["py"] > lowest_parent_pos:
+                    if nodes[n]["py"] > lowest_parent_pos - MIN_VERTICAL_SPACE * n.size().y():
                         nodes[n]["py"] = lowest_parent_pos - SPACE_DISTANCE
+
 
                     nodes[n]["calc"] = True
                     node_stack.pop()
@@ -110,7 +112,7 @@ def verticalSpacing(nodes, upward = False):
                     if len(child_nodes) > 0:
                         highest_child_pos = -100000
                         for child_node in child_nodes:
-                            if nodes[child_node]["py"] > highest_child_pos:
+                            if nodes[child_node]["py"] > highest_child_pos + MIN_VERTICAL_SPACE * child_node.size().y():
                                 highest_child_pos = nodes[child_node]["py"]
 
                         nodes[n]["py"] = highest_child_pos + SPACE_DISTANCE
@@ -149,7 +151,7 @@ def verticalSpacing(nodes, upward = False):
                 # if can calculate position at this moment, set, mark and pop
                 if can_calc:
                     # print("calc : " + n.name())
-                    if nodes[n]["py"] < highest_child_pos:
+                    if nodes[n]["py"] < highest_child_pos + MIN_VERTICAL_SPACE * n.size().y():
                         nodes[n]["py"] = highest_child_pos + SPACE_DISTANCE
 
                     nodes[n]["calc"] = True
@@ -166,7 +168,7 @@ def verticalSpacing(nodes, upward = False):
                     if len(parent_nodes) > 0:
                         lowest_child_pos = 100000
                         for parent_node in parent_nodes:
-                            if nodes[parent_node]["py"] < lowest_child_pos:
+                            if nodes[parent_node]["py"] < lowest_child_pos - MIN_VERTICAL_SPACE * parent_node.size().y():
                                 lowest_child_pos = nodes[parent_node]["py"]
 
                         nodes[n]["py"] = lowest_child_pos - SPACE_DISTANCE
