@@ -313,3 +313,34 @@ def vertical_spacing_upward_cb(context):
 
 create_python_shell = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
 CUSTOM_ITEMS.append(create_python_shell)
+
+from op_menu.node_layout import verticalCompressingAllNodes, verticalCompressing
+# vertical compressing all nodes
+def vertical_compressing_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalCompressingAllNodes()
+
+    else:
+        verticalCompressing(items)
+
+    return
+
+
+create_python_shell = ConsoleItem(item_name="Vertical Compress Node Space", alias="vc", callback=vertical_compressing_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# vertical compressing all nodes upward
+def vertical_compressing_upward_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalCompressingAllNodes(True)
+
+    else:
+        verticalCompressing(items, True)
+
+    return
+
+
+create_python_shell = ConsoleItem(item_name="Vertical Compress Node Space Upward", alias="vcu", callback=vertical_compressing_upward_cb)
+CUSTOM_ITEMS.append(create_python_shell)

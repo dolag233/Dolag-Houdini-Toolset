@@ -347,6 +347,25 @@ verticalSpacing(hou.selectedNodes(), True)
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "opmenu.dolag.vertical_compressing">
+                <label>Vertical Compress Node Space</label>
+                    <scriptCode><![CDATA[
+from op_menu.node_layout import verticalCompressing
+verticalCompressing(hou.selectedNodes())
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.vertical_compressing_upward">
+                <label>Vertical Compress Node Space Upward</label>
+                    <scriptCode><![CDATA[
+from op_menu.node_layout import verticalCompressing
+verticalCompressing(hou.selectedNodes(), True)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
         </subMenu>
     </menu>
 
