@@ -9,10 +9,6 @@ def verticalSpacingAllNodes():
     verticalSpacing(nodes)
 
 def verticalSpacing(nodes):
-    # if is a single node or not iterable
-    if nodes is None or not isinstance(nodes, Iterable):
-        return
-
     # get terminate nodes, terminate node is a node has no input node
     terminate_nodes = []
     end_nodes = []
@@ -26,15 +22,38 @@ def verticalSpacing(nodes):
                 pos_diff = block_end_node.position().y() - node.position().y()
                 block_begin_nodes_info.append({"node": node, "block_end": block_end_node, "pos_diff": pos_diff})
 
+        # get terminate nodes and end nodes
         if isinstance(node, hou.Node) or isinstance(node, hou.NetworkDot) or isinstance(node, hou.SubnetIndirectInput):
             inputs = node.inputConnections()
             if len(inputs) == 0:
                 if node not in terminate_nodes:
                     terminate_nodes.append(node)
 
+            # else if this node has no parent in the selected items
+            else:
+                is_terminate = True
+                for c in inputs:
+                    if c.inputItem() in nodes:
+                        is_terminate = False
+                        break
+
+                if is_terminate:
+                    terminate_nodes.append(node)
+
             outputs = node.outputConnections()
             if len(outputs) == 0:
                 if node not in end_nodes:
+                    end_nodes.append(node)
+
+            # else if this node has no child in the selected items
+            else:
+                is_end = True
+                for c in outputs:
+                    if c.outputItem() in nodes:
+                        is_end = False
+                        break
+
+                if is_end:
                     end_nodes.append(node)
 
     if len(terminate_nodes) == 0:
@@ -54,7 +73,7 @@ def verticalSpacing(nodes):
             # print("current node : " + n.name())
 
             # calc parent nodes
-            parent_nodes = [c.inputItem() for c in n.inputConnections()]
+            parent_nodes = [c.inputItem() for c in n.inputConnections() if c.inputItem() in nodes]
             can_calc = True
             lowest_parent_pos = 100000
             not_calc_parent = []
@@ -85,7 +104,7 @@ def verticalSpacing(nodes):
         for n in nodes.keys():
             # if is terminate node, move to top of child nodes
             if n in terminate_nodes:
-                child_nodes = [c.outputItem() for c in n.outputConnections()]
+                child_nodes = [c.outputItem() for c in n.outputConnections() if c.outputItem() in nodes]
                 if len(child_nodes) > 0:
                     highest_child_pos = -100000
                     for child_node in child_nodes:

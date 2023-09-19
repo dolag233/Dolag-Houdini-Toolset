@@ -4,7 +4,6 @@
 import hou
 import platform
 from utils.open_vex_in_vsc import openVexInVSC
-from op_menu.node_layout import verticalSpacingAllNodes
 
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem
@@ -284,10 +283,19 @@ def set_preset_node_style_milestone_cb(context):
 create_python_shell = ConsoleItem(item_name="Set Milestone Node Style", alias="milestone", callback=set_preset_node_style_milestone_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
+from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
 # vertical spacing all nodes
 def vertical_spacing_cb(context):
-    verticalSpacingAllNodes()
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalSpacingAllNodes()
+
+    else:
+        items = [n for n in items if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot) or isinstance(n, hou.SubnetIndirectInput)]
+        verticalSpacing(items)
+
+    return
 
 
-create_python_shell = ConsoleItem(item_name="Vertical Spacing Nodes", alias="vs", callback=vertical_spacing_cb)
+create_python_shell = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
 CUSTOM_ITEMS.append(create_python_shell)

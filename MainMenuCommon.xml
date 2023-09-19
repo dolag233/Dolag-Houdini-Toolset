@@ -88,6 +88,16 @@ show_UI.showUI(pip_install_UI.PipWindow)
           <label>Clear Python Cache</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/clear_pyc.py</scriptPath>
         </scriptItem>
+
+        <scriptItem id="h.menu_bar.vertical_spacing">
+          <label>Vertical Space Nodes</label>
+            <scriptCode><![CDATA[
+from op_menu.node_layout import verticalSpacingAllNodes
+
+verticalSpacingAllNodes()
+            ]]>
+            </scriptCode>
+        </scriptItem>
     </subMenu>
   </menuBar>
 </mainMenu>
