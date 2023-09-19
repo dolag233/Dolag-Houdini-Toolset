@@ -1,12 +1,14 @@
 # Doalg-Houdini-Toolset
 
-Dolag的Houdini工具集。使用python2版本的Houdini18.5.351进行开发。
+Dolag的Houdini工具集。使用python2版本的Houdini 18.5以及python3版本的Houdini 19.0进行开发，目前应该兼容python2和3大版本。
 
 ---
 
 ## 安装配置
 
 在使用前需要进行安装配置：
+
+0. 需要安装SideFX Labs，因为很多节点都依赖于Labs的节点，且没有进行嵌入(Embedding)。
 
 1. DolagPlugin.json文件放置到文档目录下对应版本的houdini文件夹下的packages文件夹中。
 
