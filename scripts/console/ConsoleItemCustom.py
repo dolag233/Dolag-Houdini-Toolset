@@ -291,11 +291,25 @@ def vertical_spacing_cb(context):
         verticalSpacingAllNodes()
 
     else:
-        items = [n for n in items if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot) or isinstance(n, hou.SubnetIndirectInput)]
         verticalSpacing(items)
 
     return
 
 
 create_python_shell = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
+CUSTOM_ITEMS.append(create_python_shell)
+
+# vertical spacing all nodes upward
+def vertical_spacing_upward_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalSpacingAllNodes(True)
+
+    else:
+        verticalSpacing(items, True)
+
+    return
+
+
+create_python_shell = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
 CUSTOM_ITEMS.append(create_python_shell)
