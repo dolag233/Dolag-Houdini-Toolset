@@ -113,7 +113,7 @@ def verticalSpacing(nodes, upward = False):
                             if nodes[child_node]["py"] > highest_child_pos:
                                 highest_child_pos = nodes[child_node]["py"]
 
-                    nodes[n]["py"] = highest_child_pos + SPACE_DISTANCE
+                        nodes[n]["py"] = highest_child_pos + SPACE_DISTANCE
 
                 n.setPosition(hou.Vector2(n.position().x(), nodes[n]["py"]))
 
@@ -169,7 +169,7 @@ def verticalSpacing(nodes, upward = False):
                             if nodes[parent_node]["py"] < lowest_child_pos:
                                 lowest_child_pos = nodes[parent_node]["py"]
 
-                    nodes[n]["py"] = lowest_child_pos - SPACE_DISTANCE
+                        nodes[n]["py"] = lowest_child_pos - SPACE_DISTANCE
 
                 n.setPosition(hou.Vector2(n.position().x(), nodes[n]["py"]))
 
