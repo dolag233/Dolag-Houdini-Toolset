@@ -105,8 +105,8 @@ def parseJson2ParameterValue(node, json_str):
 
     parms = node.parms()
     with hou.undos.group("Parse json to parameter value"):
-    for parm in parms:
-        if parm.name() in parms_json.keys():
-            print(parm.name())
-            parm.set(parms_json[parm.name()]['value'])
+        for parm in parms:
+            if parm.name() in parms_json.keys():
+                print(parm.name())
+                parm.set(parms_json[parm.name()]['value'])
 
