@@ -1,4 +1,5 @@
 import hou
+import json
 
 
 # get node from str or hou.Node
@@ -21,3 +22,35 @@ def getNode(node_desc, node_type=hou.Node):
         pass
 
     return node
+
+
+# serialize node metadata json
+def serializeNodeMetadata2Json(node):
+    node = getNode(node)
+
+    node_json = dict()
+    # serialize node metadata
+    meta_json = dict()
+    meta_json['type'] = node.type().name()
+    meta_json['name'] = node.name()
+    meta_json['pos'] = list(node.position())
+    meta_json['shape'] = node.userDataDict()['nodeshape']
+    meta_json['color'] = node.color().rgb()
+    meta_json['input_nodes'] = [c.inputItem().name() for c in node.inputConnections()]
+    meta_json['output_nodes'] = [c.outputItem().name() for c in node.outputConnections()]
+    return json.dumps(meta_json, indent=4, ensure_ascii=False) # @TODO maybe not supported in python2
+
+
+# parse node metadata json
+def parseJson2NodeMetadata(node, node_json):
+    with hou.undos.group("Parse json to node metadata"):
+        node = getNode(node)
+        node.setName(node_json['name'])
+        node.setPosition(node_json['pos'])
+        node.setColor(node_json['color'])
+        node.setUserData({'nodeshape': node_json['shape']})
+        for i in range(len(node_json['input_nodes'])):
+            node.setInput(i, hou.item(node_json['input_nodes'][i]))
+
+        for i in range(len(node_json['output_nodes'])):
+            node.setOutput(i, hou.item(node_json['output_nodes'][i]))
