@@ -16,3 +16,6 @@ python/custom/*
 test
 otls/backup
 otls/tmp/Game
+
+# ignore private files
+*.private*
