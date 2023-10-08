@@ -106,7 +106,7 @@ def convertJsonUnicodeToStr(i):
 
 def writeText2File(file_path, text):
     import os
-    if not os.path.exists(file_path):
+    if not os.path.exists(os.path.dirname(file_path)):
         os.makedirs(os.path.dirname(file_path))
 
     with open(file_path, 'w+') as f:
