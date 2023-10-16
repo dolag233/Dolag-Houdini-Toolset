@@ -75,7 +75,7 @@ def serializeParameterValue2Json(node):
 
         # string value
         elif isinstance(pt, hou.StringParmTemplate):
-            parm_json['value'] = parm.evalAsString()
+            parm_json['value'] = parm.rawValue()
 
         else:
             continue
