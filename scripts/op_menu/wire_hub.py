@@ -2,6 +2,10 @@ import hou
 
 
 def getDowmstreamNodes(node):
+    # if is neither dot nor node, return empty list
+    if not isinstance(node, hou.NetworkDot) and not isinstance(node, hou.Node):
+        return []
+    
     outputs = node.outputConnections()
     outputs = [i.outputItem() for i in outputs]
     downstream_nodes = []
@@ -23,6 +27,10 @@ def getDowmstreamNodes(node):
 
 
 def getDowmstreamItems(node):
+    # if is neither dot nor node, return empty list
+    if not isinstance(node, hou.NetworkDot) and not isinstance(node, hou.Node):
+        return []
+
     outputs = node.outputConnections()
     outputs = [i.outputItem() for i in outputs]
     downstream_nodes = []
