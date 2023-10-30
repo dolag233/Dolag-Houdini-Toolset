@@ -393,24 +393,20 @@ verticalCompressing(hou.selectedNodes(), True)
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "opmenu.dolag.wire_hub">
-                <label>Wire Hub</label>
-                    <scriptCode><![CDATA[
-from op_menu.wire_hub import wireHub
-if kwargs['node']:
-    node = kwargs['node']
-    wireHub(node)
-
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
-
             <scriptItem id = "opmenu.dolag.wire_hubs">
-                <label>Wire Hubs</label>
+                <label>Wire Hub(s)</label>
                     <scriptCode><![CDATA[
 from op_menu.wire_hub import wireHubs
 nodes = hou.selectedItems()
-wireHubs(nodes)
+node = kwargs['node']
+if len(nodes) == 0 and node:
+    wireHub(node)
+
+elif node not in nodes:
+    wireHub(node)
+
+elif node in nodes:
+    wireHubs(nodes)
 
                     ]]>
                     </scriptCode>
