@@ -345,11 +345,18 @@ def vertical_compressing_upward_cb(context):
 create_python_shell = ConsoleItem(item_name="Vertical Compress Node Space Upward", alias="vcu", callback=vertical_compressing_upward_cb)
 CUSTOM_ITEMS.append(create_python_shell)
 
-from op_menu.wire_hub import wireHub
+from op_menu.wire_hub import wireHub, wireHubs
 
 def wire_hub_cb(context):
-    node = context["selected_node"]
-    wireHub(node)
+    items = context["selected_items"]
+    if len(items) == 0:
+        return
 
-create_python_shell = ConsoleItem(item_name="Wire Hub", alias="wh", callback=wire_hub_cb)
+    elif len(items) == 1:
+        wireHub(items[0])
+
+    else:
+        wireHubs(items)
+
+create_python_shell = ConsoleItem(item_name="Wire Hub(s)", alias="wh", callback=wire_hub_cb)
 CUSTOM_ITEMS.append(create_python_shell)
