@@ -360,3 +360,13 @@ def wire_hub_cb(context):
 
 create_python_shell = ConsoleItem(item_name="Wire Hub(s)", alias="wh", callback=wire_hub_cb)
 CUSTOM_ITEMS.append(create_python_shell)
+
+def auto_resize_networkbox_cb(context):
+    items = context["selected_items"]
+    with hou.undos.group("Resize Network Boxes"):
+        for i in items:
+            if isinstance(i, hou.NetworkBox):
+                i.fitAroundContents()
+
+create_python_shell = ConsoleItem(item_name="Network Box Auto Resize", alias="resize", callback=auto_resize_networkbox_cb)
+CUSTOM_ITEMS.append(create_python_shell)
