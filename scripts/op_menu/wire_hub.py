@@ -153,9 +153,15 @@ def wireHub(top_node, max_vertical_height=5, dot_above_node_height=1, nodes_rang
         if use_undo_group:
             with hou.undos.group("Wire Hub"):
                 wireHubInternal(top_node, top_node, downstream_nodes, max_vertical_height, dot_above_node_height)
+                for n in downstream_nodes:
+                    if isinstance(n, hou.NetworkDot) and len(n.outputConnections()) == 0:
+                        n.destroy()
 
         else:
             wireHubInternal(top_node, top_node, downstream_nodes, max_vertical_height, dot_above_node_height)
+            for n in downstream_nodes:
+                if isinstance(n, hou.NetworkDot) and len(n.outputConnections()) == 0:
+                    n.destroy()
 
 
 def wireHubs(top_nodes, max_vertical_height=5, dot_above_node_height=1, clear_dot_island=True):
