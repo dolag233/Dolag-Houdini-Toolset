@@ -6,10 +6,12 @@ import time
 
 from canvaseventtypes import *
 from nodegraphconsole import KeyEventHandler
+from nodegraphexchanger import ExchangerHandler
 
 __last_mouse_state = False
 __last_mouse_click_time = 0
 __mouse_double_click_delta_time = 0.4
+__last_alt_state = False
 
 # Ctrl + Space to summon hot console
 def createEventHandler(uievent, pending_actions):
@@ -21,7 +23,7 @@ def createEventHandler(uievent, pending_actions):
         return event_handler, True if event_handler is not None else False
 
     # for quick teleport
-    elif isinstance(uievent, MouseEvent) and \
+    if isinstance(uievent, MouseEvent) and \
             uievent.eventtype == 'mousedown':
         global __last_mouse_state
         global __last_mouse_click_time
@@ -50,6 +52,15 @@ def createEventHandler(uievent, pending_actions):
                 elif not __last_mouse_state:
                     __last_mouse_state = True
                     __last_mouse_click_time = cur_time
+
+    # Exchanger
+    if isinstance(uievent, MouseEvent) and \
+            uievent.mousestate.lmb and\
+            uievent.modifierstate.alt:
+
+            event_handler = ExchangerHandler(uievent)
+            return event_handler, True if event_handler is not None else False
+
 
     return None, False
 
