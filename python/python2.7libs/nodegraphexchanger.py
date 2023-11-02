@@ -17,7 +17,7 @@ class ExchangerHandler(EventHandler):
         self.is_moving = False
         self.src_item = None
         self.src_connector_index = 0
-        self.src_item_type = "none"
+        self.src_type = "none"
         self.__undos_group = None
 
     # use dot as a marker
@@ -29,7 +29,7 @@ class ExchangerHandler(EventHandler):
             self.mark_dot = uievent.editor.pwd().createNetworkDot()
             self.mark_dot.setColor(self.__marker_color)
             # set connections
-            if self.src_item_type == "input":
+            if self.src_type == "input":
                 input_connection = None
                 for ic in self.src_item.inputConnections():
                     if ic.inputIndex() == self.src_connector_index:
@@ -42,7 +42,7 @@ class ExchangerHandler(EventHandler):
                     # delete original input connection
                     self.src_item.setInput(self.src_connector_index, None)
 
-            elif self.src_item_type == "output":
+            elif self.src_type == "output":
                 # get output connections from this exporter
                 output_connections = []
                 for oc in self.src_item.outputConnections():
@@ -53,7 +53,7 @@ class ExchangerHandler(EventHandler):
                     output_item = oc.outputItem()
                     output_item.setInput(oc.inputIndex(), self.mark_dot)
 
-            elif self.src_item_type == "dot":
+            elif self.src_type == "dot":
                 for ic in self.src_item.inputConnections():
                     self.mark_dot.setInput(ic.inputIndex(), ic.inputItem())
 
@@ -116,7 +116,7 @@ class ExchangerHandler(EventHandler):
     def __updateNearConnector(self, uievent):
         src_item, src_type, src_connector_index, _ = self.__getNearConnector(uievent, self.__detect_radius)
         self.src_item = src_item
-        self.src_item_type = src_type
+        self.src_type = src_type
         self.src_connector_index = src_connector_index
 
     def __moveMarkDot(self, uievent):
@@ -131,21 +131,32 @@ class ExchangerHandler(EventHandler):
 
     def __drop(self, uievent):
         success = False
-        if self.src_item is not None and self.mark_dot is not None:
-            dst_item, dst_type, dst_connector_index, _ = self.__getNearConnector(uievent, self.__detect_radius)
-            if self.src_item_type == 'input' and dst_type == 'input':
+        skip = False
+        dst_item, dst_type, dst_connector_index, _ = self.__getNearConnector(uievent, self.__detect_radius)
+        if self.src_item is None or self.mark_dot is None or dst_item is None:
+            skip = True
+
+        if self.src_item == dst_item:
+            if self.src_type == 'dot' and dst_type == 'dot':
+                skip = True
+
+            elif self.src_type == dst_type and self.src_connector_index == dst_connector_index:
+                skip = True
+
+        if not skip:
+            if self.src_type == 'input' and dst_type == 'input':
                 # if is input, just set because input connection is unique
                 dst_item.setInput(dst_connector_index, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
                 # delete original connection
                 self.src_item.setInput(self.src_connector_index, None)
                 success = True
 
-            elif self.src_item_type == 'output' and dst_type == 'output':
+            elif self.src_type == 'output' and dst_type == 'output':
                 for oc in self.mark_dot.outputConnections():
                     oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
                     success = True
 
-            elif self.src_item_type == 'dot':
+            elif self.src_type == 'dot':
                 if dst_type == 'dot':
                     # copy input
                     if len(self.mark_dot.inputConnections()) != 0:
@@ -175,14 +186,15 @@ class ExchangerHandler(EventHandler):
                     # delete original dot
                     self.src_item.destroy()
 
+        # restore original connections
         if not success:
             # restore original connections
             if self.src_item is not None and self.mark_dot is not None:
-                if self.src_item_type == "output":
+                if self.src_type == "output":
                     for oc in self.mark_dot.outputConnections():
                         oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
 
-                elif self.src_item_type == "input":
+                elif self.src_type == "input":
                     self.src_item.setInput(self.src_connector_index, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
 
         self.mark_dot.destroy()
