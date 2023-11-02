@@ -102,3 +102,25 @@ def convertJsonUnicodeToStr(i):
         return i.encode('utf-8')
     else:
         return i
+
+
+def writeText2File(file_path, text):
+    import os
+    if not os.path.exists(os.path.dirname(file_path)):
+        os.makedirs(os.path.dirname(file_path))
+
+    with open(file_path, 'w+') as f:
+        f.write(text)
+
+
+def readTextFromFile(file_path):
+    text = ''
+    import os
+    if not os.path.exists(file_path):
+        return text
+
+    with open(file_path, 'r') as f:
+        text = f.read()
+
+    return text
+

@@ -91,6 +91,32 @@ del_keyframes.delKeyframes(node)
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "opmenu.dolag.copy_node_json">
+                <label>Copy Node Metadata Json to Clipboard</label>
+                    <scriptCode><![CDATA[
+from op_menu import node_parm_json
+
+node = kwargs['node']
+
+node_parm_json.copyNodeMetadataJson(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.copy_parm_json">
+                <label>Copy Parameter Value Json to Clipboard</label>
+                    <scriptCode><![CDATA[
+from op_menu import node_parm_json
+
+node = kwargs['node']
+
+node_parm_json.copyParameterValueJson(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <separatorItem id="opmenu.dolag.dolag.sep_0"/>
 
             <scriptItem id = "opmenu.dolag.copy_node_shape">
@@ -362,6 +388,25 @@ verticalCompressing(hou.selectedNodes())
                     <scriptCode><![CDATA[
 from op_menu.node_layout import verticalCompressing
 verticalCompressing(hou.selectedNodes(), True)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.wire_hubs">
+                <label>Wire Hub(s)</label>
+                    <scriptCode><![CDATA[
+from op_menu.wire_hub import wireHub, wireHubs
+nodes = hou.selectedItems()
+node = kwargs['node']
+if len(nodes) == 0 and node:
+    wireHub(node)
+
+elif node not in nodes:
+    wireHub(node)
+
+elif node in nodes:
+    wireHubs(nodes)
 
                     ]]>
                     </scriptCode>
