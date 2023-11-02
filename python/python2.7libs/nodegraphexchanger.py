@@ -19,6 +19,7 @@ class ExchangerHandler(EventHandler):
         self.src_item = None
         self.src_connector_index = 0
         self.src_item_type = "none"
+        self.__undos_group = None
 
     # use dot as a marker
     def __createMarkDot(self, uievent):
@@ -65,11 +66,10 @@ class ExchangerHandler(EventHandler):
     # return connector item and type string
     def __getNearConnector(self, uievent, distance_threshold):
         cursor_pos = self.__getEditorPos(uievent)
-        print(cursor_pos)
         editor = uievent.editor
         # in_range_items, _, _ = editor.networkItemsInBox(cursor_pos - hou.Vector2(2, 2), cursor_pos + hou.Vector2(2, 2))
         in_range_items = editor.pwd().allItems()
-        in_range_items = [item for item in in_range_items if cursor_pos.distanceTo(item.position()) < 3]
+        in_range_items = [item for item in in_range_items if cursor_pos.distanceTo(item.position()) < 2]
         src_item = None
         src_item_type = "none"
         src_connector_index = 0
@@ -135,20 +135,48 @@ class ExchangerHandler(EventHandler):
         if self.src_item is not None and self.mark_dot is not None:
             dst_item, dst_type, dst_connector_index, _ = self.__getNearConnector(uievent, self.__detect_radius)
             if self.src_item_type == 'input' and dst_type == 'input':
-                for ic in dst_item.inputConnections():
-                    if ic.inputIndex() == dst_connector_index:
-                        dst_item.setInput(dst_connector_index, self.mark_dot.inputConnections()[0].inputItem())
-                        success = True
-                        break
+                # if is input, just set because input connection is unique
+                dst_item.setInput(dst_connector_index, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
+                # delete original connection
+                self.src_item.setInput(self.src_connector_index, None)
+                success = True
 
             elif self.src_item_type == 'output' and dst_type == 'output':
                 for oc in self.mark_dot.outputConnections():
-                    if oc.outputIndex() == self.src_connector_index:
+                    oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
+                    success = True
+
+            elif self.src_item_type == 'dot':
+                if dst_type == 'dot':
+                    # copy input
+                    if len(self.mark_dot.inputConnections()) != 0:
+                        dst_item.setInput(0, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
+
+                    # copy outputs
+                    for oc in self.mark_dot.outputConnections():
                         oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
-                        success = True
+
+                    success = True
+
+                elif dst_type == 'output':
+                    # copy outputs
+                    for oc in self.mark_dot.outputConnections():
+                        oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
+
+                    success = True
+
+                elif dst_type == 'input':
+                    # copy input
+                    if len(self.mark_dot.inputConnections()) != 0:
+                        dst_item.setInput(0, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
+
+                    success = True
+
+                if success:
+                    # delete original dot
+                    self.src_item.destroy()
 
         if not success:
-            # @TODO restore
             if self.src_item_type == "output":
                 for oc in self.mark_dot.outputConnections():
                     oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
@@ -158,16 +186,29 @@ class ExchangerHandler(EventHandler):
     def __getEditorPos(self, uievent):
         return uievent.editor.posFromScreen(uievent.mousepos)
 
+    def __begin_undos_group(self):
+        if self.__undos_group is not None:
+            del self.__undos_group
+
+        else:
+            self.__undos_group = hou.undos.group("Exchange Connections")
+            self.__undos_group.__enter__()
+
+    def __end_undos_group(self):
+        if self.__undos_group is not None:
+            del self.__undos_group
+            self.__undos_group = None
+
     def handleEvent(self, uievent, pending_actions):
         # if cursor near to node input, output or a network dot
         # this is the beginning of the event handler
         if self.src_item is None:
-            print("init")
             self.__updateNearConnector(uievent)
             if self.src_item is None:
                 self.__cleanState()
                 return None
             else:
+                self.__begin_undos_group()
                 self.__createMarkDot(uievent)
                 return self
 
@@ -175,16 +216,15 @@ class ExchangerHandler(EventHandler):
             # if dragging
             if isinstance(uievent, MouseEvent) and \
                 uievent.mousestate.lmb and\
-                    uievent.modifierstate.alt:
+                    uievent.modifierstate.alt and uievent.modifierstate.ctrl:
 
-                print("dragging")
                 self.__moveMarkDot(uievent)
                 # @TODO snap to other connector
                 return self
 
             # else, end dragging
             else:
-                print("drop")
                 self.__drop(uievent)
+                self.__end_undos_group()
                 self.__cleanState()
                 return None

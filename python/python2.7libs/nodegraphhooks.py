@@ -56,7 +56,7 @@ def createEventHandler(uievent, pending_actions):
     # Exchanger
     if isinstance(uievent, MouseEvent) and \
             uievent.mousestate.lmb and\
-            uievent.modifierstate.alt:
+            uievent.modifierstate.alt and uievent.modifierstate.ctrl:
 
             event_handler = ExchangerHandler(uievent)
             return event_handler, True if event_handler is not None else False
