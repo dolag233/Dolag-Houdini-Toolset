@@ -1,7 +1,6 @@
 """
     intercept event in Network editor
 """
-import math
 import time
 
 from canvaseventtypes import *
@@ -12,6 +11,7 @@ __last_mouse_state = False
 __last_mouse_click_time = 0
 __mouse_double_click_delta_time = 0.4
 __last_alt_state = False
+
 
 # Ctrl + Space to summon hot console
 def createEventHandler(uievent, pending_actions):
@@ -55,12 +55,9 @@ def createEventHandler(uievent, pending_actions):
 
     # Exchanger
     if isinstance(uievent, MouseEvent) and \
-            uievent.mousestate.lmb and\
+            uievent.mousestate.lmb and \
             uievent.modifierstate.alt and uievent.modifierstate.ctrl:
-
-            event_handler = ExchangerHandler(uievent)
-            return event_handler, True if event_handler is not None else False
-
+        event_handler = ExchangerHandler(uievent)
+        return event_handler, True if event_handler is not None else False
 
     return None, False
-

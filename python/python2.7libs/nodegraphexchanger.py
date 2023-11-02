@@ -3,9 +3,8 @@ from nodegraphbase import EventHandler
 import hou
 
 
-
-# event handler class will not be destroyed because of coroutine
-# until handleEvent return None
+# exchange input, outputs, dot's connections to another node
+# press Ctrl + Alt and drag connector
 class ExchangerHandler(EventHandler):
     def __init__(self, uievent):
         super(ExchangerHandler, self).__init__(uievent)
@@ -61,7 +60,6 @@ class ExchangerHandler(EventHandler):
                     output_item.setInput(oc.inputIndex(), self.mark_dot)
 
         self.__moveMarkDot(uievent)
-
 
     # return connector item and type string
     def __getNearConnector(self, uievent, distance_threshold):
@@ -129,7 +127,6 @@ class ExchangerHandler(EventHandler):
             else:
                 self.mark_dot.setPosition(cursor_pos)
 
-
     def __drop(self, uievent):
         success = False
         if self.src_item is not None and self.mark_dot is not None:
@@ -183,7 +180,7 @@ class ExchangerHandler(EventHandler):
 
         self.mark_dot.destroy()
 
-    def __getEditorPos(self, uievent):
+    def __getEditorPos(uievent):
         return uievent.editor.posFromScreen(uievent.mousepos)
 
     def __begin_undos_group(self):
@@ -219,10 +216,9 @@ class ExchangerHandler(EventHandler):
                     uievent.modifierstate.alt and uievent.modifierstate.ctrl:
 
                 self.__moveMarkDot(uievent)
-                # @TODO snap to other connector
                 return self
 
-            # else, end dragging
+            # if dropping
             else:
                 self.__drop(uievent)
                 self.__end_undos_group()
