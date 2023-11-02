@@ -39,6 +39,8 @@ class ExchangerHandler(EventHandler):
                 if input_connection is not None:
                     # input has at most one connection
                     self.mark_dot.setInput(0, input_connection.inputItem())
+                    # delete original input connection
+                    self.src_item.setInput(self.src_connector_index, None)
 
             elif self.src_item_type == "output":
                 # get output connections from this exporter
@@ -174,13 +176,18 @@ class ExchangerHandler(EventHandler):
                     self.src_item.destroy()
 
         if not success:
-            if self.src_item_type == "output":
-                for oc in self.mark_dot.outputConnections():
-                    oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
+            # restore original connections
+            if self.src_item is not None and self.mark_dot is not None:
+                if self.src_item_type == "output":
+                    for oc in self.mark_dot.outputConnections():
+                        oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
+
+                elif self.src_item_type == "input":
+                    self.src_item.setInput(self.src_connector_index, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].inputIndex())
 
         self.mark_dot.destroy()
 
-    def __getEditorPos(uievent):
+    def __getEditorPos(self, uievent):
         return uievent.editor.posFromScreen(uievent.mousepos)
 
     def __begin_undos_group(self):
