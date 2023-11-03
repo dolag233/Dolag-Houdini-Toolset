@@ -9,7 +9,7 @@ class DuplicatorHandler(EventHandler):
     def __init__(self, uievent):
         super(DuplicatorHandler, self).__init__(uievent)
         self.__cleanState()
-        self.__marker_color = hou.Color(1.0, 0.2, 0.1)
+        self.__marker_color = hou.Color(0.2, 0.8, 0.1)
         self.__detect_radius = 0.5
 
     def __cleanState(self):
