@@ -318,7 +318,7 @@ class DuplicatorHandler(EventHandler):
             # if dragging
             if isinstance(uievent, MouseEvent) and \
                 uievent.mousestate.lmb and\
-                    uievent.modifierstate.shift and uievent.modifierstate.ctrl:
+                    uievent.modifierstate.shift and uievent.modifierstate.ctrl and not uievent.modifierstate.alt:
 
                 self.__moveMarkDot(uievent)
                 return self

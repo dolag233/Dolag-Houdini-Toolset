@@ -325,7 +325,7 @@ class ExchangerHandler(EventHandler):
             # if dragging
             if isinstance(uievent, MouseEvent) and \
                 uievent.mousestate.lmb and\
-                    uievent.modifierstate.alt and uievent.modifierstate.ctrl:
+                    uievent.modifierstate.alt and uievent.modifierstate.ctrl and not uievent.modifierstate.shift:
 
                 self.__moveMarkDot(uievent)
                 return self

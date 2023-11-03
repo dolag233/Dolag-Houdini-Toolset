@@ -57,14 +57,14 @@ def createEventHandler(uievent, pending_actions):
     # Exchanger
     if isinstance(uievent, MouseEvent) and \
             uievent.mousestate.lmb and \
-            uievent.modifierstate.alt and uievent.modifierstate.ctrl:
+            uievent.modifierstate.alt and uievent.modifierstate.ctrl and not uievent.modifierstate.shift:
         event_handler = ExchangerHandler(uievent)
         return event_handler, True if event_handler is not None else False
 
     # Duplicator
     elif isinstance(uievent, MouseEvent) and \
             uievent.mousestate.lmb and \
-            uievent.modifierstate.shift and uievent.modifierstate.ctrl:
+            uievent.modifierstate.shift and uievent.modifierstate.ctrl and not uievent.modifierstate.alt:
         event_handler = DuplicatorHandler(uievent)
         return event_handler, True if event_handler is not None else False
 
