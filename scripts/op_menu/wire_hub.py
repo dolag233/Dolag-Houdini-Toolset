@@ -74,10 +74,12 @@ def wireHubInternal(top_node, original_top_node, downstream_nodes, max_vertical_
                    + dot_above_node_height + 0.5 * second_top_node.size()[1]]
         nodes_in_reach = [n for n in downstream_nodes if
                           0 < dot_pos[1] - n.position()[1] + n.size()[1] * 0.5 < max_vertical_height]
+        # fallback to second top node if no dot in reach
+        nodes_in_reach = [second_top_node[0]] if len(nodes_in_reach) == 0 else nodes_in_reach
         nodes_out_of_reach = [n for n in downstream_nodes if n not in nodes_in_reach]
 
         # if dot is close to top node, discard
-        if top_pos[1] - dot_pos[1] > top_node.size()[1] * 0.5 + dot_above_node_height:
+        if top_pos[1] - dot_pos[1] > top_node.size()[1] * 0.5 + dot_above_node_height * 1.1:
             dot = top_node.parent().createNetworkDot()
             dot.setPosition(dot_pos)
             dot.setInput(0, top_node)
