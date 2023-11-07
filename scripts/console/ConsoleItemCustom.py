@@ -92,8 +92,8 @@ CUSTOM_ITEMS.append(create_python_shell)
 
 # open performance monitor
 def create_performance_monitor_cb(context):
-    desktop = hou.ui.curDesktop()
-    desktop.createFloatingPane(hou.paneTabType.PerformanceMonitor)
+    monitor = hou.ui.curDesktop().createFloatingPaneTab(hou.paneTabType.PerformanceMonitor)
+    monitor.startRecording()
 
 
 create_performance_monitor = ConsoleItem(item_name="Open Performance Monitor", alias="pm", callback=create_performance_monitor_cb)
@@ -107,8 +107,8 @@ def copy_node_path_cb(context):
         du.writeClipboard(nodes[0].path())
 
 
-create_python_shell = ConsoleItem(item_name="Copy Node Path", alias="np", callback=copy_node_path_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Copy Node Path", alias="np", callback=copy_node_path_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 
 # create node(s) reference(s)
@@ -120,8 +120,8 @@ def create_node_ref_cb(context):
             dupNodeRef(node)
 
 
-create_python_shell = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=create_node_ref_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Create Node Reference", alias="ref", callback=create_node_ref_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 
 # display points
@@ -140,8 +140,8 @@ def display_point_cb(context):
     display_mode.showPointMarkers(not display_mode.isShowingPointMarkers())
 
 
-create_python_shell = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # display point normals
 def display_point_normal_cb(context):
@@ -163,8 +163,8 @@ def display_point_normal_cb(context):
         display_mode.showPointMarkers(True)
 
 
-create_python_shell = ConsoleItem(item_name="Display Point Normals", alias="dpn", callback=display_point_normal_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Display Point Normals", alias="dpn", callback=display_point_normal_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # display point numbers
 def display_point_number_cb(context):
@@ -186,8 +186,8 @@ def display_point_number_cb(context):
         display_mode.showPointMarkers(True)
 
 
-create_python_shell = ConsoleItem(item_name="Display Point Numbers", alias="dpn", callback=display_point_number_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Display Point Numbers", alias="dpn", callback=display_point_number_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 
 # display prim normals
@@ -206,8 +206,8 @@ def display_prim_normal_cb(context):
     display_mode.showPrimNormals(not display_mode.isShowingPrimNormals())
 
 
-create_python_shell = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # edit wrangle or python with vsc
 def code_with_vsc_cb(context):
@@ -222,8 +222,8 @@ def code_with_vsc_cb(context):
                         openVexInVSC(v.unexpandedString())
 
 
-create_python_shell = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu import set_preset_style
 
@@ -235,8 +235,8 @@ def set_preset_node_style_input_cb(context):
             set_preset_style.setNodePresetStyle(node, "input")
 
 
-create_python_shell = ConsoleItem(item_name="Set Input Node Style", alias="input", callback=set_preset_node_style_input_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Input Node Style", alias="input", callback=set_preset_node_style_input_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # preset output node style
 def set_preset_node_style_output_cb(context):
@@ -246,8 +246,8 @@ def set_preset_node_style_output_cb(context):
             set_preset_style.setNodePresetStyle(node, "output")
 
 
-create_python_shell = ConsoleItem(item_name="Set Output Node Style", alias="output", callback=set_preset_node_style_output_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Output Node Style", alias="output", callback=set_preset_node_style_output_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # preset global control node style
 def set_preset_node_style_global_control_cb(context):
@@ -257,8 +257,8 @@ def set_preset_node_style_global_control_cb(context):
             set_preset_style.setNodePresetStyle(node, "global control")
 
 
-create_python_shell = ConsoleItem(item_name="Set Global Control Node Style", alias="global control", callback=set_preset_node_style_global_control_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Global Control Node Style", alias="global control", callback=set_preset_node_style_global_control_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # preset output node style
 def set_preset_node_style_heavy_cb(context):
@@ -268,8 +268,8 @@ def set_preset_node_style_heavy_cb(context):
             set_preset_style.setNodePresetStyle(node, "heavy")
 
 
-create_python_shell = ConsoleItem(item_name="Set Heavy Node Style", alias="heavy", callback=set_preset_node_style_heavy_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Heavy Node Style", alias="heavy", callback=set_preset_node_style_heavy_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # preset important node style
 def set_preset_node_style_important_cb(context):
@@ -279,8 +279,8 @@ def set_preset_node_style_important_cb(context):
             set_preset_style.setNodePresetStyle(node, "important")
 
 
-create_python_shell = ConsoleItem(item_name="Set Important Node Style", alias="important", callback=set_preset_node_style_important_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Important Node Style", alias="important", callback=set_preset_node_style_important_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # preset milestone node style
 def set_preset_node_style_milestone_cb(context):
@@ -290,8 +290,8 @@ def set_preset_node_style_milestone_cb(context):
             set_preset_style.setNodePresetStyle(node, "milestone")
 
 
-create_python_shell = ConsoleItem(item_name="Set Milestone Node Style", alias="milestone", callback=set_preset_node_style_milestone_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Set Milestone Node Style", alias="milestone", callback=set_preset_node_style_milestone_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
 # vertical spacing all nodes
@@ -306,8 +306,8 @@ def vertical_spacing_cb(context):
     return
 
 
-create_python_shell = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # vertical spacing all nodes upward
 def vertical_spacing_upward_cb(context):
@@ -321,8 +321,8 @@ def vertical_spacing_upward_cb(context):
     return
 
 
-create_python_shell = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.node_layout import verticalCompressingAllNodes, verticalCompressing
 # vertical compressing all nodes
@@ -337,8 +337,8 @@ def vertical_compressing_cb(context):
     return
 
 
-create_python_shell = ConsoleItem(item_name="Vertical Compress Node Space", alias="vc", callback=vertical_compressing_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Vertical Compress Node Space", alias="vc", callback=vertical_compressing_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 # vertical compressing all nodes upward
 def vertical_compressing_upward_cb(context):
@@ -352,8 +352,8 @@ def vertical_compressing_upward_cb(context):
     return
 
 
-create_python_shell = ConsoleItem(item_name="Vertical Compress Node Space Upward", alias="vcu", callback=vertical_compressing_upward_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Vertical Compress Node Space Upward", alias="vcu", callback=vertical_compressing_upward_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.wire_hub import wireHub, wireHubs
 
@@ -368,8 +368,8 @@ def wire_hub_cb(context):
     else:
         wireHubs(items)
 
-create_python_shell = ConsoleItem(item_name="Wire Hub(s)", alias="wh", callback=wire_hub_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Wire Hub(s)", alias="wh", callback=wire_hub_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
 
 def auto_resize_networkbox_cb(context):
     items = context["selected_items"]
@@ -378,5 +378,5 @@ def auto_resize_networkbox_cb(context):
             if isinstance(i, hou.NetworkBox):
                 i.fitAroundContents()
 
-create_python_shell = ConsoleItem(item_name="Network Box Auto Resize", alias="resize", callback=auto_resize_networkbox_cb)
-CUSTOM_ITEMS.append(create_python_shell)
+tmp_console_item = ConsoleItem(item_name="Network Box Auto Resize", alias="resize", callback=auto_resize_networkbox_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
