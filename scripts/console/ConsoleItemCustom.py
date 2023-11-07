@@ -90,6 +90,16 @@ create_python_shell = ConsoleItem(item_name="Open Python Shell", alias="ps", cal
 CUSTOM_ITEMS.append(create_python_shell)
 
 
+# open performance monitor
+def create_performance_monitor_cb(context):
+    desktop = hou.ui.curDesktop()
+    desktop.createFloatingPane(hou.paneTabType.PerformanceMonitor)
+
+
+create_performance_monitor = ConsoleItem(item_name="Open Performance Monitor", alias="pm", callback=create_performance_monitor_cb)
+CUSTOM_ITEMS.append(create_performance_monitor)
+
+
 # copy node path
 def copy_node_path_cb(context):
     nodes = context["selected_nodes"]
