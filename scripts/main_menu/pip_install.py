@@ -1,24 +1,40 @@
 import sys
 
 
-def pipInstall(module_name, version = ""):
+def getPythonPath():
     import hou
     import os
-    import threading
-    import subprocess
 
     hou_path = hou.getenv("HFS")
     if sys.version_info.major == 3:
         from pathlib import Path
         hou_path = str(Path(hou_path).resolve())
 
-    python_path = hou_path + "/python37/python.exe"
+    python_path_prefix = hou_path
+    python_path = None
+    # check python 3.x
+    for i in range(7, 30):
+        python_path = python_path_prefix + "/python3" + str(i) + "/python.exe"
+        if not os.path.exists(python_path):
+            python_path = None
+            continue
 
-    if not os.path.exists(python_path):
-        python_path = hou_path + "/python27/python.exe"
-    if not os.path.exists(python_path):
+        else:
+            break
+
+    # check python 2.7
+    if not python_path:
+        if os.path.exists(hou_path + "/python27/python.exe"):
+            python_path = hou_path + "/python27/python.exe"
+
+    return python_path
+
+def pipInstall(module_name, version = ""):
+    import subprocess
+
+    python_path = getPythonPath()
+    if not python_path:
         print("cannot find python!")
-        return
 
     if version == "" or version is None:
         print("start install {}".format(module_name))
@@ -30,23 +46,11 @@ def pipInstall(module_name, version = ""):
     print("finish downloading!")
 
 def pipUninstall(module_name):
-    import hou
-    import os
-    import threading
     import subprocess
 
-    hou_path = hou.getenv("HFS")
-    if sys.version_info.major == 3:
-        from pathlib import Path
-        hou_path = str(Path(hou_path).resolve())
-
-    python_path = hou_path + "/python37/python.exe"
-
-    if not os.path.exists(python_path):
-        python_path = hou_path + "/python27/python.exe"
-    if not os.path.exists(python_path):
+    python_path = getPythonPath()
+    if not python_path:
         print("cannot find python!")
-        return
 
     print("start install {}}".format(module_name))
     subprocess.call((python_path, '-m', 'pip', 'uninstall', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
