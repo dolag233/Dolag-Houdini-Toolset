@@ -43,8 +43,6 @@ def pipInstall(module_name, version = ""):
         print("start install {}=={}".format(module_name, version))
         subprocess.call((python_path, '-m', 'pip', 'install', r"{}=={}".format(module_name, version)), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 
-    print("finish downloading!")
-
 def pipUninstall(module_name):
     import subprocess
 
@@ -52,8 +50,16 @@ def pipUninstall(module_name):
     if not python_path:
         print("cannot find python!")
 
-    print("start install {}}".format(module_name))
+    print("start uninstall {}".format(module_name))
     subprocess.call((python_path, '-m', 'pip', 'uninstall', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
-    print("finish downloading!")
 
+def pipUpgrade(module_name):
+    import subprocess
+
+    python_path = getPythonPath()
+    if not python_path:
+        print("cannot find python!")
+
+    print("start upgrade {}".format(module_name))
+    subprocess.call((python_path, '-m', 'pip', 'install', '--upgrade', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 

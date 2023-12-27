@@ -6,7 +6,7 @@ try:
     from utils.code_type import SnippetType, VexType
     from PySide2 import QtCore
     from PySide2 import QtWidgets as QtGui
-    from .pip_install import pipInstall
+    from .pip_install import pipInstall, pipUninstall, pipUpgrade
 except Exception as e:
     raise
 
@@ -36,7 +36,16 @@ class PipWindow(QtGui.QDialog):
             displayError("Empty module name!")
             return
 
-        pipInstall(self.module_name)
+        pipUninstall(self.module_name)
+
+    def __onPressUpgrade(self):
+        self.module_name = self.leModule.text()
+        self.version = self.leVersion.text()
+        if self.module_name == "" or self.module_name is None:
+            displayError("Empty module name!")
+            return
+
+        pipUpgrade(self.module_name)
 
     def __onPressCancel(self):
         # if press cancel
@@ -56,6 +65,9 @@ class PipWindow(QtGui.QDialog):
         self.pbUninstall = QtGui.QPushButton("Uninstall")
         self.pbUninstall.setFixedWidth(100)
         self.pbUninstall.clicked.connect(self.__onPressUninstall)
+        self.pbUpgrade = QtGui.QPushButton("Upgrade")
+        self.pbUpgrade.setFixedWidth(100)
+        self.pbUpgrade.clicked.connect(self.__onPressUpgrade)
         self.pbCancel = QtGui.QPushButton("Cancel")
         self.pbCancel.setFixedWidth(100)
         self.pbCancel.clicked.connect(self.__onPressCancel)
@@ -66,6 +78,7 @@ class PipWindow(QtGui.QDialog):
         blhAlias.addWidget(self.leVersion)
         blhButtons.addWidget(self.pbInstall, 0, QtCore.Qt.AlignRight)
         blhButtons.addWidget(self.pbUninstall, 0, QtCore.Qt.AlignRight)
+        blhButtons.addWidget(self.pbUpgrade, 0, QtCore.Qt.AlignRight)
         blhButtons.addWidget(self.pbCancel, 0, QtCore.Qt.AlignRight)
         blvMain.addLayout(blhAlias)
         blvMain.addLayout(blhButtons)
