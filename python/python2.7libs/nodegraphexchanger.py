@@ -240,6 +240,8 @@ class ExchangerHandler(EventHandler):
 
             elif self.src_type == 'output' and dst_type == 'output':
                 for oc in self.mark_dot.outputConnections():
+                    # @TODO if the dest node is the downstream node of the output connection node
+                    # restore the connection between the src node and this output connection node
                     oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
                     success = True
 
