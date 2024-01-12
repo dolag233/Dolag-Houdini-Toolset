@@ -6,6 +6,7 @@ import time
 from canvaseventtypes import *
 from nodegraphconsole import KeyEventHandler
 from nodegraphexchanger import ExchangerHandler
+from nodegraphduplicator import DuplicatorHandler
 
 __last_mouse_state = False
 __last_mouse_click_time = 0
@@ -56,8 +57,15 @@ def createEventHandler(uievent, pending_actions):
     # Exchanger
     if isinstance(uievent, MouseEvent) and \
             uievent.mousestate.lmb and \
-            uievent.modifierstate.alt and uievent.modifierstate.ctrl:
+            uievent.modifierstate.alt and uievent.modifierstate.ctrl and not uievent.modifierstate.shift:
         event_handler = ExchangerHandler(uievent)
+        return event_handler, True if event_handler is not None else False
+
+    # Duplicator
+    elif isinstance(uievent, MouseEvent) and \
+            uievent.mousestate.lmb and \
+            uievent.modifierstate.shift and uievent.modifierstate.ctrl and not uievent.modifierstate.alt:
+        event_handler = DuplicatorHandler(uievent)
         return event_handler, True if event_handler is not None else False
 
     return None, False

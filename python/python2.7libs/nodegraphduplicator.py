@@ -3,13 +3,13 @@ from nodegraphbase import EventHandler
 import hou
 
 
-# exchange input, outputs, dot's connections to another node
-# press Ctrl + Alt and drag connector
-class ExchangerHandler(EventHandler):
+# duplicate input, outputs, dot's connections to another node
+# press Ctrl + Shift and drag connector
+class DuplicatorHandler(EventHandler):
     def __init__(self, uievent):
-        super(ExchangerHandler, self).__init__(uievent)
+        super(DuplicatorHandler, self).__init__(uievent)
         self.__cleanState()
-        self.__marker_color = hou.Color(1.0, 0.2, 0.1)
+        self.__marker_color = hou.Color(0.2, 0.8, 0.1)
         self.__detect_radius = 0.5
 
     def __cleanState(self):
@@ -71,9 +71,6 @@ class ExchangerHandler(EventHandler):
                 for ic in self.src_item.inputConnections():
                     self.mark_dot[i].setInput(0, ic.inputItem(), ic.outputIndex())
                     i += 1
-                    # delete original input connection
-                    # remove index 0 because when you delete one input, the rest indices will be moved automatically
-                    self.src_item.setInput(0, None)
 
             else:
                 input_connection = None
@@ -85,8 +82,6 @@ class ExchangerHandler(EventHandler):
                 if input_connection is not None:
                     # input has at most one connection
                     self.mark_dot.setInput(0, input_connection.inputItem(), input_connection.outputIndex())
-                    # delete original input connection
-                    self.src_item.setInput(self.src_connector_index, None)
 
         elif self.src_type == "output":
             # get output connections from this exporter
@@ -234,8 +229,6 @@ class ExchangerHandler(EventHandler):
                 else:
                     # if is input, just set because input connection is unique
                     dst_item.setInput(dst_connector_index, self.mark_dot.inputConnections()[0].inputItem(), self.mark_dot.inputConnections()[0].outputIndex())
-                    # delete original connection
-                    self.src_item.setInput(self.src_connector_index, None)
                     success = True
 
             elif self.src_type == 'output' and dst_type == 'output':
@@ -330,7 +323,7 @@ class ExchangerHandler(EventHandler):
             # if dragging
             if isinstance(uievent, MouseEvent) and \
                 uievent.mousestate.lmb and\
-                    uievent.modifierstate.alt and uievent.modifierstate.ctrl and not uievent.modifierstate.shift:
+                    uievent.modifierstate.shift and uievent.modifierstate.ctrl and not uievent.modifierstate.alt:
 
                 self.__moveMarkDot(uievent)
                 return self
