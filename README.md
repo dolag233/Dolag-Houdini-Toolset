@@ -2,7 +2,7 @@
 
 Dolag的Houdini工具集。
 
-使用python2版本的Houdini 18.5以及python3版本的Houdini 19.0进行开发，目前应该兼容python2和3大版本。
+使用python2版本的Houdini 18.5以及python3版本的Houdini 19.5进行开发，目前应该兼容python2和3大版本。
 
 ## 目录
 
