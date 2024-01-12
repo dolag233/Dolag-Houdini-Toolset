@@ -213,7 +213,7 @@ class DuplicatorHandler(EventHandler):
                 # if they are merge node
                 if self.src_is_merge and isinstance(self.mark_dot, list):
                     if self.__checkMerge(dst_item):
-                        i = 0
+                        i = len(dst_item.inputs())
                         for dot in self.mark_dot:
                             dst_item.setInput(i, dot.inputConnections()[0].inputItem(),
                                               dot.inputConnections()[0].outputIndex())
@@ -233,7 +233,12 @@ class DuplicatorHandler(EventHandler):
 
             elif self.src_type == 'output' and dst_type == 'output':
                 for oc in self.mark_dot.outputConnections():
-                    oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
+                    # if the dest node is the ancestor (or self) node of the output connection node
+                    # restore the connection between the src node and this output connection node
+                    if oc.outputItem() in dst_item.inputAncestors() or oc.outputItem() == dst_item:
+                        oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
+                    else:
+                        oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
                     success = True
 
             elif self.src_type == 'dot':

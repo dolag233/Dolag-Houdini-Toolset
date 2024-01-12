@@ -218,7 +218,7 @@ class ExchangerHandler(EventHandler):
                 # if they are merge node
                 if self.src_is_merge and isinstance(self.mark_dot, list):
                     if self.__checkMerge(dst_item):
-                        i = 0
+                        i = len(dst_item.inputs())
                         for dot in self.mark_dot:
                             dst_item.setInput(i, dot.inputConnections()[0].inputItem(),
                                               dot.inputConnections()[0].outputIndex())
