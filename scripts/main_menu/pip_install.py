@@ -51,7 +51,7 @@ def pipUninstall(module_name):
         print("cannot find python!")
 
     print("start uninstall {}".format(module_name))
-    subprocess.call((python_path, '-m', 'pip', 'uninstall', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
+    subprocess.call((python_path, '-m', 'pip', 'uninstall', '-y', module_name), stderr=sys.stderr, stdout=sys.stdout, shell=True)
 
 def pipUpgrade(module_name):
     import subprocess
