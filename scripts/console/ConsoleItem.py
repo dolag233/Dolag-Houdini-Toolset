@@ -1,5 +1,6 @@
 import platform
 import time
+import traceback
 
 if platform.python_version_tuple()[0] == '2':
     from ConsoleContext import ConsoleContext
@@ -53,6 +54,6 @@ class ConsoleItem(ConsoleItemBase):
 
         try:
             self.callback(context)
-        except Exception:
-            pass
+        except Exception as e:
+            hou.ui.displayMessage(traceback.format_exc())
 
