@@ -146,12 +146,12 @@ else:
         </scriptItem>
 
         <scriptItem id="h.menu_bar.chatgpt">
-          <label>Houdini Master AI</label>
+          <label>Chatgpt</label>
             <scriptCode><![CDATA[
 from main_menu import chatgpt_UI
 from utils import show_UI
 
-show_UI.showUI(chatgpt_UI.ChatgptPanel)
+show_UI.showUIStandalone(chatgpt_UI.ChatgptPanel)
             ]]>
             </scriptCode>
         </scriptItem>
