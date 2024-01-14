@@ -145,8 +145,8 @@ else:
             </scriptCode>
         </scriptItem>
 
-        <scriptItem id="h.menu_bar.chatgpt">
-          <label>Chatgpt</label>
+        <scriptItem id="h.menu_bar.houdini_master">
+          <label>Houdini Master AI</label>
             <scriptCode><![CDATA[
 from main_menu import chatgpt_UI
 from utils import show_UI
