@@ -405,7 +405,7 @@ from main_menu import chatgpt_UI
 from utils import show_UI
 from PySide2 import QtCore
 def chatgpt_cb(context):
-    if "dolag::houdini_master_AI" in hou.pypanel.interfaces().keys():
+    if "dolag::houdini_master_AI_console" in hou.pypanel.interfaces().keys():
         cursor_pos = context["screen_pos_flipY"]
         desktop = hou.ui.curDesktop()
         pane = desktop.createFloatingPanel(hou.paneTabType.PythonPanel, position=cursor_pos, size=(500, 200))
