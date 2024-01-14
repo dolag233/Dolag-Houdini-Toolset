@@ -98,7 +98,7 @@ Dolag的Houdini工具集。
 
 ## 使用方法
 
-使用方法参见[此处](http://www.vis.dolag.work/houdini-toolset/)。
+使用方法参见[此处](https://www.vis.dolag.work/houdini-toolset/%E7%AE%80%E4%BB%8B.html)。
 
 ---
 
