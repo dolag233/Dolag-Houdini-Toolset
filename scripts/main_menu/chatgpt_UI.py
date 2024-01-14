@@ -5,10 +5,10 @@ from PySide2.QtCore import QObject, QThread, Signal, Slot
 import openai
 import json
 
-gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点',
+gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点。回答必须简短',
           "Vex": '你是Houdini专家。默认情况是根据问题回答Vex代码，需附上详细注释，不要带有代码外的其他任何语句。不能带有Markdown格式',
           "Python": '你是Houdini专家。默认情况是根据问题回答Houdini内的Python代码，需附上详细注释不要带有代码外的其他任何语句。不能带有Markdown格式',
-          "Free": '你是Houdini专家。用户会向你提问Houdini相关问题，尽力地为用户解答。如果问题比较复杂，你需要把问题进行分解然后回答'}
+          "Free": '你是Houdini专家。用户会向你提问Houdini相关问题，尽力地为用户解答。如果问题比较复杂，你需要把问题进行分解然后回答。回答必须简短'}
 class ChatWorker(QObject):
     message_received = Signal(str)
     apikey = ""
@@ -225,8 +225,8 @@ class ChatgptPanel(QtGui.QDialog):
         blhSendMessage.addWidget(self.lePrompt)
         blhSendMessage.addWidget(self.pbSend)
         blhSendMessage.addWidget(self.pbReset)
-        blhSendMessage.addWidget(self.pbSetPanel)
         blhSendMessage.addWidget(self.cbMode)
+        blhSendMessage.addWidget(self.pbSetPanel)
         blvMain.addWidget(self.teMessage)
         blvMain.addLayout(blhSendMessage)
 
