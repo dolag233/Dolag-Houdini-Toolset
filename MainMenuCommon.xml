@@ -75,7 +75,7 @@ hou.hipFile.saveAsBackup()
 from main_menu import pip_install_UI
 from utils import show_UI
 
-show_UI.showUI(pip_install_UI.PipWindow)
+show_UI.showUIStandalone(pip_install_UI.PipWindow)
 
 
             ]]>
