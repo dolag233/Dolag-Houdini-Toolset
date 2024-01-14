@@ -398,3 +398,24 @@ def auto_resize_networkbox_cb(context):
 
 tmp_console_item = ConsoleItem(item_name="Network Box Auto Resize", alias="resize", callback=auto_resize_networkbox_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
+
+
+# chatgpt
+from main_menu import chatgpt_UI
+from utils import show_UI
+from PySide2 import QtCore
+def chatgpt_cb(context):
+    if "dolag::houdini_master_AI" in hou.pypanel.interfaces().keys():
+        cursor_pos = context["screen_pos_flipY"]
+        desktop = hou.ui.curDesktop()
+        pane = desktop.createFloatingPanel(hou.paneTabType.PythonPanel, position=cursor_pos, size=(500, 200))
+        pane.setName("Houdini Master")
+        # qtParentWindow is a new api since 19.5 or 20.0
+        if hasattr(pane, 'qtParentWindow'):
+            pane.qtParentWindow().setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        pane_tab = pane.paneTabs()[0]
+        pane_tab.showToolbar(False)
+        pane_tab.setActiveInterface(hou.pypanel.interfaces()["dolag::houdini_master_AI_console"])
+
+tmp_console_item = ConsoleItem(item_name="Ask Houdini Master", alias="chat", callback=chatgpt_cb)
+CUSTOM_ITEMS.append(tmp_console_item)

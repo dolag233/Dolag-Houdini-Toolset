@@ -30,6 +30,11 @@
 			{
 				"value" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/stickers/",
 				"method" : "prepend"
+			},
+			"$HOUDINI_PYTHON_PANEL_PATH" :
+			{
+				"value" : "$HOUDINI_USER_PREF_DIR/DolagPlugin/python_panels/",
+				"method" : "prepend"
 			}
 		}
 	],

@@ -5,21 +5,24 @@ from PySide2.QtCore import QObject, QThread, Signal, Slot
 import openai
 import json
 
-default_prompt = '你是Houdini专家。默认情况是根据问题回答需要的节点名，可以包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并另起一行解释使用方法。对于代码问题则需要返回代码并附上详细注释。回答不准带有任何Markdown格式。不准编造内容'
-
+gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点',
+          "Vex": '你是Houdini专家。默认情况是根据问题回答Vex代码，需附上详细注释，不要带有代码外的其他任何语句。不能带有Markdown格式',
+          "Python": '你是Houdini专家。默认情况是根据问题回答Houdini内的Python代码，需附上详细注释不要带有代码外的其他任何语句。不能带有Markdown格式',
+          "Free": '你是Houdini专家。用户会向你提问Houdini相关问题，尽力地为用户解答。如果问题比较复杂，你需要把问题进行分解然后回答'}
 class ChatWorker(QObject):
     message_received = Signal(str)
     apikey = ""
     gpt_version = "gpt-4"
     proxy_url = ""
     client = None
+    prompt_key = "Node"
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.chat_history = [{'role': 'system', 'content': default_prompt}]
+        self.chat_history = [{'role': 'system', 'content': gpt_prompt[self.prompt_key]}]
 
     def resetContext(self):
-        self.chat_history = [{'role': 'system', 'content': default_prompt}]
+        self.chat_history = [{'role': 'system', 'content': gpt_prompt[self.prompt_key]}]
 
     # call this before run chat
     def setSettings(self, apikey, gpt_version, proxy_url):
@@ -32,11 +35,13 @@ class ChatWorker(QObject):
         else:
             self.client = openai.OpenAI(api_key=apikey)
 
+    def changePrompt(self, prompt):
+        self.prompt_key = prompt
 
     @Slot(str)
-    def runChat(self, prompt):
+    def runChat(self, user_prompt):
         if self.client is not None:
-            self.chat_history.append({'role': 'user', 'content': prompt})
+            self.chat_history.append({'role': 'user', 'content': user_prompt})
             # 定义初始对话
             # 使用 chat.completions.create 方法生成完成的响应，并设置 stream=True
             response = self.client.chat.completions.create(
@@ -134,8 +139,8 @@ class ChatgptPanel(QtGui.QDialog):
             self.layout.addWidget(self.https_proxy_label)
             self.layout.addWidget(self.https_proxy_edit)
             # Ok and Cancel buttons
-            self.ok_button = QPushButton("确定")
-            self.cancel_button = QPushButton("取消")
+            self.ok_button = QPushButton("Save")
+            self.cancel_button = QPushButton("Cancel")
             self.layout.addWidget(self.ok_button)
             self.layout.addWidget(self.cancel_button)
 
@@ -198,7 +203,7 @@ class ChatgptPanel(QtGui.QDialog):
 
         self.teMessage = ChatgptPanel.AutoHeightTextEdit(self)
         self.teMessage.setReadOnly(True)
-        self.teMessage.setHeightLimit(150, 350)
+        self.teMessage.setHeightLimit(150, 600)
 
         self.pbSend = QtGui.QPushButton("Send")
         self.pbSend.clicked.connect(self.sendMessage)
@@ -210,16 +215,23 @@ class ChatgptPanel(QtGui.QDialog):
         self.pbSetPanel = QtGui.QPushButton("Set")
         self.pbSetPanel.clicked.connect(self.openSettingPanel)
 
+        self.cbMode = QtGui.QComboBox()
+        for key in gpt_prompt.keys():
+            self.cbMode.addItem(key)
+        self.cbMode.currentIndexChanged.connect(self.changePromptMode)
+        self.changePromptMode() # update to default mode
+
         blhMessage.addWidget(self.teMessage)
         blhSendMessage.addWidget(self.lePrompt)
         blhSendMessage.addWidget(self.pbSend)
         blhSendMessage.addWidget(self.pbReset)
         blhSendMessage.addWidget(self.pbSetPanel)
+        blhSendMessage.addWidget(self.cbMode)
         blvMain.addWidget(self.teMessage)
         blvMain.addLayout(blhSendMessage)
 
         self.setLayout(blvMain)
-        self.resize(QtCore.QSize(450, 150))
+        self.resize(QtCore.QSize(550, 175))
         self.setWindowTitle("Houdini Master")
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         self.lePrompt.setFocus()
@@ -233,6 +245,12 @@ class ChatgptPanel(QtGui.QDialog):
         if self.has_settings:
             self.lbNoSettings.hide()
             self.newGptWorker()
+
+    def changePromptMode(self):
+        prompt_key = self.cbMode.currentText()
+        if self.has_settings and self.chat_worker is not None:
+            self.chat_worker.changePrompt(prompt_key)
+            self.chat_worker.resetContext()
 
     def newGptWorker(self):
         # chatgpt worker

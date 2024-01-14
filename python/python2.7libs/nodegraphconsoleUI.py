@@ -79,6 +79,7 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.context["hit_item"] = self.hou_event.editor.networkItemsInBox(self.hou_event.mousepos, \
                                                                            self.hou_event.mousepos, for_select=False)
         self.context["screen_pos"] = (self.pos.x(), self.pos.y())
+        self.context["screen_pos_flipY"] = (self.pos.x(), QtWidgets.QApplication.desktop().screenGeometry().height() - self.pos.y())
         self.context["qt_keys"] = event.key()
 
     def searchItem(self, search_str):
