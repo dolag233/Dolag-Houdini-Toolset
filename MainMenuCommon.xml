@@ -145,6 +145,8 @@ else:
             </scriptCode>
         </scriptItem>
 
+        <separatorItem id="h.menu_bar.sep_3"/>
+
         <scriptItem id="h.menu_bar.houdini_master">
           <label>Houdini Master AI</label>
             <scriptCode><![CDATA[
