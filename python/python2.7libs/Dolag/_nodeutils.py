@@ -28,13 +28,14 @@ def getNode(node_desc, node_type=hou.Node):
 def serializeNodeMetadata2Json(node):
     node = getNode(node)
 
-    node_json = dict()
     # serialize node metadata
     meta_json = dict()
     meta_json['type'] = node.type().name()
     meta_json['name'] = node.name()
     meta_json['pos'] = list(node.position())
-    meta_json['shape'] = node.userDataDict()['nodeshape']
+    meta_json['shape'] = node.userData('nodeshape')
+    if meta_json['shape'] is None:
+        meta_json['shape'] = node.type().defaultShape()
     meta_json['color'] = node.color().rgb()
     meta_json['input_nodes'] = [c.inputItem().name() for c in node.inputConnections()]
     meta_json['output_nodes'] = [c.outputItem().name() for c in node.outputConnections()]

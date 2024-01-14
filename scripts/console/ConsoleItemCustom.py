@@ -231,8 +231,9 @@ from op_menu import set_preset_style
 def set_preset_node_style_input_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "input")
+        with hou.undos.group("Set Input Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "input")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Input Node Style", alias="input", callback=set_preset_node_style_input_cb)
@@ -242,8 +243,9 @@ CUSTOM_ITEMS.append(tmp_console_item)
 def set_preset_node_style_output_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "output")
+        with hou.undos.group("Set Output Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "output")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Output Node Style", alias="output", callback=set_preset_node_style_output_cb)
@@ -253,19 +255,21 @@ CUSTOM_ITEMS.append(tmp_console_item)
 def set_preset_node_style_global_control_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "global control")
+        with hou.undos.group("Set Global Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "global control")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Global Control Node Style", alias="global control", callback=set_preset_node_style_global_control_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# preset output node style
+# preset heavy node style
 def set_preset_node_style_heavy_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "heavy")
+        with hou.undos.group("Set Heavy Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "heavy")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Heavy Node Style", alias="heavy", callback=set_preset_node_style_heavy_cb)
@@ -275,8 +279,9 @@ CUSTOM_ITEMS.append(tmp_console_item)
 def set_preset_node_style_important_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "important")
+        with hou.undos.group("Set Important Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "important")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Important Node Style", alias="important", callback=set_preset_node_style_important_cb)
@@ -286,11 +291,24 @@ CUSTOM_ITEMS.append(tmp_console_item)
 def set_preset_node_style_milestone_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
-        for node in nodes:
-            set_preset_style.setNodePresetStyle(node, "milestone")
+        with hou.undos.group("Set Milestone Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "milestone")
 
 
 tmp_console_item = ConsoleItem(item_name="Set Milestone Node Style", alias="milestone", callback=set_preset_node_style_milestone_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+# preset useless node style
+def set_preset_node_style_useless_cb(context):
+    nodes = context["selected_nodes"]
+    if nodes:
+        with hou.undos.group("Set Useless Node Style"):
+            for node in nodes:
+                set_preset_style.setNodePresetStyle(node, "useless")
+
+
+tmp_console_item = ConsoleItem(item_name="Set Useless Node Style", alias="useless", callback=set_preset_node_style_useless_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
@@ -379,4 +397,25 @@ def auto_resize_networkbox_cb(context):
                 i.fitAroundContents()
 
 tmp_console_item = ConsoleItem(item_name="Network Box Auto Resize", alias="resize", callback=auto_resize_networkbox_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+
+# chatgpt
+from main_menu import chatgpt_UI
+from utils import show_UI
+from PySide2 import QtCore
+def chatgpt_cb(context):
+    if "dolag::houdini_master_AI_console" in hou.pypanel.interfaces().keys():
+        cursor_pos = context["screen_pos_flipY"]
+        desktop = hou.ui.curDesktop()
+        pane = desktop.createFloatingPanel(hou.paneTabType.PythonPanel, position=cursor_pos, size=(500, 200))
+        pane.setName("Houdini Master")
+        # qtParentWindow is a new api since 19.5 or 20.0
+        if hasattr(pane, 'qtParentWindow'):
+            pane.qtParentWindow().setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        pane_tab = pane.paneTabs()[0]
+        pane_tab.showToolbar(False)
+        pane_tab.setActiveInterface(hou.pypanel.interfaces()["dolag::houdini_master_AI_console"])
+
+tmp_console_item = ConsoleItem(item_name="Ask Houdini Master", alias="chat", callback=chatgpt_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
