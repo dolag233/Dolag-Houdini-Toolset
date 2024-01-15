@@ -25,6 +25,7 @@ class ChatWorker(QObject):
 
     # call this before run chat
     def setSettings(self, apikey, gpt_version, proxy_url):
+        import openai
         self.apikey = apikey
         self.gpt_version = gpt_version
         self.proxy_url = proxy_url
