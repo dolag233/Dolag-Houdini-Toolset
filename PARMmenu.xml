@@ -321,6 +321,35 @@ for parm in parms:
             <subMenu id = "h.pane.parms.dolag.process_ramp">
                 <label>Process Ramp</label>
                 <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.RampParmTemplate)</expression>
+
+                    <scriptItem id = "h.pane.parms.dolag.randomize_ramp0_25">
+                        <label>Randomize Ramp * 0.25</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeRamp(parm, 0.05)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.randomize_ramp0_5">
+                        <label>Randomize Ramp * 0.5</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeRamp(parm, 0.1)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
                     <scriptItem id = "h.pane.parms.dolag.randomize_ramp">
                         <label>Randomize Ramp</label>
                             <scriptCode><![CDATA[
