@@ -378,6 +378,48 @@ for parm in parms:
                             </scriptCode>
                     </scriptItem>
 
+                    <scriptItem id = "h.pane.parms.dolag.randomize_interval0_5">
+                        <label>Randomize Interval * 0.5</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeIntervalRamp(parm, 0.1)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.randomize_interval">
+                        <label>Randomize Interval</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeIntervalRamp(parm)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
+                    <scriptItem id = "h.pane.parms.dolag.randomize_interval2">
+                        <label>Randomize Interval * 2</label>
+                            <scriptCode><![CDATA[
+import hou
+from parm_menu import ramp
+
+parms = kwargs['parms']
+for parm in parms:
+    ramp.randomizeIntervalRamp(parm, 0.4)
+
+                            ]]>
+                            </scriptCode>
+                    </scriptItem>
+
                     <scriptItem id = "h.pane.parms.dolag.subdivide_ramp">
                         <label>Subdivide Ramp</label>
                             <scriptCode><![CDATA[
