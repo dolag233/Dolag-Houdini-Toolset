@@ -2,6 +2,7 @@ from PySide2.QtWidgets import QApplication, QDialog, QPushButton, QTextEdit, QVB
 from PySide2 import QtWidgets as QtGui
 from PySide2 import QtCore
 from PySide2.QtCore import QObject, QThread, Signal, Slot
+from PySide2.QtGui import QTextCursor
 import json
 
 gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点。回答必须简短',
@@ -320,8 +321,8 @@ class ChatgptPanel(QtGui.QDialog):
 
     def appendMessage(self, str):
         if str is not None and len(str) > 0:
-            cursor = self.teMessage.textCursor()
-            cursor.insertText(str)
+            self.teMessage.setPlainText(self.teMessage.toPlainText() + str)
+            self.teMessage.moveCursor(QTextCursor.End)
             # 必须启用repaint才会重绘制
             self.teMessage.repaint()
 

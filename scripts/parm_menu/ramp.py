@@ -122,7 +122,6 @@ def randomizeRamp(parm, amp=0.2):
 
 
 def subdivideRamp(parm, level=1):
-    import random
     parm = dp.getParm(parm)
     if parm is None:
         return
@@ -169,7 +168,6 @@ def subdivideRamp(parm, level=1):
 
 
 def smoothRamp(parm, iter=1):
-    import random
     parm = dp.getParm(parm)
     if parm is None:
         return
@@ -215,3 +213,39 @@ def smoothRamp(parm, iter=1):
     new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), tuple(new_values))
     parm.set(new_ramp)
 
+
+def randomizeIntervalRamp(parm, amp=0.2):
+    import random
+    parm = dp.getParm(parm)
+    if parm is None:
+        return
+
+    if not isinstance(parm.parmTemplate(), hou.RampParmTemplate):
+        return
+
+    ramp = parm.evalAsRamp()
+    values = ramp.values()
+    keys = list(ramp.keys())
+    basis = ramp.basis()
+    len_keys = len(keys)
+
+    new_keys = keys
+    new_basis = basis
+    for i in range(len_keys):
+        idx = i
+        key = keys[idx]
+        d2l = 0
+        d2n = 0
+        if idx > 0:
+            d2l = key - keys[idx - 1]
+        if idx < (len_keys - 1):
+            d2n = keys[idx + 1] - key
+        rand_val = (random.random() - 0.5) * 2
+        if rand_val < 0:
+            key = key - amp * rand_val * d2l
+        else:
+            key = key + amp * rand_val * d2n
+        new_keys[idx] = key
+
+    new_ramp = hou.Ramp(tuple(new_basis), tuple(new_keys), values)
+    parm.set(new_ramp)
