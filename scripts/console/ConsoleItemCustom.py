@@ -419,3 +419,12 @@ def chatgpt_cb(context):
 
 tmp_console_item = ConsoleItem(item_name="Ask Houdini Master", alias="chat", callback=chatgpt_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
+
+
+# viewer wanderer
+from utils import viewer_states
+def viewer_wanderer_cb(context):
+    viewer_states.enableSOPState("dolag::viewer_wanderer")
+
+tmp_console_item = ConsoleItem(item_name="Viewer Wanderer WSAD", alias="walk", callback=viewer_wanderer_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
