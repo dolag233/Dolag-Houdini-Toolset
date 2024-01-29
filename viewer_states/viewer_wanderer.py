@@ -16,6 +16,7 @@ import stateutils
 class State(object):
     speed = 0.15
     speed_step = 0.05
+    rotate_matrix = hou.Matrix3([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
     rotate_mouse_pos = hou.Vector2(0, 0)
     rotate = False
     MSG = "Press Ctrl + WSADEQ to move the camera\nScroll wheel to set move speed. Current speed : {}"
@@ -67,36 +68,47 @@ class State(object):
 
                 return True
 
-    # def onMouseEvent(self, kwargs):
-    #     ui_device = kwargs["ui_event"].device()
-    #     if ui_device.isMiddleButton():
-    #         #  rotate camera
-    #         viewer = stateutils.findSceneViewer()
-    #         if viewer:
-    #             vp = viewer.curViewport()
-    #             camera = vp.defaultCamera()
-    #             forward = hou.Vector3((0, 0, -1)) * camera.rotation()
-    #             center = hou.Vector3(camera.pivot()) + hou.Vector3(camera.translation()) * camera.rotation().inverted()
-    #             forward = center - hou.Vector3(camera.pivot())
-    #             forward = forward.normalized()
-    #             camera.setPivot(tuple(center))
-    #             camera.setTranslation((0, 0, 0))
-    #             mouse_pos = hou.Vector2(ui_device.mouseX() / vp.size()[2] - vp.size()[0],
-    #                                            ui_device.mouseY() / vp.size()[3] - vp.size()[1])
-    #             delta_pos = mouse_pos - self.rotate_mouse_pos
-    #
-    #             # 假设你已经有了一个yaw和pitch的角度（以度为单位）
-    #             yaw = delta_pos[1] * 0.25  # Yaw角度
-    #             pitch = delta_pos[0] * 0.25  # Pitch角度
-    #
-    #             # 使用hou.hmath.buildRotate函数来构造旋转矩阵
-    #             rotation_matrix = hou.hmath.buildRotate((0, yaw, pitch))
-    #             rotation = camera.rotation() * rotation_matrix.extractRotationMatrix3()
-    #             camera.setRotation(rotation)
-    #
-    #             return True
-    #
-    #     return False
+    def onMouseEvent(self, kwargs):
+        ui_device = kwargs["ui_event"].device()
+        if ui_device.isMiddleButton():
+            #  rotate camera
+            viewer = stateutils.findSceneViewer()
+            if viewer:
+                vp = viewer.curViewport()
+                camera = vp.defaultCamera()
+                if not self.rotate:
+                    #  record the init mouse pos
+                    self.rotate_mouse_pos = hou.Vector2(ui_device.mouseX() / vp.size()[2] - vp.size()[0],
+                                                        ui_device.mouseY() / vp.size()[3] - vp.size()[1])
+                    self.rotate_matrix = camera.rotation()
+                    self.rotate = True
+
+                forward = hou.Vector3((0, 0, -1)) * camera.rotation()
+                center = hou.Vector3(camera.pivot()) + hou.Vector3(camera.translation()) * camera.rotation().inverted()
+                forward = center - hou.Vector3(camera.pivot())
+                forward = forward.normalized()
+                #  camera.setPivot(tuple(center))
+                #  camera.setTranslation((0, 0, 0))
+                mouse_pos = hou.Vector2(ui_device.mouseX() / vp.size()[2] - vp.size()[0],
+                                               ui_device.mouseY() / vp.size()[3] - vp.size()[1])
+                delta_pos = mouse_pos - self.rotate_mouse_pos
+
+                # 假设你已经有了一个yaw和pitch的角度（以度为单位）
+                yaw = delta_pos[1] * 90  # Yaw角度
+                pitch = delta_pos[0] * 90  # Pitch角度
+
+                # 使用hou.hmath.buildRotate函数来构造旋转矩阵
+                rotation_matrix = hou.hmath.buildRotate((-yaw, 0, 0))
+                rotation_matrix1 = hou.hmath.buildRotate((0, pitch, 0))
+                rotation = self.rotate_matrix * rotation_matrix.extractRotationMatrix3() * rotation_matrix1.extractRotationMatrix3()
+                camera.setRotation(rotation)
+
+                return True
+
+        else:
+            self.rotate = False
+
+        return False
 
     def onMouseWheelEvent(self, kwargs):
         ui_device = kwargs["ui_event"].device()
