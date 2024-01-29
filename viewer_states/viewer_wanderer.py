@@ -110,16 +110,17 @@ class State(object):
 
     def onKeyTransitEvent(self, kwargs):
         ui_device = kwargs["ui_event"].device()
-        if ui_device.isMiddleButton() and not self.rotate:
-            viewer = stateutils.findSceneViewer()
-            vp = viewer.curViewport()
-            camera = vp.defaultCamera()
-            #  record the init mouse pos
-            self.rotate_mouse_pos = hou.Vector2(ui_device.mouseX() / vp.size()[2] - vp.size()[0],
-                                               ui_device.mouseY() / vp.size()[3] - vp.size()[1])
-            self.rotate = True
-        elif ui_device.isMidddleButtonUp():
-            self.rotate = False
+        if hou.applicationVersion()[0] >= 19 and hou.applicationVersion()[1] >= 5:  # middle button api is added since 19.5
+            if ui_device.isMiddleButton() and not self.rotate:
+                viewer = stateutils.findSceneViewer()
+                vp = viewer.curViewport()
+                camera = vp.defaultCamera()
+                #  record the init mouse pos
+                self.rotate_mouse_pos = hou.Vector2(ui_device.mouseX() / vp.size()[2] - vp.size()[0],
+                                                   ui_device.mouseY() / vp.size()[3] - vp.size()[1])
+                self.rotate = True
+            elif ui_device.isMiddleButtonRelease():
+                self.rotate = False
 
         self.displayPrompt()
 
