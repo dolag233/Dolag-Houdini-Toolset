@@ -24,6 +24,26 @@ def getNode(node_desc, node_type=hou.Node):
     return node
 
 
+def unlockCustomNode(cur_node, traveled_nodes=None):
+    import os
+    if traveled_nodes is None:
+        traveled_nodes = []
+
+    cur_node.allowEditingOfContents()
+    for n in cur_node.children():
+        if not isinstance(n, hou.SopNode) or n.type() is None or n.type().definition() is None:
+            continue
+
+        node_type = n.type()
+        hda_def = n.type().definition()
+        hda_path = hda_def.libraryFilePath()
+        if (hda_path == "Embedded" or not os.path.exists(hda_path)\
+            or not os.path.abspath(hou.getenv("HFS")) in os.path.abspath(hda_path)) and n not in traveled_nodes:
+            n.allowEditingOfContents()
+            traveled_nodes.append(n)
+            unlockCustomNode(n, traveled_nodes)
+
+
 # serialize node metadata json
 def serializeNodeMetadata2Json(node):
     node = getNode(node)
@@ -39,7 +59,7 @@ def serializeNodeMetadata2Json(node):
     meta_json['color'] = node.color().rgb()
     meta_json['input_nodes'] = [c.inputItem().name() for c in node.inputConnections()]
     meta_json['output_nodes'] = [c.outputItem().name() for c in node.outputConnections()]
-    return json.dumps(meta_json, indent=4, ensure_ascii=False) # @TODO maybe not supported in python2
+    return json.dumps(meta_json, indent=4, ensure_ascii=False)  # @TODO maybe not supported in python2
 
 
 # parse node metadata json
