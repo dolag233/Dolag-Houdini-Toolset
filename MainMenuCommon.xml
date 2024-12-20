@@ -25,6 +25,21 @@ hou.hipFile.saveAsBackup()
       </scriptItem>
     </subMenu>
 
+    <!-- Item inserted into Asset menu -->
+    <subMenu id="assets_menu">
+      <label>Assets</label>
+      <scriptItem id="h.save_hda_copy_unlock">
+          <label>Save Copy Unlock Asset</label>
+          <scriptCode><![CDATA[
+from main_menu import hda_save_as
+
+hda_save_as.saveHDACopyUnlock(hou.selectedNodes(), save_original_hda=True)
+                    ]]>
+          </scriptCode>
+          <insertBefore>edit_asset</insertBefore>
+      </scriptItem>
+    </subMenu>
+
     <subMenu>
       <label>Dolag</label>
         <scriptItem id="h.menu_bar.visit_github">
