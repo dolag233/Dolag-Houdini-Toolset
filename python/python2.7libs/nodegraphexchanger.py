@@ -20,6 +20,7 @@ class ExchangerHandler(EventHandler):
         self.src_merge_input_indices = []
         self.src_type = "none"
         self.src_is_merge = False
+        self.src_is_subnet_input = False
         self.__undos_group = None
 
     def __checkMerge(self, node):
@@ -158,6 +159,17 @@ class ExchangerHandler(EventHandler):
                         src_connector_index = index
                         src_connector_pos = output_pos
 
+            elif isinstance(item, hou.SubnetIndirectInput):
+                output_pos = editor.itemOutputPos(item, 0)
+                distance = output_pos.distanceTo(cursor_pos)
+                if distance < distance_threshold and distance < nearest_distance:
+                    nearest_distance = distance
+                    src_item = item
+                    src_item_type = "output"
+                    src_connector_index = 0
+                    src_connector_pos = output_pos
+                    self.src_is_subnet_input = True
+
         return src_item, src_item_type, src_connector_index, src_connector_pos
 
     def __updateNearConnector(self, uievent):
@@ -198,7 +210,6 @@ class ExchangerHandler(EventHandler):
                     self.mark_dot.setPosition(cursor_pos)
 
     def __drop(self, uievent):
-
         success = False
         skip = False
         dst_item, dst_type, dst_connector_index, _ = self.__getNearConnector(uievent, self.__detect_radius, self.mark_dot)
@@ -242,8 +253,11 @@ class ExchangerHandler(EventHandler):
                 for oc in self.mark_dot.outputConnections():
                     # if the dest node is the ancestor (or self) node of the output connection node
                     # restore the connection between the src node and this output connection node
-                    if oc.outputItem() in dst_item.inputAncestors() or oc.outputItem() == dst_item:
-                        oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
+                    if not self.src_is_subnet_input:
+                        if oc.outputItem() in dst_item.inputAncestors() or oc.outputItem() == dst_item:
+                            oc.outputItem().setInput(oc.inputIndex(), self.src_item, self.src_connector_index)
+                        else:
+                            oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
                     else:
                         oc.inputItem().setInput(oc.inputIndex(), dst_item, dst_connector_index)
                     success = True
