@@ -91,6 +91,21 @@ del_keyframes.delKeyframes(node)
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "opmenu.dolag.unlock_node_recursively">
+                <label>Unlock Node Recursively</label>
+                    <scriptCode><![CDATA[
+import hou
+import sys
+from op_menu import unlock_node_recursively
+
+node = kwargs['node']
+
+unlock_node_recursively.unlockNodeRecursively(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <scriptItem id = "opmenu.dolag.copy_node_json">
                 <label>Copy Node Metadata Json to Clipboard</label>
                     <scriptCode><![CDATA[
