@@ -107,7 +107,7 @@ unlock_node_recursively.unlockNodeRecursively(node)
             </scriptItem>
 
             <scriptItem id = "opmenu.dolag.copy_node_json">
-                <label>Copy Node Metadata Json to Clipboard</label>
+                <label>Copy Node Metadata as Json to Clipboard</label>
                     <scriptCode><![CDATA[
 from op_menu import node_parm_json
 
@@ -120,13 +120,40 @@ node_parm_json.copyNodeMetadataJson(node)
             </scriptItem>
 
             <scriptItem id = "opmenu.dolag.copy_parm_json">
-                <label>Copy Parameter Value Json to Clipboard</label>
+                <label>Copy Parameter Value as Json to Clipboard</label>
                     <scriptCode><![CDATA[
 from op_menu import node_parm_json
 
 node = kwargs['node']
 
 node_parm_json.copyParameterValueJson(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.paste_parm_json">
+                <label>Paste Parameter Value as Json From Clipboard</label>
+                    <expression>
+import hou
+import json
+
+clip = hou.ui.getTextFromClipboard()
+try:
+    clip = json.loads(clip)
+except:
+    return False
+
+return True
+
+                    </expression>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu import node_parm_json
+
+node = kwargs['node']
+
+node_parm_json.pasteParameterValueFromJson(node)
 
                     ]]>
                     </scriptCode>
