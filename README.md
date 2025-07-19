@@ -12,7 +12,9 @@
 
 ## 功能概览
 
-- **100+ 实用HDA**：提供海量HDA，涵盖建模、虚幻引擎、体积、高度场等多个模块。所有节点均可在Tab菜单的 `Dolag` 分类下找到。
+- **100+ 实用HDA**：提供海量SOP HDA，涵盖建模、虚幻引擎、体积、高度场等多个模块，专为程序化生成设计，同时又包含许多通用功能。
+    
+    所有节点均可在Tab菜单的 `Dolag` 分类下找到。
 
 <p align="center">
   <img src="img/节点一览.png" alt="节点一览" width="80%">
@@ -21,7 +23,7 @@
 - **快捷控制台**：在网络编辑器（Network Editor）面板中，按下`Ctrl+空格`即可唤出一个快速搜索列表，允许用户通过关键词搜索并执行指令。
 
 - **增强菜单功能**：
-    1. **扩充右键菜单**：为节点和参数的右键菜单添加了丰富的“Dolag”分类功能。例如，右键点击按钮类型的参数，会显示“Dolag > Copy Button”等扩展选项。部分功能包括：
+    1. **扩充右键菜单**：部分功能包括：
         - 一键整理节点布局。
         - 保存与加载节点参数。
         - 一键设置Ramp参数的插值方式，并支持细分、随机、平滑等操作。
@@ -82,7 +84,9 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
 
 ## <a name="features"></a>Features
 
-- **100+ Practical HDAs**: Provides a massive collection of HDAs covering modules like modeling, Unreal Engine, volumes, and height fields. All nodes can be found under the `Dolag` category in the Tab menu.
+- **100+ Practical SOP HDAs**: Provides a massive collection of SOP HDAs covering modules like modeling, Unreal Engine, volumes, and height fields, specifically designed for procedural generation while including many general-purpose functionalities.
+
+    All nodes can be found under the `Dolag` category in the Tab menu.
 
 <p align="center">
   <img src="img/节点一览.png" alt="Node Overview" width="80%">
@@ -91,7 +95,7 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
 - **Quick Console**: In the Network Editor pane, press `Ctrl+Space` to bring up a quick search list, allowing users to find and execute commands via keywords.
 
 - **Enhanced Menu Functions**:
-    1. **Extended Right-Click Menu**: Adds a "Dolag" category to the right-click menus for nodes and parameters. For example, right-clicking a button-type parameter will show extended options like "Dolag > Copy Button". Some features include:
+    1. **Extended Right-Click Menu**: Key features include:
         - One-click node layout arrangement.
         - Save and load node parameters.
         - One-click setting of interpolation modes for Ramp parameters, with support for subdivision, randomization, and smoothing.
