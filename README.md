@@ -38,17 +38,17 @@
 
 **HDA效果展示**
 <p align="center">
-  <img src="img/节点布局整理.png" alt="节点布局整理" width="80%">
+  <img src="img/节点布局整理.png" alt="节点布局整理" width="60%">
 </p>
 
 **连接交换器**
 <p align="center">
-  <img src="img/连接交换器.gif" alt="连接交换器" width="80%">
+  <img src="img/连接交换器.gif" alt="连接交换器" width="40%">
 </p>
 
 **快捷控制台**
 <p align="center">
-  <img src="img/快捷控制台.gif" alt="快捷控制台" width="80%">
+  <img src="img/快捷控制台.gif" alt="快捷控制台" width="30%">
 </p>
 
 ## 安装方法
@@ -108,17 +108,17 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
 
 **HDA Showcase**
 <p align="center">
-  <img src="img/节点布局整理.png" alt="Node Layout Arrangement" width="80%">
+  <img src="img/节点布局整理.png" alt="Node Layout Arrangement" width="60%">
 </p>
 
 **Connection Swapper**
 <p align="center">
-  <img src="img/连接交换器.gif" alt="Connection Swapper" width="80%">
+  <img src="img/连接交换器.gif" alt="Connection Swapper" width="40%">
 </p>
 
 **Quick Console**
 <p align="center">
-  <img src="img/快捷控制台.gif" alt="Quick Console" width="80%">
+  <img src="img/快捷控制台.gif" alt="Quick Console" width="30%">
 </p>
 
 ## <a name="installation"></a>Installation
