@@ -1,5 +1,4 @@
 import hou
-from collections.abc import Iterable
 SPACE_DISTANCE = 1.5
 MIN_VERTICAL_SPACE = 1.25
 MIN_COMPRESSION_DISTANCE = 5
