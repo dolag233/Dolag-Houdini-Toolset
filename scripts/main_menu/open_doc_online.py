@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
     visit doc online
 """

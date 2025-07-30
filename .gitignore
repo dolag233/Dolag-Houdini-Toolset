@@ -19,3 +19,4 @@ otls/tmp/Game
 
 # ignore private files
 *.private*
+.cursorignore

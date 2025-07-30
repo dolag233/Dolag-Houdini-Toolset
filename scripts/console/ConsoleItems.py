@@ -1,3 +1,4 @@
+from __future__ import division
 import platform
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem

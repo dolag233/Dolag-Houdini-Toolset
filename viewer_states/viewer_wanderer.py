@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import division
+
 """
 State:          Viewer Wanderer
 State type:     viewer_wanderer

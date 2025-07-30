@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import hou
 import os
 from Dolag import node as dn

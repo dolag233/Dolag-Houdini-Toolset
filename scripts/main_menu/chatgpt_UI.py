@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PySide2.QtWidgets import QApplication, QDialog, QPushButton, QTextEdit, QVBoxLayout, QWidget, QProgressBar
 from PySide2 import QtWidgets as QtGui
 from PySide2 import QtCore
@@ -18,7 +19,7 @@ class ChatWorker(QObject):
     prompt_key = "Node"
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(ChatWorker, self).__init__(parent)
         self.chat_history = [{'role': 'system', 'content': gpt_prompt[self.prompt_key]}]
 
     def resetContext(self):
@@ -80,7 +81,7 @@ class ChatgptPanel(QtGui.QDialog):
     class AutoHeightTextEdit(QTextEdit):
         def __init__(self, *args, **kwargs):
             import openai
-            super().__init__(*args, **kwargs)
+            super(ChatgptPanel.AutoHeightTextEdit, self).__init__(*args, **kwargs)
             self.document().documentLayout().documentSizeChanged.connect(self.adjustHeight)
             self.max_height = 200
             self.min_height = 125
@@ -107,7 +108,7 @@ class ChatgptPanel(QtGui.QDialog):
         https_proxy = ""
         save = False
         def __init__(self):
-            super().__init__()
+            super(ChatgptPanel.SettingPanel, self).__init__()
 
             self.layout = QVBoxLayout(self)
 
