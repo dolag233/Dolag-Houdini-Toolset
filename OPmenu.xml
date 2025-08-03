@@ -91,8 +91,8 @@ del_keyframes.delKeyframes(node)
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "opmenu.dolag.unlock_node_recursively">
-                <label>Unlock Node Recursively</label>
+            <scriptItem id = "opmenu.dolag.unlock_nodes_recursively">
+                <label>Unlock Nodes Recursively</label>
                     <scriptCode><![CDATA[
 import hou
 import sys
