@@ -11,6 +11,16 @@ elif platform.python_version_tuple()[0] == '3':
 import hou
 from abc import ABCMeta, abstractmethod
 
+# Global usage counter for LUT (Last Used Time)
+# Higher numbers mean more recently used
+_global_usage_counter = 0
+
+def get_next_usage_counter():
+    """Get next usage counter value (thread-safe increment)"""
+    global _global_usage_counter
+    _global_usage_counter += 1
+    return _global_usage_counter
+
 
 class ConsoleItemBase(object):
     __metaclass__ = ABCMeta
@@ -44,7 +54,7 @@ class ConsoleItem(ConsoleItemBase):
         self.LUT = 0
 
     def updateLastUsedTime(self):
-        self.LUT = time.time()
+        self.LUT = get_next_usage_counter()
 
     def run(self, context):
         if not isinstance(context, ConsoleContext):

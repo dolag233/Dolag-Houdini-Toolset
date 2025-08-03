@@ -144,14 +144,26 @@ class SubStringMatchScore(MatchScoreMethodBase):
             search_str = search_str.upper()
             match_str = match_str.upper()
         
+        # First check if search_str is directly contained in match_str
+        if search_str in match_str:
+            self.first_match = match_str.find(search_str)
+            self.lcs = search_str
+            score_bias = self.score_bias
+            score_grain = self.score_grain
+            score = score_bias + score_grain * len(search_str)
+            # reduce position penalty for better UX
+            score -= self.first_match * score_grain * 0.05
+            return score
+        
+        # Fallback to longest common substring
         self.lcs, self.first_match = lcString(search_str, match_str)
         score_bias = self.score_bias
         score_grain = self.score_grain
         score = 0
 
         lcs, first_match = self.lcs, self.first_match
-        # if just match 1 char, degenerate to lcSequence
-        if len(lcs) == 1 or first_match == -1:
+        # only return 0 if no match at all
+        if len(lcs) == 0 or first_match == -1:
             return score
 
         score += score_bias
@@ -231,6 +243,68 @@ class SubSequenceMatchScore(MatchScoreMethodBase):
         return 1
 
 
+class WordContainMatchScore(MatchScoreMethodBase):
+    """Match whole words or word prefixes within the target string"""
+    def __init__(self, search_str, match_str):
+        super(WordContainMatchScore, self).__init__(search_str, match_str, 6)  # highest priority
+        
+    def eval(self, ignore_cap=True):
+        search_str = self.search_str
+        match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        words = match_str.split()
+        score_bias = self.score_bias
+        score_grain = self.score_grain
+        best_score = 0
+        
+        for i, word in enumerate(words):
+            # Exact word match
+            if word == search_str:
+                return score_bias + score_grain * len(search_str) * 2  # Double bonus for exact word
+            # Word starts with search string
+            elif word.startswith(search_str):
+                score = score_bias + score_grain * len(search_str) * 1.5  # 1.5x bonus for prefix
+                best_score = max(best_score, score)
+        
+        return best_score
+    
+    def getRestStr(self):
+        return self.match_str
+    
+    def initPriority(self):
+        return 6
+
+
+class FirstCharMatchScore(MatchScoreMethodBase):
+    """Match first character of search string"""
+    def __init__(self, search_str, match_str):
+        super(FirstCharMatchScore, self).__init__(search_str, match_str, 4)
+        
+    def eval(self, ignore_cap=True):
+        search_str = self.search_str
+        match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        if len(search_str) == 0 or len(match_str) == 0:
+            return 0
+            
+        # Check if first character matches
+        if match_str[0] == search_str[0]:
+            return self.score_grain * 0.5  # Small bonus for first char match
+        return 0
+    
+    def getRestStr(self):
+        return self.match_str
+    
+    def initPriority(self):
+        return 4
+
+
 class MatchScoreStringBase(du.Subject):
     __metaclass__ = ABCMeta
 
@@ -279,7 +353,7 @@ class AliasMatchString(MatchScoreStringBase):
             if isinstance(obs, type):
                 self.addObs(obs)
 
-        self.rank_score = 0.3
+        self.rank_score = 0.2
 
 
 class ItemNameMatchString(MatchScoreStringBase):
@@ -290,7 +364,7 @@ class ItemNameMatchString(MatchScoreStringBase):
             if isinstance(obs, type):
                 self.addObs(obs)
 
-        self.rank_score = 0.2
+        self.rank_score = 0.4
 
 
 class CaptainMatchString(MatchScoreStringBase):
