@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import hou
 import os
 from Dolag import node as dn
@@ -35,11 +33,11 @@ def saveHDACopy(node, suffix="_Copy", save_original_hda=False):
         hou.ui.setStatusMessage("Error: Cannot find hda definition")
 
     new_hda_file_name = hda_name + suffix
-    # 对于带版本的hda，名称需要有特殊的处理
+    # if hda has version, name need to be special handle
     namespaces = hda_name.split("::")
     if len(namespaces) > 2:
         try:
-            float(namespaces[-1])  # 判断是否为版本号
+            float(namespaces[-1])  # check if is version number
             namespaces[-2] += suffix
             new_hda_file_name = "::".join(namespaces)
         except:

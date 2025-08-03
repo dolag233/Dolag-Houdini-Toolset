@@ -1,0 +1,9 @@
+[
+  {
+    "item_name": "Remesh",
+    "alias": "rm",
+    "important": false,
+    "type": "node",
+    "node_name": "remesh"
+  }
+]

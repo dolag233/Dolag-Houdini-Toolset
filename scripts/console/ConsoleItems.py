@@ -1,18 +1,17 @@
 from __future__ import division
+import hou
+import json
+import os
+import traceback
 import platform
+
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem
-    from ConsoleContext import ConsoleContext
     from ConsoleItemCustom import CUSTOM_ITEMS
 
 elif platform.python_version_tuple()[0] == '3':
     from .ConsoleItem import ConsoleItem
-    from .ConsoleContext import ConsoleContext
     from .ConsoleItemCustom import CUSTOM_ITEMS
-
-import hou
-import json
-import os
 
 
 def createNodeTemplate(node_name):
@@ -33,19 +32,10 @@ def createNodeTemplate(node_name):
 
 
 class ItemCollect(object):
-
     def __init__(self):
         self.items = {}
         self.item_path = "{0}/scripts/console/console_items.json".format(hou.getenv("DOLAG_PATH"))
         self.loadItem()
-        # [0]: item_name [1]: alias [2]: node_name
-        node_creation = [("Point Wrangle", "pw", "pointwrangle"),
-                         ("Primitive Wrangle", ("prw", "primw"), "primitivewrangle"),
-                         ("Attribute Wrangle", "aw", "attributewrangle"),
-                         ("Merge", "m", "merge"), ]
-        for n in node_creation:
-            item = ConsoleItem(item_name=n[0], alias=n[1], callback=createNodeTemplate(n[2]))
-            self.items[item.item_name] = item
 
     def getItems(self):
         return self.items
@@ -67,31 +57,52 @@ class ItemCollect(object):
     def update(self, another_dict):
         self.items.update(another_dict)
 
+    def _loadUserCustomItems(self):
+        try:
+            import sys
+            houdini_user_pref = hou.expandString("$HOUDINI_USER_PREF_DIR")
+            user_data_path = os.path.join(houdini_user_pref, "DolagPlugin", "user_data")
+            
+            if user_data_path not in sys.path:
+                sys.path.insert(0, user_data_path)
+            
+            from UserCustomConsoleItems import USER_CUSTOM_ITEMS
+            with open(os.path.join(user_data_path, "user_console_items.json"), "r") as f:
+                user_custom_template_items = json.load(f)
+                
+            return USER_CUSTOM_ITEMS, user_custom_template_items
+            
+        except Exception as e:
+            hou.ui.displayMessage("Failed to load UserCustomConsoleItems.py:\n" + str(e))
+            return [], []
+
     def loadItem(self):
         try:
-            # first load json
             json_array = []
             if os.path.isfile(self.item_path):
                 with open(self.item_path) as f:
-                    json_array = json.load(f)
+                    try:
+                        json_array = json.load(f)
+                    except:
+                        pass
 
+            user_custom_items, user_custom_template_items = self._loadUserCustomItems()
+            json_array.extend(user_custom_template_items)
+            
             for item in json_array:
                 if "node_name" in item.keys():
                     item = ConsoleItem(item_name=item["item_name"], alias=item["alias"], \
-                                       callback=createNodeTemplate(item["node_name"]), important=item["important"])
+                                    callback=createNodeTemplate(item["node_name"]), important=item["important"])
                     self.items[item.item_name] = item
 
                 else:
                     continue
 
-            # second load custom item
-            # import importlib
-            # importlib.reload(ConsoleItemCustom)
-            for item in CUSTOM_ITEMS:
+            for item in user_custom_items + CUSTOM_ITEMS:
                 self.items[item.item_name] = item
 
-        except Exception:
-            return
+        except Exception as e:
+            hou.ui.displayMessage(traceback.format_exc())
 
     def reload(self):
         self.loadItem()

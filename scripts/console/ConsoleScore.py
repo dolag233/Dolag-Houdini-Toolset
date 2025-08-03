@@ -62,6 +62,38 @@ def lcString(s1, s2):
     return s1[p - mmax:p], first_match
 
 
+class ExactPrefixMatchScore(MatchScoreMethodBase):
+    """Exact prefix match, give highest score to exact prefix match"""
+    def __init__(self, search_str, match_str):
+        super(ExactPrefixMatchScore, self).__init__(search_str, match_str, 5)  # highest priority
+        self.match_length = 0
+        
+    def eval(self, ignore_cap=True):
+        search_str = self.search_str
+        match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        # check if it is a prefix match
+        if match_str.startswith(search_str):
+            self.match_length = len(search_str)
+            score = self.score_bias + self.score_grain * len(search_str)
+            # give extra bonus for exact match
+            if len(search_str) == len(match_str):
+                score += 1.0
+            return score
+        return 0
+    
+    def getRestStr(self):
+        if self.match_length > 0:
+            return self.match_str[self.match_length:]
+        return self.match_str
+    
+    def initPriority(self):
+        return 5
+
+
 class PrefixMatchScore(MatchScoreMethodBase):
     def __init__(self, search_str, match_str):
         super(PrefixMatchScore, self).__init__(search_str, match_str, 3)
@@ -69,15 +101,16 @@ class PrefixMatchScore(MatchScoreMethodBase):
         self.first_match = -1
 
     def eval(self, ignore_cap=True):
-        self.lcs, self.first_match = lcString(self.search_str, self.match_str)
         search_str = self.search_str
         match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        self.lcs, self.first_match = lcString(search_str, match_str)
         score_bias = self.score_bias
         score_grain = self.score_grain
         score = 0
-        if ignore_cap:
-            search_str.upper()
-            match_str.upper()
 
         lcs, first_match = self.lcs, self.first_match
         if first_match != 0:
@@ -85,7 +118,7 @@ class PrefixMatchScore(MatchScoreMethodBase):
 
         score += score_bias
         score += score_grain * len(lcs)
-        score -= first_match * score_grain
+        # improve: prefix match should not be penalized
         return score
 
     def getRestStr(self):
@@ -105,15 +138,16 @@ class SubStringMatchScore(MatchScoreMethodBase):
         self.first_match = -1
 
     def eval(self, ignore_cap=True):
-        self.lcs, self.first_match = lcString(self.search_str, self.match_str)
         search_str = self.search_str
         match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        self.lcs, self.first_match = lcString(search_str, match_str)
         score_bias = self.score_bias
         score_grain = self.score_grain
         score = 0
-        if ignore_cap:
-            search_str.upper()
-            match_str.upper()
 
         lcs, first_match = self.lcs, self.first_match
         # if just match 1 char, degenerate to lcSequence
@@ -122,7 +156,8 @@ class SubStringMatchScore(MatchScoreMethodBase):
 
         score += score_bias
         score += score_grain * len(lcs)
-        score -= first_match * score_grain
+        # reduce the weight of position penalty, the earlier the better
+        score -= first_match * score_grain * 0.1
         return score
 
     def getRestStr(self):
@@ -162,18 +197,19 @@ class SubSequenceMatchScore(MatchScoreMethodBase):
         self.first_match = -1
 
     def eval(self, ignore_cap=True):
-        self.lcs = lcSequence(self.search_str, self.match_str)
-        if len(self.lcs) != 0:
-            self.first_match = self.match_str.find(self.lcs[0])
-
         search_str = self.search_str
         match_str = self.match_str
+        if ignore_cap:
+            search_str = search_str.upper()
+            match_str = match_str.upper()
+        
+        self.lcs = lcSequence(search_str, match_str)
+        if len(self.lcs) != 0:
+            self.first_match = match_str.find(self.lcs[0])
+
         score_bias = self.score_bias
         score_grain = self.score_grain
         score = 0
-        if ignore_cap:
-            search_str.upper()
-            match_str.upper()
 
         lcs, first_match = self.lcs, self.first_match
         # match failed
@@ -181,7 +217,11 @@ class SubSequenceMatchScore(MatchScoreMethodBase):
             return score
 
         score += score_bias
-        score += score_grain * (len(lcs) - self.first_match)
+        # avoid negative score, use reasonable calculation of match length and position
+        score += score_grain * len(lcs)
+        # slightly reduce position penalty
+        if first_match > 0:
+            score -= first_match * score_grain * 0.05
         return score
 
     def getRestStr(self):

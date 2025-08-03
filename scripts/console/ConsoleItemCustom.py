@@ -13,13 +13,9 @@ elif platform.python_version_tuple()[0] == '3':
 
 from Dolag import utils as du
 
-# CUSTOM_ITEMS contains all user customized console item here
-# you can simply create ConsoleItem object and append to CUSTOM_ITEMS
 CUSTOM_ITEMS = []
 
 
-# create callback for custom item
-# context are defined in ConsoleContext.py
 def my_custom_0_cb(context):
     if context["selected_nodes"]:
         msg = "You don't select any node"
@@ -31,12 +27,10 @@ def my_custom_0_cb(context):
         hou.ui.displayMessage(msg)
 
 
-# create custom item
 my_custom_0 = ConsoleItem(item_name="Count Node", alias="cn", callback=my_custom_0_cb)
 CUSTOM_ITEMS.append(my_custom_0)
 
 
-# open parm tab
 def create_parmsheet_cb(context):
     desktop = hou.ui.curDesktop()
     pane = desktop.createFloatingPane(hou.paneTabType.Parm)
@@ -48,7 +42,6 @@ create_parmsheet = ConsoleItem(item_name="Open Spreadsheet", alias="", callback=
 CUSTOM_ITEMS.append(create_parmsheet)
 
 
-# open scene view
 def create_sceneview_cb(context):
     desktop = hou.ui.curDesktop()
     pane = desktop.createFloatingPane(hou.paneTabType.SceneView)
@@ -58,7 +51,6 @@ create_sceneview = ConsoleItem(item_name="Open Scene View", alias="sv", callback
 CUSTOM_ITEMS.append(create_sceneview)
 
 
-# open detail pane
 def create_detail_pane_cb(context):
     desktop = hou.ui.curDesktop()
     pane = desktop.createFloatingPane(hou.paneTabType.DetailsView)
@@ -70,7 +62,6 @@ create_detail_pane = ConsoleItem(item_name="Open Param Info Pane", alias="par", 
 CUSTOM_ITEMS.append(create_detail_pane)
 
 
-# open detail pane
 def create_help_browser_cb(context):
     desktop = hou.ui.curDesktop()
     desktop.createFloatingPane(hou.paneTabType.HelpBrowser)
@@ -80,7 +71,6 @@ create_help_browser = ConsoleItem(item_name="Open Cookbook", alias="cb", callbac
 CUSTOM_ITEMS.append(create_help_browser)
 
 
-# open python shell
 def create_python_shell_cb(context):
     desktop = hou.ui.curDesktop()
     desktop.createFloatingPane(hou.paneTabType.PythonShell)
@@ -90,7 +80,6 @@ create_python_shell = ConsoleItem(item_name="Open Python Shell", alias="ps", cal
 CUSTOM_ITEMS.append(create_python_shell)
 
 
-# open performance monitor
 def create_performance_monitor_cb(context):
     monitor = hou.ui.curDesktop().createFloatingPaneTab(hou.paneTabType.PerformanceMonitor)
     monitor.startRecording()
@@ -100,7 +89,6 @@ create_performance_monitor = ConsoleItem(item_name="Open Performance Monitor", a
 CUSTOM_ITEMS.append(create_performance_monitor)
 
 
-# copy node path
 def copy_node_path_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
@@ -111,7 +99,6 @@ tmp_console_item = ConsoleItem(item_name="Copy Node Path", alias="np", callback=
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
-# create node(s) reference(s)
 def create_node_ref_cb(context):
     from scripts.op_menu.node_ref import dupNodeRef
     nodes = context["selected_nodes"]
@@ -124,41 +111,23 @@ tmp_console_item = ConsoleItem(item_name="Create Node Reference", alias="ref", c
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
-# display points
 def display_point_cb(context):
     import hou
-    # Get a reference to the geometry viewer
     pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
-
-    # Get the display settings
     settings = pane.curViewport().settings()
-
-    # Get display mode
     display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
-
-    # switch point marker
     display_mode.showPointMarkers(not display_mode.isShowingPointMarkers())
 
 
 tmp_console_item = ConsoleItem(item_name="Display Point Markers", alias="dp", callback=display_point_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# display point normals
 def display_point_normal_cb(context):
     import hou
-    # Get a reference to the geometry viewer
     pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
-
-    # Get the display settings
     settings = pane.curViewport().settings()
-
-    # Get display mode
     display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
-
-    # switch point normals
     display_mode.showPointNormals(not display_mode.isShowingPointNormals())
-
-    # display point markers
     if display_mode.isShowingPointNormals():
         display_mode.showPointMarkers(True)
 
@@ -166,16 +135,16 @@ def display_point_normal_cb(context):
 tmp_console_item = ConsoleItem(item_name="Display Point Normals", alias="dpn", callback=display_point_normal_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# display point numbers
+
 def display_point_number_cb(context):
     import hou
-    # Get a reference to the geometry viewer
+
     pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
 
-    # Get the display settings
+
     settings = pane.curViewport().settings()
 
-    # Get display mode
+
     display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
 
     # switch point numbers
@@ -190,16 +159,16 @@ tmp_console_item = ConsoleItem(item_name="Display Point Numbers", alias="dpn", c
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
-# display prim normals
+
 def display_prim_normal_cb(context):
     import hou
-    # Get a reference to the geometry viewer
+
     pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
 
-    # Get the display settings
+
     settings = pane.curViewport().settings()
 
-    # Get display mode
+
     display_mode = settings.displaySet(hou.displaySetType.DisplayModel)
 
     # switch prim normals
@@ -227,7 +196,7 @@ CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu import set_preset_style
 
-# preset input node style
+
 def set_preset_node_style_input_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
@@ -239,7 +208,7 @@ def set_preset_node_style_input_cb(context):
 tmp_console_item = ConsoleItem(item_name="Set Input Node Style", alias="input", callback=set_preset_node_style_input_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# preset output node style
+
 def set_preset_node_style_output_cb(context):
     nodes = context["selected_nodes"]
     if nodes:
@@ -312,7 +281,7 @@ tmp_console_item = ConsoleItem(item_name="Set Useless Node Style", alias="useles
 CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
-# vertical spacing all nodes
+
 def vertical_spacing_cb(context):
     items = context["selected_items"]
     if len(items) == 0:
@@ -327,7 +296,6 @@ def vertical_spacing_cb(context):
 tmp_console_item = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# vertical spacing all nodes upward
 def vertical_spacing_upward_cb(context):
     items = context["selected_items"]
     if len(items) == 0:
@@ -427,4 +395,38 @@ def viewer_wanderer_cb(context):
     viewer_states.enableSOPState("dolag::viewer_wanderer")
 
 tmp_console_item = ConsoleItem(item_name="Viewer Wanderer WSAD", alias="walk", callback=viewer_wanderer_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+
+def merge_selected_cb(context):
+    if len(context["selected_nodes"]) > 0:
+        network = context["network_node"]
+        merge_node = network.createNode("merge")
+        index = 0
+        for node in context["selected_nodes"]:
+            for i in range(len(node.outputNames())):
+                merge_node.setInput(index, node, i)
+                index += 1
+
+        merge_node.setPosition(context["editor_pos"])
+
+
+tmp_console_item = ConsoleItem(item_name="Merge Selected", alias="merge", callback=merge_selected_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+
+def switch_selected_cb(context):
+    if len(context["selected_nodes"]) > 0:
+        network = context["network_node"]
+        switch_node = network.createNode("switch")
+        index = 0
+        for node in context["selected_nodes"]:
+            for i in range(len(node.outputNames())):
+                switch_node.setInput(index, node, i)
+                index += 1
+
+        switch_node.setPosition(context["editor_pos"])
+
+
+tmp_console_item = ConsoleItem(item_name="Switch Selected", alias="switch", callback=switch_selected_cb)
 CUSTOM_ITEMS.append(tmp_console_item)

@@ -95,33 +95,52 @@ class ConsoleWindow(QtWidgets.QDialog):
                 alias = alias.upper()
             search_str = search_str.upper()
             alias_match_str = ConsoleScore.AliasMatchString(search_str, alias,
-                                                            (ConsoleScore.SubStringMatchScore,
+                                                            (ConsoleScore.ExactPrefixMatchScore,
+                                                             ConsoleScore.PrefixMatchScore,
+                                                             ConsoleScore.SubStringMatchScore,
                                                              ConsoleScore.SubSequenceMatchScore))
             name_match_str = ConsoleScore.ItemNameMatchString(search_str, item_name,
-                                                              (ConsoleScore.SubStringMatchScore,
+                                                              (ConsoleScore.ExactPrefixMatchScore,
+                                                               ConsoleScore.PrefixMatchScore,
+                                                               ConsoleScore.SubStringMatchScore,
                                                                ConsoleScore.SubSequenceMatchScore))
             captain = ''.join([word[0] for word in item_name.split(' ')])
             captain_match_str = ConsoleScore.CaptainMatchString(search_str, captain,
-                                                                (ConsoleScore.SubStringMatchScore,
+                                                                (ConsoleScore.ExactPrefixMatchScore,
+                                                                 ConsoleScore.PrefixMatchScore,
+                                                                 ConsoleScore.SubStringMatchScore,
                                                                  ConsoleScore.SubSequenceMatchScore))
             eval_score = ConsoleScore.EvalSearchStringScore((alias_match_str, name_match_str, captain_match_str))
             score, rank_score = eval_score.eval()
-            # the tuple order means the sort order
-            # score > rank_score(alias > name > captain) > last used time > name length
-            score_item_list.append((score, rank_score, item.LUT, -len(item_name), item))
 
-        # sort decreasingly
+            # calculate time bonus (recently used items get slight bonus)
+            import time
+            current_time = time.time()
+            # if used within 24 hours, give slight bonus
+            time_bonus = 0.01 if (current_time - item.LUT) < 86400 and item.LUT > 0 else 0
+            
+            # name length weight (shorter names better, but very small weight)
+            length_penalty = len(item_name) * 0.001
+            
+            # final sorting tuple: (main score, match type weight, time bonus, length penalty, name)
+            final_score = score + time_bonus - length_penalty
+            score_item_list.append((final_score, rank_score, -item.LUT, item_name, item))
+
+        # sort decreasingly by final score, then by rank score
         # for python2, it sorts default by index
         import sys
         if sys.version_info.major == 2:
-            score_item_list.sort()
+            score_item_list.sort(key=lambda x: (x[0], x[1]))
 
         # for python3, we have to use itemgetter
         elif sys.version_info.major == 3:
             from operator import itemgetter
-            score_item_list.sort(key=itemgetter(0, 1, 2, 3))
+            score_item_list.sort(key=itemgetter(0, 1), reverse=True)
 
-        score_item_list.reverse()
+        # if Python2，reverse
+        if sys.version_info.major == 2:
+            score_item_list.reverse()
+        
         # extract name as a new list
         new_item_list = [item[-1].item_name for item in score_item_list]
         self.item_list = new_item_list
