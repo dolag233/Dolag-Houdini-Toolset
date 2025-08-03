@@ -404,20 +404,8 @@ hda_alias.setHdaAlias(node, alias)
 
             <separatorItem id="opmenu.dolag.dolag.sep_2"/>
 
-            <scriptItem id = "opmenu.dolag.vertical_spacing">
-                <label>Vertical Space Nodes</label>
-                    <scriptCode><![CDATA[
-import hou
-from op_menu.node_layout import verticalSpacing
-
-verticalSpacing(hou.selectedNodes())
-
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
-
-            <scriptItem id = "opmenu.dolag.vertical_spacing_upward">
-                <label>Vertical Space Nodes Upward</label>
+            <scriptItem id = "opmenu.dolag.layout_nodes">
+                <label>Layout Nodes</label>
                     <scriptCode><![CDATA[
 import hou
 from op_menu.node_layout import verticalSpacing
@@ -428,21 +416,33 @@ verticalSpacing(hou.selectedNodes(), True)
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "opmenu.dolag.vertical_compressing">
-                <label>Vertical Compress Node Space</label>
+            <scriptItem id = "opmenu.dolag.layout_nodes_downward">
+                <label>Layout Nodes Downward</label>
                     <scriptCode><![CDATA[
-from op_menu.node_layout import verticalCompressing
-verticalCompressing(hou.selectedNodes())
+import hou
+from op_menu.node_layout import verticalSpacing
+
+verticalSpacing(hou.selectedNodes())
 
                     ]]>
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "opmenu.dolag.vertical_compressing_upward">
-                <label>Vertical Compress Node Space Upward</label>
+            <scriptItem id = "opmenu.dolag.compress_node_space">
+                <label>Compress Node Space</label>
                     <scriptCode><![CDATA[
 from op_menu.node_layout import verticalCompressing
 verticalCompressing(hou.selectedNodes(), True)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.compress_node_space_upward">
+                <label>Compress Node Space Downward</label>
+                    <scriptCode><![CDATA[
+from op_menu.node_layout import verticalCompressing
+verticalCompressing(hou.selectedNodes())
 
                     ]]>
                     </scriptCode>

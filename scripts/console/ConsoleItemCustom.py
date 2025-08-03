@@ -280,23 +280,9 @@ def set_preset_node_style_useless_cb(context):
 tmp_console_item = ConsoleItem(item_name="Set Useless Node Style", alias="useless", callback=set_preset_node_style_useless_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing
+from op_menu.node_layout import verticalSpacingAllNodes, verticalSpacing, snapToGrid, snapToGridAllNodes
 
 def vertical_spacing_cb(context):
-    items = context["selected_items"]
-    if len(items) == 0:
-        verticalSpacingAllNodes()
-
-    else:
-        verticalSpacing(items)
-
-    return
-
-
-tmp_console_item = ConsoleItem(item_name="Vertical Space Nodes", alias="vs", callback=vertical_spacing_cb)
-CUSTOM_ITEMS.append(tmp_console_item)
-
-def vertical_spacing_upward_cb(context):
     items = context["selected_items"]
     if len(items) == 0:
         verticalSpacingAllNodes(True)
@@ -307,27 +293,26 @@ def vertical_spacing_upward_cb(context):
     return
 
 
-tmp_console_item = ConsoleItem(item_name="Vertical Space Nodes Upward", alias="vsu", callback=vertical_spacing_upward_cb)
+tmp_console_item = ConsoleItem(item_name="Layout Nodes", alias="layout", callback=vertical_spacing_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+def vertical_spacing_upward_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalSpacingAllNodes()
+
+    else:
+        verticalSpacing(items)
+
+    return
+
+
+tmp_console_item = ConsoleItem(item_name="Layout Nodes Downward", alias="layoutd", callback=vertical_spacing_upward_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.node_layout import verticalCompressingAllNodes, verticalCompressing
 # vertical compressing all nodes
 def vertical_compressing_cb(context):
-    items = context["selected_items"]
-    if len(items) == 0:
-        verticalCompressingAllNodes()
-
-    else:
-        verticalCompressing(items)
-
-    return
-
-
-tmp_console_item = ConsoleItem(item_name="Vertical Compress Node Space", alias="vc", callback=vertical_compressing_cb)
-CUSTOM_ITEMS.append(tmp_console_item)
-
-# vertical compressing all nodes upward
-def vertical_compressing_upward_cb(context):
     items = context["selected_items"]
     if len(items) == 0:
         verticalCompressingAllNodes(True)
@@ -338,7 +323,22 @@ def vertical_compressing_upward_cb(context):
     return
 
 
-tmp_console_item = ConsoleItem(item_name="Vertical Compress Node Space Upward", alias="vcu", callback=vertical_compressing_upward_cb)
+tmp_console_item = ConsoleItem(item_name="Compress Node Space", alias="compress", callback=vertical_compressing_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+# vertical compressing all nodes upward
+def vertical_compressing_upward_cb(context):
+    items = context["selected_items"]
+    if len(items) == 0:
+        verticalCompressingAllNodes()
+
+    else:
+        verticalCompressing(items)
+
+    return
+
+
+tmp_console_item = ConsoleItem(item_name="Compress Node Space Downward", alias="compressd", callback=vertical_compressing_upward_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu.wire_hub import wireHub, wireHubs
@@ -430,3 +430,17 @@ def switch_selected_cb(context):
 
 tmp_console_item = ConsoleItem(item_name="Switch Selected", alias="switch", callback=switch_selected_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
+
+def snap_to_grid_cb(context):
+    nodes = context["selected_nodes"]
+    if len(nodes) == 0:
+        snapToGridAllNodes()
+    else:
+        snapToGrid(nodes)
+
+tmp_console_item = ConsoleItem(item_name="Nodes Snap to Grid", alias="snap", callback=snap_to_grid_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+
+
+

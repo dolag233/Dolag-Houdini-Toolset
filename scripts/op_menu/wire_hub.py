@@ -55,14 +55,21 @@ def getDowmstreamItems(node):
 
 # pure connection means that, there are only NetworkDot or Wire between two nodes
 def checkPureConnection(parent, child):
+    """Check if there's a pure connection (only dots/wires) between parent and child"""
     # direct link
     if parent == child:
         return True
 
-    # if child is a Node, you are dirty
+    # if child is directly connected to parent (including nodes)
+    parent_outputs = [conn.outputItem() for conn in parent.outputConnections()]
+    if child in parent_outputs:
+        return True
+
+    # if child is a Node and not directly connected, not pure
     if isinstance(child, hou.Node):
         return False
 
+    # for dots, check if child is in downstream path
     return child in getDowmstreamItems(parent)
 
 
@@ -93,17 +100,20 @@ def wireHubInternal(top_node, original_top_node, downstream_nodes, max_vertical_
                 mean_pos_x = 0
                 valid_node_count = 0
                 for node in nodes_in_reach:
-                    # get original
-                    top_node_indices = []  # maybe exist more than one connection toward top node
+                    # get original connections that should be redirected
+                    connections_to_redirect = []
                     in_connections = node.inputConnections()
+                    
                     for c in in_connections:
                         if checkPureConnection(original_top_node, c.inputItem()):
-                            top_node_indices.append(c.inputIndex())
+                            # Store both the input index and the original source
+                            connections_to_redirect.append((c.inputIndex(), c.inputItem()))
 
-                    for index in top_node_indices:
-                        node.setInput(index, dot)
+                    # redirect connections to dot, maintaining original connection order
+                    for input_index, original_source in connections_to_redirect:
+                        node.setInput(input_index, dot)
 
-                    if len(top_node_indices) > 0:
+                    if len(connections_to_redirect) > 0:
                         mean_pos_x += node.position()[0] + 0.5 * (node.size()[0] - dot.size()[0])
                         valid_node_count += 1
 

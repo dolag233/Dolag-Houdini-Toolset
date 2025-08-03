@@ -1,7 +1,11 @@
 import hou
+import math
 SPACE_DISTANCE = 1.5
 MIN_VERTICAL_SPACE = 1.25
 MIN_COMPRESSION_DISTANCE = 5
+HORIZONTAL_SPACE = 2
+GRID_SIZE_X = 2  # Horizontal grid spacing
+GRID_SIZE_Y = 1  # Vertical grid spacing
 
 def verticalSpacingAllNodes(upward = False):
     editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
@@ -12,6 +16,123 @@ def verticalCompressingAllNodes(upward=False):
     editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
     nodes = editor.currentNode().parent().allItems()
     verticalCompressing(nodes, upward)
+
+def snapToGrid(nodes, use_floor=False):
+    """Snap nodes to grid alignment with different horizontal and vertical spacing
+    
+    Args:
+        nodes: List of nodes to snap
+        use_floor: If True, use floor alignment; if False, use round alignment
+    """
+    with hou.undos.group("Snap to Grid"):
+        for node in nodes:
+            if isinstance(node, hou.Node) or isinstance(node, hou.NetworkDot):
+                pos = node.position()
+                if use_floor:
+                    new_x = math.floor(pos.x() / GRID_SIZE_X) * GRID_SIZE_X
+                    new_y = math.floor(pos.y() / GRID_SIZE_Y) * GRID_SIZE_Y
+                else:
+                    new_x = round(pos.x() / GRID_SIZE_X) * GRID_SIZE_X
+                    new_y = round(pos.y() / GRID_SIZE_Y) * GRID_SIZE_Y
+                node.setPosition(hou.Vector2(new_x, new_y))
+
+def snapToGridAllNodes():
+    """Snap all nodes in current network to grid"""
+    editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
+    nodes = editor.currentNode().parent().allItems()
+    snapToGrid(nodes)
+
+def distributeHorizontally(nodes_at_same_level, center_x=None):
+    """Distribute nodes horizontally while keeping same Y position - only if necessary"""
+    if len(nodes_at_same_level) <= 1:
+        return
+    
+    # Sort nodes by current X position
+    sorted_nodes = sorted(nodes_at_same_level, key=lambda n: n.position().x())
+    
+    # Check if redistribution is necessary
+    needs_redistribution = False
+    min_spacing = HORIZONTAL_SPACE * 0.5  # Minimum acceptable spacing
+    
+    # Check for overlaps or insufficient spacing
+    for i in range(len(sorted_nodes) - 1):
+        current_node = sorted_nodes[i]
+        next_node = sorted_nodes[i + 1]
+        
+        current_right = current_node.position().x() + current_node.size().x() / 2
+        next_left = next_node.position().x() - next_node.size().x() / 2
+        actual_spacing = next_left - current_right
+        
+        # If nodes are too close or overlapping
+        if actual_spacing < min_spacing:
+            needs_redistribution = True
+            break
+    
+    # Check if nodes are excessively spread out (more than 3x normal spacing)
+    if not needs_redistribution and len(sorted_nodes) > 1:
+        max_spacing = HORIZONTAL_SPACE * 3
+        for i in range(len(sorted_nodes) - 1):
+            current_node = sorted_nodes[i]
+            next_node = sorted_nodes[i + 1]
+            
+            current_right = current_node.position().x() + current_node.size().x() / 2
+            next_left = next_node.position().x() - next_node.size().x() / 2
+            actual_spacing = next_left - current_right
+            
+            if actual_spacing > max_spacing:
+                needs_redistribution = True
+                break
+    
+    # Only redistribute if necessary
+    if not needs_redistribution:
+        return
+    
+    # Calculate total width needed for redistribution
+    total_node_width = sum(node.size().x() for node in sorted_nodes)
+    total_spacing = (len(sorted_nodes) - 1) * HORIZONTAL_SPACE
+    total_width = total_node_width + total_spacing
+    
+    # Determine starting position
+    if center_x is not None:
+        start_x = center_x - total_width / 2
+    else:
+        # Use current center of existing nodes as reference
+        current_left = sorted_nodes[0].position().x() - sorted_nodes[0].size().x() / 2
+        current_right = sorted_nodes[-1].position().x() + sorted_nodes[-1].size().x() / 2
+        current_center = (current_left + current_right) / 2
+        start_x = current_center - total_width / 2
+    
+    # Position nodes
+    current_x = start_x
+    for node in sorted_nodes:
+        node_size = node.size()
+        new_pos = hou.Vector2(current_x + node_size.x() / 2, node.position().y())
+        node.setPosition(new_pos)
+        current_x += node_size.x() + HORIZONTAL_SPACE
+
+def groupNodesByLevel(nodes):
+    """Group nodes that are at the same level (connect to same outputs)"""
+    level_groups = {}
+    
+    for node in nodes:
+        if not (isinstance(node, hou.Node) or isinstance(node, hou.NetworkDot)):
+            continue
+            
+        # Create a key based on output connections
+        output_key = tuple(sorted([conn.outputItem().name() for conn in node.outputConnections() 
+                                 if conn.outputItem() in nodes]))
+        
+        if not output_key:  # No outputs, group by Y position
+            y_pos = round(node.position().y() * 2) / 2  # Round to 0.5 increments
+            output_key = ("end_level", y_pos)
+        
+        if output_key not in level_groups:
+            level_groups[output_key] = []
+        level_groups[output_key].append(node)
+    
+    return level_groups
+
+
 
 def verticalSpacing(nodes, upward = False):
     network_boxes = [n for n in nodes if isinstance(n, hou.NetworkBox)]
@@ -65,7 +186,7 @@ def verticalSpacing(nodes, upward = False):
 
     if len(terminate_nodes) == 0:
         return
-
+    
     with hou.undos.group("Vertical Spacing Nodes"):
         if not upward:
             nodes = {n: {"py": n.position().y(), "calc": True if n in terminate_nodes else False} for n in nodes}
@@ -124,6 +245,27 @@ def verticalSpacing(nodes, upward = False):
 
                 n.setPosition(hou.Vector2(n.position().x(), nodes[n]["py"]))
 
+            # horizontal distribution for nodes at same level (downward flow)
+            node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
+            level_groups = groupNodesByLevel(node_list)
+            
+            for group_key, group_nodes in level_groups.items():
+                if len(group_nodes) > 1:
+                    # Calculate center X position based on their outputs
+                    center_x = None
+                    if not group_key[0].startswith("end_level"):
+                        # Find common output nodes
+                        output_nodes = []
+                        for node in group_nodes:
+                            outputs = [conn.outputItem() for conn in node.outputConnections() 
+                                     if conn.outputItem() in node_list]
+                            output_nodes.extend(outputs)
+                        
+                        if output_nodes:
+                            center_x = sum(out.position().x() for out in output_nodes) / len(output_nodes)
+                    
+                    distributeHorizontally(group_nodes, center_x)
+
         else:
             nodes = {n: {"py": n.position().y(), "calc": True if n in end_nodes else False} for n in nodes}
             node_stack = terminate_nodes
@@ -180,6 +322,27 @@ def verticalSpacing(nodes, upward = False):
 
                 n.setPosition(hou.Vector2(n.position().x(), nodes[n]["py"]))
 
+            # horizontal distribution for nodes at same level (upward flow)
+            node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
+            level_groups = groupNodesByLevel(node_list)
+            
+            for group_key, group_nodes in level_groups.items():
+                if len(group_nodes) > 1:
+                    # Calculate center X position based on their outputs
+                    center_x = None
+                    if not group_key[0].startswith("end_level"):
+                        # Find common output nodes
+                        output_nodes = []
+                        for node in group_nodes:
+                            outputs = [conn.outputItem() for conn in node.outputConnections() 
+                                     if conn.outputItem() in node_list]
+                            output_nodes.extend(outputs)
+                        
+                        if output_nodes:
+                            center_x = sum(out.position().x() for out in output_nodes) / len(output_nodes)
+                    
+                    distributeHorizontally(group_nodes, center_x)
+
         # recalc block begin pos
         for block_begin in block_begin_nodes_info:
             if len(block_begin["node"].outputConnections()) == 0:
@@ -188,6 +351,10 @@ def verticalSpacing(nodes, upward = False):
         # auto resize network boxes
         for b in network_boxes:
             b.fitAroundContents()
+        
+        # snap to grid after layout (using floor alignment)
+        node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
+        snapToGrid(node_list, use_floor=True)
 
 
 def verticalCompressing(nodes, upward = False):
@@ -242,7 +409,7 @@ def verticalCompressing(nodes, upward = False):
 
     if len(terminate_nodes) == 0:
         return
-
+    
     with hou.undos.group("Vertical Spacing Nodes"):
         if not upward:
             nodes = {n: {"py": n.position().y(), "calc": True if n in end_nodes else False} for n in nodes}
@@ -299,7 +466,7 @@ def verticalCompressing(nodes, upward = False):
                 if nodes[n]["calc"] is True:
                     node_stack.pop()
                     continue
-
+            
                 # print("current node : " + n.name())
 
                 # calc parent nodes
@@ -343,4 +510,8 @@ def verticalCompressing(nodes, upward = False):
         # auto resize network boxes
         for b in network_boxes:
             b.fitAroundContents()
+        
+        # snap to grid after layout (using floor alignment)
+        node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
+        snapToGrid(node_list, use_floor=True)
 
