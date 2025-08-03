@@ -354,7 +354,7 @@ def wire_hub_cb(context):
     else:
         wireHubs(items)
 
-tmp_console_item = ConsoleItem(item_name="Wire Hub(s)", alias="wh", callback=wire_hub_cb)
+tmp_console_item = ConsoleItem(item_name="Organize Wires", alias="wire", callback=wire_hub_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
 def auto_resize_networkbox_cb(context):

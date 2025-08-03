@@ -448,8 +448,8 @@ verticalCompressing(hou.selectedNodes())
                     </scriptCode>
             </scriptItem>
 
-            <scriptItem id = "opmenu.dolag.wire_hubs">
-                <label>Wire Hub(s)</label>
+            <scriptItem id = "opmenu.dolag.organize_wires">
+                <label>Organize Wires</label>
                     <scriptCode><![CDATA[
 from op_menu.wire_hub import wireHub, wireHubs
 nodes = hou.selectedItems()
