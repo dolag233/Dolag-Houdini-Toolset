@@ -23,6 +23,18 @@ node_path.copyNodePath(node)
                     </scriptCode>
             </scriptItem>
 
+            <scriptItem id = "opmenu.dolag.open_dependency_viewer">
+                <label>Dependency Viewer</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu import node_dependency_viewer
+
+node = kwargs['node']
+node_dependency_viewer.open_dependency_viewer(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
             
             <scriptItem id = "opmenu.dolag.dup_node_ref">
                 <label>Duplicate Node As Reference</label>
@@ -429,7 +441,6 @@ verticalSpacing(hou.selectedNodes(), True)
                     ]]>
                     </scriptCode>
             </scriptItem>
-
 
             <scriptItem id = "opmenu.dolag.layout_nodes_downward">
                 <label>Layout Nodes Downward</label>

@@ -23,6 +23,21 @@ def createEventHandler(uievent, pending_actions):
         event_handler = KeyEventHandler(uievent)
         return event_handler, True if event_handler is not None else False
 
+    # Ctrl + R to open Dependency Viewer on first selected node
+    if isinstance(uievent, KeyboardEvent) and \
+            uievent.eventtype == 'keyhit' and \
+            (uievent.key == 'Ctrl+R' or uievent.key == 'Ctrl+r'):
+        try:
+            import hou
+            from op_menu import node_dependency_viewer
+            sel = hou.selectedNodes()
+            if len(sel) > 0:
+                node_dependency_viewer.open_dependency_viewer(sel[0])
+        except Exception:
+            # fail silently to avoid interrupting Houdini event loop
+            pass
+        return None, True
+
     # for quick teleport
     if isinstance(uievent, MouseEvent) and \
             uievent.eventtype == 'mousedown':

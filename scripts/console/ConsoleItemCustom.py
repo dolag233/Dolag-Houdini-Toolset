@@ -442,5 +442,14 @@ tmp_console_item = ConsoleItem(item_name="Nodes Snap to Grid", alias="snap", cal
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
+def open_dependency_viewer_cb(context):
+    nodes = context["selected_nodes"]
+    from op_menu import node_dependency_viewer
+    if len(nodes) > 0:
+        node_dependency_viewer.open_dependency_viewer(nodes[0])
+
+tmp_console_item = ConsoleItem(item_name="Open Dependency Viewer", alias="dep", callback=open_dependency_viewer_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
 
 
