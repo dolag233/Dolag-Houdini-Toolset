@@ -54,13 +54,13 @@
 ## 安装方法
 
 0. **安装SideFX Labs**：许多节点依赖于Labs插件，请确保已安装。本工具集未内嵌相关节点。
-    
+   
 1. 在 `C:\Users\你的用户名\Documents\houdiniX.Y` 目录下，使用Git克隆本仓库至 `DolagPlugin` 文件夹：
 
    ```bash
    git clone https://github.com/dolag233/Dolag-Houdini-Toolset.git DolagPlugin
    ```
-    
+   
 2. 将 `DolagPlugin` 文件夹下的 `DolagPlugin.json` 文件复制到 `C:\Users\你的用户名\Documents\houdiniX.Y\packages` 目录下。如果 `packages` 目录不存在，请先创建它。
 
 ## 使用文档
@@ -70,8 +70,9 @@
 ## 路线图
 
 - [ ] 支持保存用户设置
-- [ ] 支持复制递归引用节点
+- [ ] 支持复制递归引用节点(用于SubNetwork)
 - [ ] 支持快速拷贝参数引用
+- [ ] 支持递归查找、同步解锁的节点
 
 ---
 <br>
@@ -150,13 +151,13 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
 ## <a name="installation"></a>Installation
 
 0. **Install SideFX Labs**: Many nodes depend on the Labs plugin, so please ensure it is installed. This toolset does not embed the required Labs nodes.
-    
+   
 1. In your `C:\Users\YourUsername\Documents\houdiniX.Y` directory, clone this repository into a folder named `DolagPlugin` using Git:
 
    ```bash
    git clone https://github.com/dolag233/Dolag-Houdini-Toolset.git DolagPlugin
    ```
-    
+   
 2. Copy the `DolagPlugin.json` file from the `DolagPlugin` folder to the `C:\Users\YourUsername\Documents\houdiniX.Y\packages` directory. If the `packages` directory does not exist, please create it first.
 
 ## <a name="usage"></a>Usage
