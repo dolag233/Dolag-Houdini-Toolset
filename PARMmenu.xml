@@ -11,6 +11,89 @@
             <label>Dolag</label>
             <insertBefore>revert_to_prev_val</insertBefore>
 
+            
+
+            <scriptItem id = "h.pane.parms.dolag.paste_node_path">
+                <expression>
+import hou
+
+# 检查是否为字符串参数
+if not isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate):
+    return False
+
+# 检查剪贴板内容是否为有效节点路径
+clip = hou.ui.getTextFromClipboard()
+if not clip or not clip.strip():
+    return False
+
+# 尝试解析为节点，如果成功则认为是有效路径
+try:
+    node = hou.node(clip)
+    return node is not None
+except:
+    return False
+                </expression>
+                <label>Paste Node Path</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu import node_path
+
+parms = kwargs['parms']
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.StringParmTemplate):
+        text = hou.ui.getTextFromClipboard()
+        # 直接覆盖式粘贴（Houdini 自定义脚本无法获取光标位置）
+        parm.set(text)
+        break
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            <scriptItem id = "h.pane.parms.dolag.paste_relative_node_path">
+                <expression>
+import hou
+
+# 检查是否为字符串参数
+if not isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate):
+    return False
+
+# 检查剪贴板内容是否为有效节点路径
+clip = hou.ui.getTextFromClipboard()
+if not clip or not clip.strip():
+    return False
+
+# 尝试解析为节点，如果成功则认为是有效路径
+try:
+    node = hou.node(clip)
+    return node is not None
+except:
+    return False
+                </expression>
+                <label>Paste Relative Node Path (to This Node)</label>
+                    <scriptCode><![CDATA[
+import hou
+from Dolag import path as dpath
+
+parms = kwargs['parms']
+for parm in parms:
+    if isinstance(parm.parmTemplate(), hou.StringParmTemplate):
+        clip = hou.ui.getTextFromClipboard()
+        # 如果剪贴板是绝对路径，转换为相对当前参数所属节点的路径
+        try:
+            node = parm.node()
+            # 使用 Houdini 内置接口
+            rel = node.relativePathTo(hou.node(clip)) if clip.startswith('/') else clip
+        except Exception:
+            # 兜底使用绝对路径原样粘贴
+            rel = clip
+        parm.set(rel)
+        break
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <scriptItem id = "h.pane.parms.dolag.menu.open_in_vsc">
                 <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
                 <label>Edit in VSCode</label>

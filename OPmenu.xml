@@ -10,6 +10,20 @@
         <subMenu id = "opmenu.dolag">
             <label>Dolag</label>
             <insertBefore>opmenu.flags_menu</insertBefore>
+            <scriptItem id = "opmenu.dolag.copy_node_path">
+                <label>Copy Node Path</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu import node_path
+
+node = kwargs['node']
+node_path.copyNodePath(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
+            
             <scriptItem id = "opmenu.dolag.dup_node_ref">
                 <label>Duplicate Node As Reference</label>
                     <scriptCode><![CDATA[
@@ -415,6 +429,7 @@ verticalSpacing(hou.selectedNodes(), True)
                     ]]>
                     </scriptCode>
             </scriptItem>
+
 
             <scriptItem id = "opmenu.dolag.layout_nodes_downward">
                 <label>Layout Nodes Downward</label>
