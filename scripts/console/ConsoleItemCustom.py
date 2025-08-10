@@ -400,15 +400,16 @@ CUSTOM_ITEMS.append(tmp_console_item)
 
 def merge_selected_cb(context):
     if len(context["selected_nodes"]) > 0:
-        network = context["network_node"]
-        merge_node = network.createNode("merge")
-        index = 0
-        for node in context["selected_nodes"]:
-            for i in range(len(node.outputNames())):
-                merge_node.setInput(index, node, i)
-                index += 1
+        with hou.undos.group("Merge Selected"):
+            network = context["network_node"]
+            merge_node = network.createNode("merge")
+            index = 0
+            for node in context["selected_nodes"]:
+                for i in range(len(node.outputNames())):
+                    merge_node.setInput(index, node, i)
+                    index += 1
 
-        merge_node.setPosition(context["editor_pos"])
+            merge_node.setPosition(context["editor_pos"])
 
 
 tmp_console_item = ConsoleItem(item_name="Merge Selected", alias="merge", callback=merge_selected_cb)
@@ -418,14 +419,15 @@ CUSTOM_ITEMS.append(tmp_console_item)
 def switch_selected_cb(context):
     if len(context["selected_nodes"]) > 0:
         network = context["network_node"]
-        switch_node = network.createNode("switch")
-        index = 0
-        for node in context["selected_nodes"]:
-            for i in range(len(node.outputNames())):
-                switch_node.setInput(index, node, i)
-                index += 1
+        with hou.undos.group("Switch Selected"):
+            switch_node = network.createNode("switch")
+            index = 0
+            for node in context["selected_nodes"]:
+                for i in range(len(node.outputNames())):
+                    switch_node.setInput(index, node, i)
+                    index += 1
 
-        switch_node.setPosition(context["editor_pos"])
+            switch_node.setPosition(context["editor_pos"])
 
 
 tmp_console_item = ConsoleItem(item_name="Switch Selected", alias="switch", callback=switch_selected_cb)
