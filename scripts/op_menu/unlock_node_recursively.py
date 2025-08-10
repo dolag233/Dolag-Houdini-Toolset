@@ -1,5 +1,6 @@
 import hou
 from Dolag import node as dn
+from collections.abc import Iterable
 
 def unlockNodeRecursively(node):
     node = dn.getNode(node)
@@ -7,3 +8,4 @@ def unlockNodeRecursively(node):
         return
 
     dn.unlockCustomNode(node)
+    

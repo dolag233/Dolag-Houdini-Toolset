@@ -48,6 +48,22 @@ open_unlocked_nodes_viewer()
                     ]]>
                     </scriptCode>
             </scriptItem>
+
+            <scriptItem id = "opmenu.dolag.unlock_nodes_recursively">
+                <label>Unlocked Nodes Recursively</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu.unlock_node_recursively import unlockNodeRecursively
+
+with hou.undos.group("Unlock Nodes Recursively"):
+    nodes = kwargs['items']
+    for node in nodes:
+        unlockNodeRecursively(node)
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+
             <separatorItem id="opmenu.sep.viewers"/>
             
             <scriptItem id = "opmenu.dolag.dup_node_ref">

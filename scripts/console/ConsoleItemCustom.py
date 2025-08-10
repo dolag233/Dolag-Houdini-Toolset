@@ -462,4 +462,14 @@ tmp_console_item = ConsoleItem(item_name="Open Unlocked Nodes Viewer", alias="un
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
+def unlock_nodes_recursively_cb(context):
+    from op_menu.unlock_node_recursively import unlockNodeRecursively
+    nodes = context["selected_nodes"]
+    with hou.undos.group("Unlock Nodes Recursively"):
+        for node in nodes:
+            unlockNodeRecursively(node)
+
+tmp_console_item = ConsoleItem(item_name="Unlock Nodes Recursively", alias="unlock", callback=unlock_nodes_recursively_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
 
