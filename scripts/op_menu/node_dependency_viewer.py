@@ -11,7 +11,7 @@ import hou
 from PySide2 import QtCore
 from PySide2 import QtWidgets as QtGui
 from PySide2 import QtGui as QtG
-from .node_graph_widget import NodeGraphWidget
+from .node_graph_widget import NodeGraphWidget, _TitlePinButton
 
 
 # Graph drawing handled by shared NodeGraphWidget
@@ -146,6 +146,11 @@ class DependencyViewer(QtGui.QDialog):
         self._did_position = False
         self._build_ui()
         self._populate()
+        try:
+            self._pin_btn = _TitlePinButton(self)
+            self._header_right.addWidget(self._pin_btn)
+        except Exception:
+            pass
 
     def _build_ui(self):
         main_layout = QtGui.QVBoxLayout(self)
@@ -167,10 +172,10 @@ class DependencyViewer(QtGui.QDialog):
         self.auto_focus_chk = QtGui.QCheckBox("Auto Focus")
         self.auto_focus_chk.setChecked(True)
         header.addWidget(self.auto_focus_chk)
-        # Always on top toggle
-        self.on_top_chk = QtGui.QCheckBox("Always On Top")
-        self.on_top_chk.setChecked(True)
-        header.addWidget(self.on_top_chk)
+        # right header container for pin button
+        self._header_right = QtGui.QHBoxLayout()
+        self._header_right.setContentsMargins(0,0,0,0)
+        header.addLayout(self._header_right)
         main_layout.addLayout(header)
 
         self.tabs = QtGui.QTabWidget()
@@ -213,7 +218,6 @@ class DependencyViewer(QtGui.QDialog):
         self.list_out.itemDoubleClicked.connect(self._on_item_double_clicked)
         self.list_in.itemDoubleClicked.connect(self._on_item_double_clicked)
         self.depth_spin.valueChanged.connect(self._on_depth_changed)
-        self.on_top_chk.stateChanged.connect(self._on_on_top_changed)
         self.list_out.itemSelectionChanged.connect(self._on_list_selection_changed)
         self.list_in.itemSelectionChanged.connect(self._on_list_selection_changed)
         self.btn_refresh.clicked.connect(self._refresh_from_network)
@@ -298,15 +302,6 @@ class DependencyViewer(QtGui.QDialog):
     def _on_depth_changed(self, val):
         self._depth = max(1, int(val))
         self._populate()
-
-    def _on_on_top_changed(self, state):
-        flags = self.windowFlags()
-        if state == QtCore.Qt.Checked:
-            flags |= QtCore.Qt.WindowStaysOnTopHint
-        else:
-            flags &= ~QtCore.Qt.WindowStaysOnTopHint
-        self.setWindowFlags(flags)
-        self.show()  # re-apply flags
 
     def _on_graph_node_double_clicked(self, node):
         self._recenter_to_node(node)

@@ -32,17 +32,28 @@
 - **增强菜单功能**：
     1. **扩充右键菜单**：包含节点右键菜单和变量右键菜单。部分功能包括：
         - 一键整理节点布局。
+        
         - 保存与加载节点参数。
+        
         - 一键设置Ramp参数的插值方式，并支持细分、随机、平滑等操作。
+        
         - 复制与粘贴节点样式。
+        
         - 递归解锁当前节点内的所有子节点。
+
+        - 递归查找unlock的节点。
+        
+        <p align="center">
+          <img src="img/解锁节点查看器.png" alt="解锁节点查看器" width="90%">
+        </p>
+        
         - **显示节点引用关系**。
         <p align="center">
           <img src="img/引用查看器.gif" alt="引用查看器" width="90%">
         </p>
-
+        
     2. **主菜单功能**：在Houdini主菜单中添加了实用功能，如增量保存、为内置Python自动**安装pip**及通过pip**安装模块**等。
-
+    
 - **节点编辑器增强**：
 
     **移动和复制节点连接线**：按住`Ctrl+Alt`或`Shift+Ctrl`并拖动节点连接线，可以移动或复制它们，体验类似于在Unreal Engine中按住`Ctrl`键操作连接线。
@@ -72,7 +83,7 @@
 - [ ] 支持保存用户设置
 - [ ] 支持复制递归引用节点(用于SubNetwork)
 - [ ] 支持快速拷贝参数引用
-- [ ] 支持递归查找、同步解锁的节点
+- [x] 支持递归查找、同步解锁的节点
 
 ---
 <br>
@@ -107,10 +118,21 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
 - **Enhanced Menu Functions**:
     1. **Extended Right-Click Menu**: Includes node right-click menu and parameter right-click menu. Key features include:
         - One-click node layout arrangement.
+        
         - Save and load node parameters.
+        
         - One-click setting of interpolation modes for Ramp parameters, with support for subdivision, randomization, and smoothing.
+        
         - Copy and paste node styles.
+        
         - Recursively unlock all child nodes within the current node.
+
+        - Recursively find unlocked nodes.
+        
+        <p align="center">
+          <img src="img/解锁节点查看器.png" alt="Unlock Node Viewer" width="90%">
+        </p>
+        
         - **Display node reference relationships**.
         <p align="center">
           <img src="img/引用查看器.gif" alt="Reference Viewer" width="90%">
@@ -148,6 +170,11 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
   <img src="img/引用查看器.gif" alt="Reference Viewer" width="90%">
 </p>
 
+**Unlock Node Viewer**
+<p align="center">
+  <img src="img/解锁节点查看器.png" alt="Unlock Node Viewer" width="90%">
+</p>
+
 ## <a name="installation"></a>Installation
 
 0. **Install SideFX Labs**: Many nodes depend on the Labs plugin, so please ensure it is installed. This toolset does not embed the required Labs nodes.
@@ -167,5 +194,6 @@ For detailed usage instructions, please refer to the [online documentation](http
 ## Roadmap
 
 - [ ] Support for saving user settings
-- [ ] Support for copying recursive reference nodes
+- [ ] Support for copying recursive reference nodes (for SubNetwork)
 - [ ] Support for quick parameter reference copying
+- [x] Support for recursively finding and synchronizing unlocked nodes

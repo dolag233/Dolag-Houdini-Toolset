@@ -452,4 +452,12 @@ tmp_console_item = ConsoleItem(item_name="Open Dependency Viewer", alias="dep", 
 CUSTOM_ITEMS.append(tmp_console_item)
 
 
+def open_unlocked_nodes_viewer_cb(context):
+    from op_menu.unlocked_nodes_viewer import open_unlocked_nodes_viewer
+    open_unlocked_nodes_viewer()
+
+tmp_console_item = ConsoleItem(item_name="Open Unlocked Nodes Viewer", alias="unlock", callback=open_unlocked_nodes_viewer_cb)
+CUSTOM_ITEMS.append(tmp_console_item)
+
+
 

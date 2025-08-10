@@ -22,6 +22,7 @@ node_path.copyNodePath(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.general"/>
 
             <scriptItem id = "opmenu.dolag.open_dependency_viewer">
                 <label>Dependency Viewer</label>
@@ -35,6 +36,19 @@ node_dependency_viewer.open_dependency_viewer(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            
+            <scriptItem id = "opmenu.dolag.find_unlocked_nodes">
+                <label>Find Unlocked Nodes</label>
+                    <scriptCode><![CDATA[
+import hou
+from op_menu.unlocked_nodes_viewer import open_unlocked_nodes_viewer
+
+open_unlocked_nodes_viewer()
+
+                    ]]>
+                    </scriptCode>
+            </scriptItem>
+            <separatorItem id="opmenu.sep.viewers"/>
             
             <scriptItem id = "opmenu.dolag.dup_node_ref">
                 <label>Duplicate Node As Reference</label>
@@ -101,6 +115,7 @@ node_ref.pasteNodeRef(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.refs"/>
 
             <scriptItem id = "opmenu.dolag.del_all_keyframes">
                 <label>Delete Expression And Keys</label>
@@ -112,21 +127,6 @@ from op_menu import del_keyframes
 node = kwargs['node']
 
 del_keyframes.delKeyframes(node)
-
-                    ]]>
-                    </scriptCode>
-            </scriptItem>
-
-            <scriptItem id = "opmenu.dolag.unlock_nodes_recursively">
-                <label>Unlock Nodes Recursively</label>
-                    <scriptCode><![CDATA[
-import hou
-import sys
-from op_menu import unlock_node_recursively
-
-node = kwargs['node']
-
-unlock_node_recursively.unlockNodeRecursively(node)
 
                     ]]>
                     </scriptCode>
@@ -184,6 +184,7 @@ node_parm_json.pasteParameterValueFromJson(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.json"/>
 
             <separatorItem id="opmenu.dolag.dolag.sep_0"/>
 
@@ -230,6 +231,7 @@ node_style.copyNodeStyle(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.style.copy"/>
 
             <scriptItem id = "opmenu.dolag.paste_node_shape">
                 <label>Paste Node Shape</label>
@@ -315,6 +317,7 @@ for node in hou.selectedNodes():
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.style.paste"/>
 
             <subMenu id = "opmenu.dolag.set_node_preset_style_menu">
                 <label>Preset Style</label>
@@ -409,6 +412,7 @@ set_preset_style.setNodePresetStyle(node, "useless")
                         </scriptCode>
                 </scriptItem>
             </subMenu>
+            <separatorItem id="opmenu.sep.style.preset"/>
 
             <separatorItem id="opmenu.dolag.dolag.sep_1"/>
 
@@ -427,6 +431,7 @@ hda_alias.setHdaAlias(node, alias)
                     ]]>
                     </scriptCode>
             </scriptItem>
+            <separatorItem id="opmenu.sep.other"/>
 
             <separatorItem id="opmenu.dolag.dolag.sep_2"/>
 
