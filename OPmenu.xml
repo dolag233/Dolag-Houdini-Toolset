@@ -231,7 +231,6 @@ node_style.copyNodeStyle(node)
                     ]]>
                     </scriptCode>
             </scriptItem>
-            <separatorItem id="opmenu.sep.style.copy"/>
 
             <scriptItem id = "opmenu.dolag.paste_node_shape">
                 <label>Paste Node Shape</label>
