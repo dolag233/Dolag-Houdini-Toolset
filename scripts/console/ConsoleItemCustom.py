@@ -341,9 +341,9 @@ def vertical_compressing_upward_cb(context):
 tmp_console_item = ConsoleItem(item_name="Compress Node Space Downward", alias="compressd", callback=vertical_compressing_upward_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-from op_menu.wire_hub import wireHub, wireHubs
+from op_menu.wire_organize import wireHub, wireHubs
 
-def wire_hub_cb(context):
+def wire_organize_cb(context):
     items = context["selected_items"]
     if len(items) == 0:
         return
@@ -354,7 +354,7 @@ def wire_hub_cb(context):
     else:
         wireHubs(items)
 
-tmp_console_item = ConsoleItem(item_name="Organize Wires", alias="wire", callback=wire_hub_cb)
+tmp_console_item = ConsoleItem(item_name="Organize Wires", alias="wire", callback=wire_organize_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
 def auto_resize_networkbox_cb(context):

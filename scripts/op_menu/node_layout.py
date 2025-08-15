@@ -351,10 +351,6 @@ def verticalSpacing(nodes, upward = False):
         # auto resize network boxes
         for b in network_boxes:
             b.fitAroundContents()
-        
-        # snap to grid after layout (using floor alignment)
-        node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
-        snapToGrid(node_list, use_floor=True)
 
 
 def verticalCompressing(nodes, upward = False):
@@ -510,8 +506,4 @@ def verticalCompressing(nodes, upward = False):
         # auto resize network boxes
         for b in network_boxes:
             b.fitAroundContents()
-        
-        # snap to grid after layout (using floor alignment)
-        node_list = [n for n in nodes.keys() if isinstance(n, hou.Node) or isinstance(n, hou.NetworkDot)]
-        snapToGrid(node_list, use_floor=True)
 
