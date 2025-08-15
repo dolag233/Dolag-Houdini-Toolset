@@ -1,11 +1,5 @@
 import math
-from PySide2 import QtCore
-from PySide2 import QtWidgets as QtGui
-from PySide2 import QtGui as QtG
-try:
-    from PySide2 import QtSvg
-except Exception:
-    QtSvg = None
+from utils.qt_compat_layer import QtCore, QtGui, QtG, QtSvg
 
 
 class GraphicsView(QtGui.QGraphicsView):

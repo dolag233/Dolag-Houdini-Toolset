@@ -4,8 +4,7 @@ try:
     from utils.check_filename import checkInvalidFileName
     from error.error_report import displayError
     from utils.code_type import SnippetType, VexType
-    from PySide2 import QtCore
-    from PySide2 import QtWidgets as QtGui
+    from utils.qt_compat_layer import QtCore, QtGui
 except Exception as e:
     raise
 

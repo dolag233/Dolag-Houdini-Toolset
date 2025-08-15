@@ -8,9 +8,7 @@ Rendering is delegated to the shared NodeGraphWidget.
 import re
 import os
 import hou
-from PySide2 import QtCore
-from PySide2 import QtWidgets as QtGui
-from PySide2 import QtGui as QtG
+from utils.qt_compat_layer import QtCore, QtGui, QtG
 from .node_graph_widget import NodeGraphWidget, _TitlePinButton
 
 
@@ -137,7 +135,7 @@ class DependencyViewer(QtGui.QDialog):
         super(DependencyViewer, self).__init__(parent)
         flags = self.windowFlags()
         flags = flags & ~QtCore.Qt.WindowContextHelpButtonHint
-        flags |= QtCore.Qt.WindowStaysOnTopHint
+        flags |= QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.WindowCloseButtonHint
         self.setWindowFlags(flags)
         self.setWindowTitle("Dependency Viewer - {}".format(node.path()))
         self.setMinimumSize(780, 560)

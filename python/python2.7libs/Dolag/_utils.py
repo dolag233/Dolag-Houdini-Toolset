@@ -80,16 +80,26 @@ def lcSequence(s1, s2):
 
 
 def writeClipBoard(text):
-    import PySide2
-    clipboard = PySide2.QtWidgets.QApplication.clipboard()
-    clipboard.clear()
-    clipboard.setText(text)
+    try:
+        from scripts.utils.qt_compat_layer import clipboard
+        cb = clipboard()
+        cb.clear()
+        cb.setText(text)
+    except Exception:
+        import PySide2
+        clipboard = PySide2.QtWidgets.QApplication.clipboard()
+        clipboard.clear()
+        clipboard.setText(text)
 
 
 def readClipBoard():
-    import PySide2
-    clipboard = PySide2.QtWidgets.QApplication.clipboard()
-    return clipboard.text()
+    try:
+        from scripts.utils.qt_compat_layer import clipboard
+        return clipboard().text()
+    except Exception:
+        import PySide2
+        clipboard = PySide2.QtWidgets.QApplication.clipboard()
+        return clipboard.text()
 
 
 # convert unicode in parsed json to str

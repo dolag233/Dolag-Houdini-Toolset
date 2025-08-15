@@ -1,9 +1,19 @@
 try:
     from Dolag import utils as du
-    from PySide2.QtGui import QFont
-    from PySide2 import QtGui
-    from PySide2 import QtCore
-    from PySide2 import QtWidgets
+    try:
+        from utils.qt_compat_layer import QtCore, QtGui, QtWidgets, QtG, set_font_weight
+    except Exception:
+        # Fallback for Py2 environments where qt_compat_layer isn't importable via sys.path
+        from PySide2 import QtCore
+        from PySide2 import QtGui as QtG
+        from PySide2 import QtWidgets
+        def set_font_weight(font, weight):
+            try:
+                font.setWeight(int(weight))
+            except Exception:
+                pass
+        # Align project-wide convention: QtGui refers to widgets
+        QtGui = QtWidgets
     from console import ConsoleContext, ConsoleItems, ConsoleScore
     from Dolag import utils as du
     import hou
@@ -31,7 +41,7 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.search_width = 325
         self.search_height = 80
         # set panel pos
-        self.pos = QtGui.QCursor.pos()
+        self.pos = QtG.QCursor.pos()
         self.hou_event = hou_event
         # notice main process this window should be close
         self.close_flag = False
@@ -41,7 +51,7 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.close_flag = flag
 
     def _updateCursorPos(self):
-        self.pos = QtGui.QCursor.pos()
+        self.pos = QtG.QCursor.pos()
         x, y = (self.pos.x(), self.pos.y())
         self.pos.setX(x - self.search_width / 2)
         self.pos.setY(y - self.search_height / 2)
@@ -79,7 +89,7 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.context["hit_item"] = self.hou_event.editor.networkItemsInBox(self.hou_event.mousepos, \
                                                                            self.hou_event.mousepos, for_select=False)
         self.context["screen_pos"] = (self.pos.x(), self.pos.y())
-        self.context["screen_pos_flipY"] = (self.pos.x(), QtWidgets.QApplication.desktop().screenGeometry().height() - self.pos.y())
+        self.context["screen_pos_flipY"] = (self.pos.x(), _screen_height() - self.pos.y())
         self.context["qt_keys"] = event.key()
 
     def searchItem(self, search_str):
@@ -230,15 +240,16 @@ class ConsoleWindow(QtWidgets.QDialog):
             self.searchItem(text)
 
     def _initUI(self):
-        fRes = QFont()
+        from utils.qt_compat_layer import set_font_weight
+        fRes = QtG.QFont()
         fRes.setPointSize(16)
         fRes.setBold(True)
-        fRes.setWeight(65)
+        set_font_weight(fRes, 65)
 
-        fSearch = QFont()
+        fSearch = QtG.QFont()
         fSearch.setPointSize(16)
         fSearch.setBold(True)
-        fSearch.setWeight(75)
+        set_font_weight(fSearch, 75)
 
         self.blvMain = QtWidgets.QVBoxLayout()
         self.blvMain.setSpacing(0)
@@ -300,3 +311,23 @@ class ConsoleWindow(QtWidgets.QDialog):
         # detach
         self.setParent(None)
         # self.done(0)
+
+
+def _screen_height():
+    try:
+        # Qt6: primaryScreen API
+        app = QtWidgets.QApplication.instance()
+        if app is not None:
+            scr = getattr(app, 'primaryScreen', None)
+            if callable(scr):
+                s = app.primaryScreen()
+                geo = getattr(s, 'geometry', None)
+                if callable(geo):
+                    return s.geometry().height()
+    except Exception:
+        pass
+    try:
+        # Qt5: desktop() API
+        return QtWidgets.QApplication.desktop().screenGeometry().height()
+    except Exception:
+        return 0

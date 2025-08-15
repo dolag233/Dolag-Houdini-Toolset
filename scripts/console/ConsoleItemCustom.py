@@ -371,7 +371,7 @@ CUSTOM_ITEMS.append(tmp_console_item)
 # chatgpt
 from main_menu import chatgpt_UI
 from utils import show_UI
-from PySide2 import QtCore
+from utils.qt_compat_layer import QtCore
 def chatgpt_cb(context):
     if "dolag::houdini_master_AI_console" in hou.pypanel.interfaces().keys():
         cursor_pos = context["screen_pos_flipY"]

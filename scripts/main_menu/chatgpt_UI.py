@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
-from PySide2.QtWidgets import QApplication, QDialog, QPushButton, QTextEdit, QVBoxLayout, QWidget, QProgressBar
-from PySide2 import QtWidgets as QtGui
-from PySide2 import QtCore
-from PySide2.QtCore import QObject, QThread, Signal, Slot
-from PySide2.QtGui import QTextCursor
+from utils.qt_compat_layer import QtCore, QtGui, QtG
 import json
 
 gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点。回答必须简短',
           "Vex": '你是Houdini专家。默认情况是根据问题回答Vex代码，需附上详细注释，不要带有代码外的其他任何语句。不能带有Markdown格式',
           "Python": '你是Houdini专家。默认情况是根据问题回答Houdini内的Python代码，需附上详细注释不要带有代码外的其他任何语句。不能带有Markdown格式',
           "Free": '你是Houdini专家。用户会向你提问Houdini相关问题，尽力地为用户解答。如果问题比较复杂，你需要把问题进行分解然后回答。回答必须简短'}
-class ChatWorker(QObject):
-    message_received = Signal(str)
+class ChatWorker(QtCore.QObject):
+    message_received = QtCore.Signal(str)
     apikey = ""
     gpt_version = "gpt-4"
     proxy_url = ""
@@ -40,7 +36,7 @@ class ChatWorker(QObject):
     def changePrompt(self, prompt):
         self.prompt_key = prompt
 
-    @Slot(str)
+    @QtCore.Slot(str)
     def runChat(self, user_prompt):
         if self.client is not None:
             self.chat_history.append({'role': 'user', 'content': user_prompt})
@@ -78,7 +74,7 @@ class ChatgptPanel(QtGui.QDialog):
     chat_thread = None
 
     # auto resize text edit
-    class AutoHeightTextEdit(QTextEdit):
+    class AutoHeightTextEdit(QtGui.QTextEdit):
         def __init__(self, *args, **kwargs):
             import openai
             super(ChatgptPanel.AutoHeightTextEdit, self).__init__(*args, **kwargs)
@@ -100,7 +96,7 @@ class ChatgptPanel(QtGui.QDialog):
             self.setFixedHeight(doc_height)
 
     # settings panel
-    class SettingPanel(QDialog):
+    class SettingPanel(QtGui.QDialog):
         apikey = ""
         gpt_version = "gpt-4"
         proxy_url = ""
@@ -110,7 +106,7 @@ class ChatgptPanel(QtGui.QDialog):
         def __init__(self):
             super(ChatgptPanel.SettingPanel, self).__init__()
 
-            self.layout = QVBoxLayout(self)
+            self.layout = QtGui.QVBoxLayout(self)
 
             # Openai API Key
             self.api_key_label = QtGui.QLabel("Openai API Key:")
@@ -142,8 +138,8 @@ class ChatgptPanel(QtGui.QDialog):
             self.layout.addWidget(self.https_proxy_label)
             self.layout.addWidget(self.https_proxy_edit)
             # Ok and Cancel buttons
-            self.ok_button = QPushButton("Save")
-            self.cancel_button = QPushButton("Cancel")
+            self.ok_button = QtGui.QPushButton("Save")
+            self.cancel_button = QtGui.QPushButton("Cancel")
             self.layout.addWidget(self.ok_button)
             self.layout.addWidget(self.cancel_button)
 
@@ -258,14 +254,15 @@ class ChatgptPanel(QtGui.QDialog):
     def newGptWorker(self):
         # chatgpt worker
         self.chat_worker = ChatWorker()
-        self.chat_thread = QThread()
+        self.chat_thread = QtCore.QThread()
         self.chat_worker.moveToThread(self.chat_thread)
         self.chat_worker.message_received.connect(self.appendMessage)
         self.chat_worker.setSettings(self.apikey, self.gpt_version, self.proxy_url)
 
     def openSettingPanel(self):
         self.setting_panel = ChatgptPanel.SettingPanel()
-        self.setting_panel.exec_()
+        # Qt5/Qt6 兼容
+        (getattr(self.setting_panel, 'exec', None) or getattr(self.setting_panel, 'exec_', None))()
         self.loadJson()
 
         if self.has_settings:
@@ -323,7 +320,7 @@ class ChatgptPanel(QtGui.QDialog):
     def appendMessage(self, str):
         if str is not None and len(str) > 0:
             self.teMessage.setPlainText(self.teMessage.toPlainText() + str)
-            self.teMessage.moveCursor(QTextCursor.End)
+            self.teMessage.moveCursor(QtG.QTextCursor.End)
             # 必须启用repaint才会重绘制
             self.teMessage.repaint()
 

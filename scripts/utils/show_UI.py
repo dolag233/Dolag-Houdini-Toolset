@@ -2,8 +2,7 @@ try:
     APP = "houdini"
     import hou
 
-    from PySide2 import QtCore
-    from PySide2 import QtWidgets as QtGui
+    from utils.qt_compat_layer import QtCore, QtGui
 except Exception as e:
     raise
 
@@ -22,7 +21,8 @@ def showUI(func, *args):
     dialog = func(*args)
     dialog.raise_()
     dialog.show()
-    dialog.exec_()
+    # Qt5/Qt6 兼容执行
+    (getattr(dialog, 'exec', None) or getattr(dialog, 'exec_', None))()
     return dialog
 
 def showUIStandalone(func, *args):
