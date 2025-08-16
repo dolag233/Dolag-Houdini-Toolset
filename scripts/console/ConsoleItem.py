@@ -9,6 +9,7 @@ elif platform.python_version_tuple()[0] == '3':
     from .ConsoleContext import ConsoleContext
 
 import hou
+from utils.user_settings import settings
 from abc import ABCMeta, abstractmethod
 
 # Global usage counter for LUT (Last Used Time)
@@ -64,6 +65,18 @@ class ConsoleItem(ConsoleItemBase):
 
         try:
             self.callback(context)
+            # persist recent command names (last 50)
+            try:
+                recent = settings.get_raw('console_recent', []) or []
+                name = self.item_name
+                if name in recent:
+                    recent.remove(name)
+                recent.append(name)
+                if len(recent) > 50:
+                    recent = recent[-50:]
+                settings.set_raw('console_recent', recent)
+            except Exception:
+                pass
         except Exception as e:
             hou.ui.displayMessage(traceback.format_exc())
 

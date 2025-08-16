@@ -12,6 +12,8 @@ if platform.python_version_tuple()[0] == '2':
 elif platform.python_version_tuple()[0] == '3':
     from .ConsoleItem import ConsoleItem
     from .ConsoleItemCustom import CUSTOM_ITEMS
+    
+from utils.user_settings import settings
 
 
 def createNodeTemplate(node_name):
@@ -36,6 +38,17 @@ class ItemCollect(object):
         self.items = {}
         self.item_path = "{0}/scripts/console/console_items.json".format(hou.getenv("DOLAG_PATH"))
         self.loadItem()
+        # Restore recent usage order (last 50 item names)
+        try:
+            recent = settings.get_raw('console_recent', []) or []
+            base = 1
+            for name in recent:
+                it = self.items.get(name)
+                if it is not None:
+                    it.LUT = base
+                    base += 1
+        except Exception:
+            pass
 
     def getItems(self):
         return self.items
@@ -100,6 +113,7 @@ class ItemCollect(object):
 
             for item in user_custom_items + CUSTOM_ITEMS:
                 self.items[item.item_name] = item
+            # keep settings unchanged here; updates happen on execution side
 
         except Exception as e:
             hou.ui.displayMessage(traceback.format_exc())
