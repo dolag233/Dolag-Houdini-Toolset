@@ -96,21 +96,16 @@ for parm in parms:
 
             <scriptItem id = "h.pane.parms.dolag.menu.open_in_vsc">
                 <expression>isinstance(kwargs['parms'][0].parmTemplate(), hou.StringParmTemplate)</expression>
-                <label>Edit in VSCode</label>
+                <label>Edit in VS Code</label>
                     <scriptCode><![CDATA[
 import hou
-from utils.open_vex_in_vsc import openVexInVSC
+from utils.open_vex_in_vsc import openParmInVscode
 
 parms = kwargs['parms']
 
 for parm in parms:
-    # just save snippet
-    if parm.name() == 'snippet' or parm.name() == 'python':
-        code = parm.unexpandedString()
-        if len(code) == 0:
-            continue
-
-        openVexInVSC(code)
+    if isinstance(parm.parmTemplate(), hou.StringParmTemplate):
+        openParmInVscode(parm, wait=True, write_back=False)
 
                     ]]>
                     </scriptCode>

@@ -3,7 +3,6 @@
 """
 import hou
 import platform
-from utils.open_vex_in_vsc import openVexInVSC
 
 if platform.python_version_tuple()[0] == '2':
     from ConsoleItem import ConsoleItem
@@ -178,21 +177,6 @@ def display_prim_normal_cb(context):
 tmp_console_item = ConsoleItem(item_name="Display Prim Normals", alias="dpn", callback=display_prim_normal_cb)
 CUSTOM_ITEMS.append(tmp_console_item)
 
-# edit wrangle or python with vsc
-def code_with_vsc_cb(context):
-    nodes = context["selected_nodes"]
-    if nodes:
-        for node in nodes:
-            if isinstance(node, hou.SopNode):
-                parms = node.parms()
-                code = [v for v in parms if v.name() == "snippet" or v.name == "python"]
-                if len(code) > 0:
-                    for v in code:
-                        openVexInVSC(v.unexpandedString())
-
-
-tmp_console_item = ConsoleItem(item_name="Edit Code in VSC", alias="vex", callback=code_with_vsc_cb)
-CUSTOM_ITEMS.append(tmp_console_item)
 
 from op_menu import set_preset_style
 

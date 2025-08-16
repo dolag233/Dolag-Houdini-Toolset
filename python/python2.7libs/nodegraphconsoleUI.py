@@ -78,7 +78,7 @@ class ConsoleWindow(QtWidgets.QDialog):
     def getEventFromHou(self):
         self.close()
 
-    def updateContext(self, event):
+    def updateContext(self, event=None):
         # pity that this window cannot sense the event in editor
         self._updateCursorPos()
         self.context["editor"] = self.hou_event.editor
@@ -90,7 +90,10 @@ class ConsoleWindow(QtWidgets.QDialog):
                                                                            self.hou_event.mousepos, for_select=False)
         self.context["screen_pos"] = (self.pos.x(), self.pos.y())
         self.context["screen_pos_flipY"] = (self.pos.x(), _screen_height() - self.pos.y())
-        self.context["qt_keys"] = event.key()
+        try:
+            self.context["qt_keys"] = event.key() if event is not None else None
+        except Exception:
+            self.context["qt_keys"] = None
 
     def searchItem(self, search_str):
         self.item_list = []
@@ -306,6 +309,37 @@ class ConsoleWindow(QtWidgets.QDialog):
         self.setWindowFlag(QtCore.Qt.WindowMinimizeButtonHint, False)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.setStyleSheet(hou.ui.mainQtWindow().styleSheet())
+
+        # mouse interactions: click/double-click to execute
+        try:
+            self.lvRes.clicked.connect(self._on_list_clicked)
+            self.lvRes.doubleClicked.connect(self._on_list_double_clicked)
+        except Exception:
+            pass
+
+    # --- interactions ---
+    def _run_index(self, index):
+        try:
+            if not index or not index.isValid():
+                return
+            row = index.row()
+            if row is None:
+                return
+            self.updateContext(None)
+            item_name = self.item_list[row]
+            item = self.console_items[item_name]
+            item.run(self.context)
+            item.updateLastUsedTime()
+            self.close_flag = True
+            self.close()
+        except Exception:
+            pass
+
+    def _on_list_clicked(self, index):
+        self._run_index(index)
+
+    def _on_list_double_clicked(self, index):
+        self._run_index(index)
 
     def closeEvent(self, event):
         # detach
