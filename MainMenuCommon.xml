@@ -173,6 +173,17 @@ show_UI.showUIStandalone(chatgpt_UI.ChatgptPanel)
             </scriptCode>
         </scriptItem>
 
+        <separatorItem id="h.menu_bar.sep_4"/>
+
+        <scriptItem id="h.menu_bar.preferences">
+          <label>Preferences</label>
+            <scriptCode><![CDATA[
+from main_menu import preferences_UI
+preferences_UI.open_preferences()
+            ]]>
+            </scriptCode>
+        </scriptItem>
+
     </subMenu>
   </menuBar>
 </mainMenu>

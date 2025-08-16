@@ -326,6 +326,20 @@ class ConsoleWindow(QtWidgets.QDialog):
             if row is None:
                 return
             self.updateContext(None)
+            # honor max history count from settings
+            try:
+                from main_menu.preferences_utils import getSetting, Config
+                from utils.user_settings import settings
+                max_hist = int(getSetting(Config.Console.MAX_HISTORY))
+                recent = settings.get_raw('console_recent', []) or []
+                if item_name in recent:
+                    recent.remove(item_name)
+                recent.append(item_name)
+                if len(recent) > max_hist:
+                    recent = recent[-max_hist:]
+                settings.set_raw('console_recent', recent)
+            except Exception:
+                pass
             item_name = self.item_list[row]
             item = self.console_items[item_name]
             item.run(self.context)
@@ -365,3 +379,4 @@ def _screen_height():
         return QtWidgets.QApplication.desktop().screenGeometry().height()
     except Exception:
         return 0
+

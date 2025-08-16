@@ -1,4 +1,5 @@
 import hou
+from main_menu.preferences_utils import getSetting, Config
 import math
 SPACE_DISTANCE = 1.5
 MIN_VERTICAL_SPACE = 1.25
@@ -24,16 +25,21 @@ def snapToGrid(nodes, use_floor=False):
         nodes: List of nodes to snap
         use_floor: If True, use floor alignment; if False, use round alignment
     """
+    # read snap distance from settings; fall back to GRID_SIZE_* if unset
+    snap = int(getSetting(Config.Network.SNAP_DISTANCE))
+    # grid ratio: use horizontal = snap, vertical = snap/2 as default mapping
+    gx = max(1, snap)
+    gy = max(1, int(round(snap / 2.0)))
     with hou.undos.group("Snap to Grid"):
         for node in nodes:
             if isinstance(node, hou.Node) or isinstance(node, hou.NetworkDot):
                 pos = node.position()
                 if use_floor:
-                    new_x = math.floor(pos.x() / GRID_SIZE_X) * GRID_SIZE_X
-                    new_y = math.floor(pos.y() / GRID_SIZE_Y) * GRID_SIZE_Y
+                    new_x = math.floor(pos.x() / gx) * gx
+                    new_y = math.floor(pos.y() / gy) * gy
                 else:
-                    new_x = round(pos.x() / GRID_SIZE_X) * GRID_SIZE_X
-                    new_y = round(pos.y() / GRID_SIZE_Y) * GRID_SIZE_Y
+                    new_x = round(pos.x() / gx) * gx
+                    new_y = round(pos.y() / gy) * gy
                 node.setPosition(hou.Vector2(new_x, new_y))
 
 def snapToGridAllNodes():
