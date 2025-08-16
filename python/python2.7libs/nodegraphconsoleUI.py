@@ -328,9 +328,10 @@ class ConsoleWindow(QtWidgets.QDialog):
             self.updateContext(None)
             # honor max history count from settings
             try:
-                from main_menu.preferences_utils import getSetting, Config
+                from main_menu.preferences_utils import getSetting
+                from main_menu.preference_config import Keys
                 from utils.user_settings import settings
-                max_hist = int(getSetting(Config.Console.MAX_HISTORY))
+                max_hist = int(getSetting(Keys.Console.MAX_HISTORY))
                 recent = settings.get_raw('console_recent', []) or []
                 if item_name in recent:
                     recent.remove(item_name)
