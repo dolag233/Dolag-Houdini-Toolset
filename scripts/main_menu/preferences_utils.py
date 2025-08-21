@@ -14,7 +14,7 @@ def getSetting(section_or_entry):
         section, key = section_or_entry[0], section_or_entry[1]
         default = registry.get(section, key).default
         setting_data = settings.get(section, key, default)
-        if setting_data:
+        if setting_data is not None:
             dtype = registry.get(section, key).dtype
             if dtype is bool:
                 return bool(setting_data)
