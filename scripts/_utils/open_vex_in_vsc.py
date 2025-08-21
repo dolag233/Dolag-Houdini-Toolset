@@ -1,7 +1,7 @@
 """VS Code opener utilities with language-aware defaults and optional linter.
 
 Usage examples:
-  from scripts.utils.open_vex_in_vsc import open_in_vscode
+  from _utils.open_vex_in_vsc import open_in_vscode
   new_py = open_in_vscode(py_text, language='python', wait=True)
   new_vex = open_in_vscode(vex_text, language='vex', wait=True)
 """

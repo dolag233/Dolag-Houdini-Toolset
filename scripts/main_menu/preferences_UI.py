@@ -1,7 +1,7 @@
 from __future__ import division
 
-from utils.qt_compat_layer import QtCore, QtGui
-from utils.user_settings import settings
+from _utils.qt_compat_layer import QtCore, QtGui
+from _utils.user_settings import settings
 from .preference_config import registry
 
 

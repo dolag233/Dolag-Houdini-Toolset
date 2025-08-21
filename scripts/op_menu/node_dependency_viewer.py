@@ -8,7 +8,7 @@ Rendering is delegated to the shared NodeGraphWidget.
 import re
 import os
 import hou
-from utils.qt_compat_layer import QtCore, QtGui, QtG
+from _utils.qt_compat_layer import QtCore, QtGui, QtG
 from .node_graph_widget import NodeGraphWidget, _TitlePinButton
 
 
@@ -402,7 +402,7 @@ class DependencyViewer(QtGui.QDialog):
 
 
 def open_dependency_viewer(node):
-    from utils import show_UI
+    from _utils import show_UI
     real_node = node if isinstance(node, hou.Node) else hou.node(str(node))
     if real_node is None:
         return

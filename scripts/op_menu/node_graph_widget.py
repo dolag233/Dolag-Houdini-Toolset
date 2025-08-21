@@ -1,5 +1,5 @@
 import math
-from utils.qt_compat_layer import QtCore, QtGui, QtG, QtSvg
+from _utils.qt_compat_layer import QtCore, QtGui, QtG, QtSvg
 
 
 class GraphicsView(QtGui.QGraphicsView):

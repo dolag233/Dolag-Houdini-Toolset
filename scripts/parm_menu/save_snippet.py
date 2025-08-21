@@ -3,7 +3,7 @@ import sys
 import os
 from os import environ as env
 from error.error_report import displayError
-from utils.code_type import VexType, SnippetType
+from _utils.code_type import VexType, SnippetType
 
 
 # check the code

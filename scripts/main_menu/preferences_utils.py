@@ -1,6 +1,6 @@
 from __future__ import division
 
-from utils.user_settings import settings
+from _utils.user_settings import settings
 from main_menu.preference_config import registry
 
 def getSetting(section_or_entry):

@@ -1,24 +1,30 @@
 """
     config some items for DolagPlugin
     @NOTE: This file is run in top-level
-    so cannot do any relative path operation
-    solving by configuring the sys.path
+    Add necessary paths but avoid adding common module names like 'utils'
 """
 if __name__ == "__main__":
     import os
     import sys
 
     # DOLAG_HOUDINI_PATH will be create by DolagPlugin.json
-    # and append some our python load dir into the sys.path
     if "DOLAG_HOUDINI_PATH" in os.environ.keys():
         dolag_path = os.environ["DOLAG_HOUDINI_PATH"]
-        # python script path
-        sys.path.insert(0, dolag_path + "\\scripts")
-        # custom python snippet path
+        
+        # Add the plugin root path
+        if dolag_path not in sys.path:
+            sys.path.insert(0, dolag_path)
+            
+        # Add scripts path but rename modules to avoid conflicts
+        scripts_path = dolag_path + "\\scripts"
+        if scripts_path not in sys.path:
+            sys.path.insert(0, scripts_path)
+            
+        # Add python paths
         sys.path.insert(0, dolag_path + "\\python\\python2.7libs")
         sys.path.insert(0, dolag_path + "\\python\\custom")
         sys.path.insert(0, dolag_path + "\\python")
-        sys.path.insert(0, dolag_path)
+        
         # env DOLAG_PYTHON_LIB path
         if "DOLAG_PYTHON_LIB" in os.environ.keys():
             for pylib_path in os.environ["DOLAG_PYTHON_LIB"]:

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utils.qt_compat_layer import QtCore, QtGui, QtG
+from _utils.qt_compat_layer import QtCore, QtGui, QtG
 import json
 
 gpt_prompt = {"Node": '你是Houdini专家。默认情况是根据问题回答需要的节点名，包括SideFX Labs的节点，最好回答一个节点，不准有其他语句；若有多个节点则用+连接并换行解释使用方法；回答之前先对比各种节点的实现效果难易程度，择优回答。不准编造节点。回答必须简短',

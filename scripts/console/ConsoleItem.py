@@ -9,7 +9,7 @@ elif platform.python_version_tuple()[0] == '3':
     from .ConsoleContext import ConsoleContext
 
 import hou
-from utils.user_settings import settings
+from _utils.user_settings import settings
 from abc import ABCMeta, abstractmethod
 
 # Global usage counter for LUT (Last Used Time)

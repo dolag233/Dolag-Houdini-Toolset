@@ -88,7 +88,7 @@ hda_save_as.saveHDACopyUnlock(hou.selectedNodes(), save_original_hda=True)
           <label>Pip Install</label>
             <scriptCode><![CDATA[
 from main_menu import pip_install_UI
-from utils import show_UI
+from _utils import show_UI
 
 show_UI.showUIStandalone(pip_install_UI.PipWindow)
 
@@ -166,7 +166,7 @@ else:
           <label>Houdini Master AI</label>
             <scriptCode><![CDATA[
 from main_menu import chatgpt_UI
-from utils import show_UI
+from _utils import show_UI
 
 show_UI.showUIStandalone(chatgpt_UI.ChatgptPanel)
             ]]>

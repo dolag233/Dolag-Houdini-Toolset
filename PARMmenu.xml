@@ -99,7 +99,7 @@ for parm in parms:
                 <label>Edit in VS Code</label>
                     <scriptCode><![CDATA[
 import hou
-from utils.open_vex_in_vsc import openParmInVscode
+from _utils.open_vex_in_vsc import openParmInVscode
 
 parms = kwargs['parms']
 
@@ -118,8 +118,8 @@ for parm in parms:
 import hou
 import sys
 from parm_menu import save_snippet, save_window
-from utils import show_UI
-from utils.code_type import SnippetType, VexType
+from _utils import show_UI
+from _utils.code_type import SnippetType, VexType
 from error.error_report import displayError
 
 parms = kwargs['parms']
@@ -164,8 +164,8 @@ for parm in parms:
 import hou
 import sys
 from parm_menu import import_snippet, import_snippet_UI
-from utils import show_UI
-from utils.code_type import SnippetType, VexType
+from _utils import show_UI
+from _utils.code_type import SnippetType, VexType
 
 parms = kwargs['parms']
 

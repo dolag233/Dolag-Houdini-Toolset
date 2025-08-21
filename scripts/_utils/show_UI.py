@@ -2,7 +2,7 @@ try:
     APP = "houdini"
     import hou
 
-    from utils.qt_compat_layer import QtCore, QtGui
+    from _utils.qt_compat_layer import QtCore, QtGui
 except Exception as e:
     raise
 

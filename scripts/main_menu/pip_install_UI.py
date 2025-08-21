@@ -1,10 +1,10 @@
 try:
     APP = "houdini"
     import hou
-    from utils.check_filename import checkInvalidFileName
+    from _utils.check_filename import checkInvalidFileName
     from error.error_report import displayError
-    from utils.code_type import SnippetType, VexType
-    from utils.qt_compat_layer import QtCore, QtGui
+    from _utils.code_type import SnippetType, VexType
+    from _utils.qt_compat_layer import QtCore, QtGui
     from .pip_install import pipInstall, pipUninstall, pipUpgrade
 except Exception as e:
     raise

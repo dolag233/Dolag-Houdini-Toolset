@@ -5,7 +5,7 @@ Unlocked Nodes Viewer
 - Render a simple 1-column graph using shared NodeGraphWidget when needed
 """
 import hou
-from utils.qt_compat_layer import QtCore, QtGui
+from _utils.qt_compat_layer import QtCore, QtGui
 
 from .node_graph_widget import NodeGraphWidget, _TitlePinButton
 
@@ -192,7 +192,7 @@ class UnlockedNodesViewer(QtGui.QDialog):
 
 
 def open_unlocked_nodes_viewer():
-    from utils import show_UI
+    from _utils import show_UI
     show_UI.showUIStandalone(UnlockedNodesViewer)
 
 

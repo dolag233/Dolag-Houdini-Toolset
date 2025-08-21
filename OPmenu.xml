@@ -436,7 +436,7 @@ set_preset_style.setNodePresetStyle(node, "useless")
                     <scriptCode><![CDATA[
 import hou
 from op_menu import hda_alias, hda_alias_UI
-from utils import show_UI
+from _utils import show_UI
 
 alias_wind = show_UI.showUI(hda_alias_UI.AliasWindow)
 alias = alias_wind.getAlias()

@@ -13,7 +13,7 @@ elif platform.python_version_tuple()[0] == '3':
     from .ConsoleItem import ConsoleItem
     from .ConsoleItemCustom import CUSTOM_ITEMS
     
-from utils.user_settings import settings
+from _utils.user_settings import settings
 
 
 def createNodeTemplate(node_name):

@@ -1,7 +1,7 @@
 try:
     from Dolag import utils as du
     try:
-        from utils.qt_compat_layer import QtCore, QtGui, QtWidgets, QtG, set_font_weight
+        from _utils.qt_compat_layer import QtCore, QtGui, QtWidgets, QtG, set_font_weight
     except Exception:
         # Fallback for Py2 environments where qt_compat_layer isn't importable via sys.path
         from PySide2 import QtCore
@@ -243,7 +243,7 @@ class ConsoleWindow(QtWidgets.QDialog):
             self.searchItem(text)
 
     def _initUI(self):
-        from utils.qt_compat_layer import set_font_weight
+        from _utils.qt_compat_layer import set_font_weight
         fRes = QtG.QFont()
         fRes.setPointSize(16)
         fRes.setBold(True)
@@ -330,7 +330,7 @@ class ConsoleWindow(QtWidgets.QDialog):
             try:
                 from main_menu.preferences_utils import getSetting
                 from main_menu.preference_config import Keys
-                from utils.user_settings import settings
+                from _utils.user_settings import settings
                 max_hist = int(getSetting(Keys.Console.MAX_HISTORY))
                 recent = settings.get_raw('console_recent', []) or []
                 if item_name in recent:

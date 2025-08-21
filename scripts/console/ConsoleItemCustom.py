@@ -99,7 +99,7 @@ CUSTOM_ITEMS.append(tmp_console_item)
 
 
 def create_node_ref_cb(context):
-    from scripts.op_menu.node_ref import dupNodeRef
+    from op_menu.node_ref import dupNodeRef
     nodes = context["selected_nodes"]
     if nodes:
         for node in nodes:
@@ -354,8 +354,8 @@ CUSTOM_ITEMS.append(tmp_console_item)
 
 # chatgpt
 from main_menu import chatgpt_UI
-from utils import show_UI
-from utils.qt_compat_layer import QtCore
+from _utils import show_UI
+from _utils.qt_compat_layer import QtCore
 def chatgpt_cb(context):
     if "dolag::houdini_master_AI_console" in hou.pypanel.interfaces().keys():
         cursor_pos = context["screen_pos_flipY"]
@@ -374,7 +374,7 @@ CUSTOM_ITEMS.append(tmp_console_item)
 
 
 # viewer wanderer
-from utils import viewer_states
+from _utils import viewer_states
 def viewer_wanderer_cb(context):
     viewer_states.enableSOPState("dolag::viewer_wanderer")
 

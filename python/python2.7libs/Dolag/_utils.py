@@ -81,7 +81,7 @@ def lcSequence(s1, s2):
 
 def writeClipBoard(text):
     try:
-        from scripts.utils.qt_compat_layer import clipboard
+        from _utils.qt_compat_layer import clipboard
         cb = clipboard()
         cb.clear()
         cb.setText(text)
@@ -94,7 +94,7 @@ def writeClipBoard(text):
 
 def readClipBoard():
     try:
-        from scripts.utils.qt_compat_layer import clipboard
+        from _utils.qt_compat_layer import clipboard
         return clipboard().text()
     except Exception:
         import PySide2
