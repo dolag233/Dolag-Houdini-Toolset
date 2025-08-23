@@ -74,16 +74,11 @@
    
 2. 将 `DolagPlugin` 文件夹下的 `DolagPlugin.json` 文件复制到 `C:\Users\你的用户名\Documents\houdiniX.Y\packages` 目录下。如果 `packages` 目录不存在，请先创建它。
 
+安装之后可通过`主菜单`>`Dolag`>`Check Update`进行插件更新。
+
 ## 使用文档
 
 详细使用方法请参见[在线文档](https://www.vis.dolag.work/houdini-toolset/%E7%AE%80%E4%BB%8B.html)。
-
-## 路线图
-
-- [ ] 支持保存用户设置
-- [ ] 支持复制递归引用节点(用于SubNetwork)
-- [x] 支持递归查找、同步解锁的节点
-- [x] 自动排列节点、理线功能有问题
 
 ---
 <br>
@@ -92,7 +87,7 @@
 
 A powerful Houdini toolset that brings you a massive number of practical SOP nodes, seamless menu function extensions, and efficient shortcut commands. Compatible with Houdini 18.5 and above.
 
-> **Notice**: This toolset is open-sourced under the **MIT** license. Since it uses some nodes from SideFX's Game Development Toolset, the SideFX license content has been added to the agreement. Therefore, if you use content from this open-source repository, please add SideFX's license content to your license. [Here](https://github.com/dolag233/Doalg-Houdini-Toolset/) is the GitHub repository link, contributions are welcome 😘.
+> **Note**: This toolset is open-sourced under the **MIT** license. Since it uses some nodes from SideFX's Game Development Toolset, the SideFX license content has been added to the agreement. Therefore, if you use content from this open-source repository, please add SideFX's license content to your license. [Here](https://github.com/dolag233/Doalg-Houdini-Toolset/) is the GitHub repository link, contributions are welcome 😘.
 
 [Features](#features) | [Demos](#demos) | [Installation](#installation) | [Usage](#usage)
 
@@ -187,13 +182,8 @@ A powerful Houdini toolset that brings you a massive number of practical SOP nod
    
 2. Copy the `DolagPlugin.json` file from the `DolagPlugin` folder to the `C:\Users\YourUsername\Documents\houdiniX.Y\packages` directory. If the `packages` directory does not exist, please create it first.
 
+After installation, you can update the plugin through `Main Menu` > `Dolag` > `Check Update`.
+
 ## <a name="usage"></a>Usage
 
 For detailed usage instructions, please refer to the [online documentation](https://www.vis.dolag.work/houdini-toolset/%E7%AE%80%E4%BB%8B.html).
-
-## Roadmap
-
-- [ ] Support for saving user settings
-- [ ] Support for copying recursive reference nodes (for SubNetwork)
-- [ ] Support for quick parameter reference copying
-- [x] Support for recursively finding and synchronizing unlocked nodes
