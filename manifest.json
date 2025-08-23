@@ -1,6 +1,6 @@
 {
     "name": "DolagPlugin",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "github_repo": "https://github.com/dolag233/Dolag-Houdini-Toolset",
     "min_houdini_version": "18.5"
 }

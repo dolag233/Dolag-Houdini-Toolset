@@ -42,6 +42,13 @@ hda_save_as.saveHDACopyUnlock(hou.selectedNodes(), save_original_hda=True)
 
     <subMenu>
       <label>Dolag</label>
+        <scriptItem id="h.menu_bar.check_update">
+          <label>Check Update</label>
+          <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/check_update.py</scriptPath>
+        </scriptItem>
+
+        <separatorItem />
+
         <scriptItem id="h.menu_bar.visit_github">
           <label>Visit Github</label>
           <scriptPath>$DOLAG_HOUDINI_PATH/scripts/main_menu/visit_github.py</scriptPath>
